@@ -47,6 +47,14 @@ public class Formula extends ar.com.avaco.arc.core.domain.Entity<Long> {
 	@JoinColumn(name = "ID_MATERIAL")
 	private Material material;
 
+	@Column(name = "OBSERVACIONES")
+	private String observaciones;
+
+	@Override
+	public String toString() {
+		return nombre + " V" + version + " (" + norma + ")";
+	}
+
 	public Long getId() {
 		return id;
 	}
@@ -93,6 +101,14 @@ public class Formula extends ar.com.avaco.arc.core.domain.Entity<Long> {
 
 	public void setNorma(String norma) {
 		this.norma = norma;
+	}
+
+	public String getObservaciones() {
+		return observaciones;
+	}
+
+	public void setObservaciones(String observaciones) {
+		this.observaciones = observaciones;
 	}
 
 }

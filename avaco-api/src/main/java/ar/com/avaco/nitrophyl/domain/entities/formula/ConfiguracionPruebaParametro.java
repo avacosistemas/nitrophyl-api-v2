@@ -30,9 +30,6 @@ public class ConfiguracionPruebaParametro extends ar.com.avaco.arc.core.domain.E
 	@JoinColumn(name = "ID_CONF_PRUEBA")
 	private ConfiguracionPrueba configuracionPrueba;
 
-//	@Column(name = "ID_CONF_PRUEBA")
-//	private Long idConfiguracionPrueba;
-
 	@Column(name = "NOMBRE")
 	private String nombre;
 

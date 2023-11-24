@@ -11,6 +11,7 @@ public class FormulaDTO extends DTOEntity<Long> {
 	private Integer version;
 	private String fecha;
 	private String norma;
+	private String observaciones;
 
 	public String getNorma() {
 		return norma;
@@ -66,6 +67,14 @@ public class FormulaDTO extends DTOEntity<Long> {
 
 	public void setMaterial(String material) {
 		this.material = material;
+	}
+
+	public String getObservaciones() {
+		return observaciones;
+	}
+
+	public void setObservaciones(String observaciones) {
+		this.observaciones = observaciones;
 	}
 
 }
