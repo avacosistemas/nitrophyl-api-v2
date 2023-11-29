@@ -114,6 +114,7 @@ public class ClienteEPServiceImpl extends CRUDEPBaseService<Long, ClienteDTO, Cl
 			clienteDTO.setCuit(entity.getCuit());
 			clienteDTO.setObservacionesCobranzas(entity.getObservacionesCobranzas());
 			clienteDTO.setObservacionesEntrega(entity.getObservacionesEntrega());
+			clienteDTO.setObservacionesFacturacion(entity.getObservacionesFacturacion());
 		}
 
 		return clienteDTO;
@@ -151,6 +152,7 @@ public class ClienteEPServiceImpl extends CRUDEPBaseService<Long, ClienteDTO, Cl
 		cliente.setCUIT(dto.getCuit());
 		cliente.setObservacionesCobranzas(dto.getObservacionesCobranzas());
 		cliente.setObservacionesEntrega(dto.getObservacionesEntrega());
+		cliente.setObservacionesFacturacion(dto.getObservacionesFacturacion());
 
 		return cliente;
 	}

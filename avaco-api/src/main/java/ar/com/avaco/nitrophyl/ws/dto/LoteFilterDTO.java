@@ -2,7 +2,7 @@ package ar.com.avaco.nitrophyl.ws.dto;
 
 public class LoteFilterDTO extends SortPageDTO {
 
-	private Long idLote;
+	private String nroLote;
 
 	private Long idFormula;
 
@@ -10,12 +10,12 @@ public class LoteFilterDTO extends SortPageDTO {
 
 	private String fechaHasta;
 
-	public Long getIdLote() {
-		return idLote;
+	public String getNroLote() {
+		return nroLote;
 	}
 
-	public void setIdLote(Long idLote) {
-		this.idLote = idLote;
+	public void setNroLote(String nroLote) {
+		this.nroLote = nroLote;
 	}
 
 	public Long getIdFormula() {

@@ -15,7 +15,7 @@ import ar.com.avaco.utils.DateUtils;
 
 public class LoteFilter extends AbstractFilter {
 
-	private Long idLote;
+	private String nroLote;
 
 	private Long idFormula;
 
@@ -25,10 +25,10 @@ public class LoteFilter extends AbstractFilter {
 
 	public LoteFilter() {
 	}
-	
+
 	public LoteFilter(LoteFilterDTO filter) {
 		super(filter.getRows(), filter.getFirst(), filter.getAsc(), filter.getIdx());
-		this.idLote = filter.getIdLote();
+		this.nroLote = filter.getNroLote();
 		this.idFormula = filter.getIdFormula();
 		this.fechaDesde = filter.getFechaDesde();
 		this.fechaHasta = filter.getFechaHasta();
@@ -37,8 +37,8 @@ public class LoteFilter extends AbstractFilter {
 	@Override
 	public List<FilterData> getFilterDatas() {
 		List<FilterData> list = new ArrayList<FilterData>();
-		if (idLote != null && idLote > 0) {
-			list.add(new FilterData("id", idLote, FilterDataType.EQUALS));
+		if (StringUtils.isNotBlank(this.nroLote)) {
+			list.add(new FilterData("nroLote", this.nroLote, FilterDataType.LIKE));
 		}
 		if (idFormula != null && idFormula > 0) {
 			list.add(new FilterData("formula.id", idFormula, FilterDataType.EQUALS));
@@ -49,7 +49,7 @@ public class LoteFilter extends AbstractFilter {
 				list.add(new FilterData("fechaDesde", desde, FilterDataType.EQUALS_MORE_THAN));
 			} catch (ParseException e) {
 			}
-			
+
 		}
 		if (StringUtils.isNotBlank(fechaHasta)) {
 			try {
@@ -57,17 +57,17 @@ public class LoteFilter extends AbstractFilter {
 				list.add(new FilterData("fechaHasta", hasta, FilterDataType.EQUALS_LESS_THAN));
 			} catch (ParseException e) {
 			}
-			
+
 		}
 		return list;
 	}
 
-	public Long getIdLote() {
-		return idLote;
+	public String getNroLote() {
+		return nroLote;
 	}
 
-	public void setIdLote(Long idLote) {
-		this.idLote = idLote;
+	public void setNroLote(String nroLote) {
+		this.nroLote = nroLote;
 	}
 
 	public Long getIdFormula() {

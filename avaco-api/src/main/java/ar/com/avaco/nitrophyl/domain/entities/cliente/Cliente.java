@@ -102,6 +102,9 @@ public class Cliente extends ar.com.avaco.arc.core.domain.Entity<Long> {
 	@Column(name = "OBS_ENTREGA")
 	private String observacionesEntrega;
 
+	@Column(name = "OBS_FACTURACION")
+	private String observacionesFacturacion;
+
 	public Cliente() {
 	}
 
@@ -215,6 +218,14 @@ public class Cliente extends ar.com.avaco.arc.core.domain.Entity<Long> {
 
 	public void setNombre(String nombre) {
 		this.nombre = nombre;
+	}
+
+	public String getObservacionesFacturacion() {
+		return observacionesFacturacion;
+	}
+
+	public void setObservacionesFacturacion(String observacionesFacturacion) {
+		this.observacionesFacturacion = observacionesFacturacion;
 	}
 
 }

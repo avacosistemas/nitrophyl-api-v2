@@ -7,6 +7,7 @@ import javax.annotation.Resource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -27,7 +28,7 @@ public class EnsayoRestController extends AbstractDTORestController<EnsayoDTO, L
 	}
 
 	@RequestMapping(value = "/ensayo/{idLote}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<JSONResponse> list(@RequestParam Long idLote) {
+	public ResponseEntity<JSONResponse> list(@PathVariable Long idLote) {
 		List<EnsayoDTO> ensayos = super.service.listByLote(idLote);
 		JSONResponse response = new JSONResponse();
 		response.setData(ensayos);
