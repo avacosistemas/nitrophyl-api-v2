@@ -59,6 +59,9 @@ public class Cliente extends ar.com.avaco.arc.core.domain.Entity<Long> {
 	@Column(name = "DOMICILIO")
 	private String domicilio;
 
+	@Column(name = "TEL_FIJO")
+	private String telefono;
+
 	/**
 	 * El codigo postal.
 	 */
@@ -226,6 +229,14 @@ public class Cliente extends ar.com.avaco.arc.core.domain.Entity<Long> {
 
 	public void setObservacionesFacturacion(String observacionesFacturacion) {
 		this.observacionesFacturacion = observacionesFacturacion;
+	}
+
+	public String getTelefono() {
+		return telefono;
+	}
+
+	public void setTelefono(String telefono) {
+		this.telefono = telefono;
 	}
 
 }
