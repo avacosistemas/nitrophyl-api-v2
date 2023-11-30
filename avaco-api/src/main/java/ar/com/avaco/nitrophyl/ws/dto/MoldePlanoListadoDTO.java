@@ -3,6 +3,7 @@ package ar.com.avaco.nitrophyl.ws.dto;
 import java.util.Date;
 
 import ar.com.avaco.nitrophyl.domain.entities.moldes.MoldePlano;
+import ar.com.avaco.utils.DateUtils;
 
 public class MoldePlanoListadoDTO {
 
@@ -10,7 +11,7 @@ public class MoldePlanoListadoDTO {
 	private Long idMolde;
 	private String nombreArchivo;
 	private Integer version;
-	private Date fecha;
+	private String fecha;
 	private String descripcion;
 
 	public MoldePlanoListadoDTO() {
@@ -22,7 +23,7 @@ public class MoldePlanoListadoDTO {
 		this.idMolde = mp.getIdMolde();
 		this.nombreArchivo = mp.getNombreArchivo();
 		this.version = mp.getVersion();
-		this.fecha = mp.getFecha();
+		this.fecha = DateUtils.toString(mp.getFecha(), DateUtils.PATTERN_FULL_24_HS);
 		this.descripcion = mp.getDescripcion();
 	}
 
@@ -58,11 +59,11 @@ public class MoldePlanoListadoDTO {
 		this.version = version;
 	}
 
-	public Date getFecha() {
+	public String getFecha() {
 		return fecha;
 	}
 
-	public void setFecha(Date fecha) {
+	public void setFecha(String fecha) {
 		this.fecha = fecha;
 	}
 

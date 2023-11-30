@@ -3,6 +3,7 @@ package ar.com.avaco.nitrophyl.ws.dto;
 import java.util.Date;
 
 import ar.com.avaco.nitrophyl.domain.entities.moldes.MoldeFoto;
+import ar.com.avaco.utils.DateUtils;
 
 public class MoldeFotoListadoDTO {
 
@@ -10,7 +11,7 @@ public class MoldeFotoListadoDTO {
 	private Long idMolde;
 	private String nombreArchivo;
 	private Integer version;
-	private Date fecha;
+	private String fecha;
 	private String descripcion;
 
 	public MoldeFotoListadoDTO() {
@@ -22,7 +23,7 @@ public class MoldeFotoListadoDTO {
 		this.idMolde = mf.getIdMolde();
 		this.nombreArchivo = mf.getNombreArchivo();
 		this.version = mf.getVersion();
-		this.fecha = mf.getFecha();
+		this.fecha = DateUtils.toString(mf.getFecha(), DateUtils.PATTERN_FULL_24_HS);
 		this.descripcion = mf.getDescripcion();
 	}
 
@@ -58,11 +59,11 @@ public class MoldeFotoListadoDTO {
 		this.version = version;
 	}
 
-	public Date getFecha() {
+	public String getFecha() {
 		return fecha;
 	}
 
-	public void setFecha(Date fecha) {
+	public void setFecha(String fecha) {
 		this.fecha = fecha;
 	}
 
