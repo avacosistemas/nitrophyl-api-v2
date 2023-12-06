@@ -2,7 +2,6 @@ package ar.com.avaco.nitrophyl.domain.entities.lote;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -10,11 +9,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
-
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
-
-import ar.com.avaco.nitrophyl.domain.entities.formula.ConfiguracionPruebaParametro;
 
 @Entity
 @Table(name = "ENSAYO_RESULTADO")
@@ -34,14 +28,26 @@ public class EnsayoResultado extends ar.com.avaco.arc.core.domain.Entity<Long> {
 	@Column(name = "redondeo")
 	private Double redondeo;
 
+	@Column(name = "minimo")
+	private Double minimo;
+
+	@Column(name = "maximo")
+	private Double maximo;
+
 	@ManyToOne(optional = false)
 	@JoinColumn(name = "ID_ENSAYO")
 	private Ensayo ensayo;
 
-	@Fetch(FetchMode.JOIN)
-	@ManyToOne(fetch = FetchType.EAGER, optional = false)
-	@JoinColumn(name = "ID_CONFIG_PRUEBA_PARAM")
-	private ConfiguracionPruebaParametro configuracion;
+	@Column(name = "nombre")
+	private String nombre;
+
+	public String getNombre() {
+		return nombre;
+	}
+
+	public void setNombre(String nombre) {
+		this.nombre = nombre;
+	}
 
 	public Long getId() {
 		return id;
@@ -75,12 +81,20 @@ public class EnsayoResultado extends ar.com.avaco.arc.core.domain.Entity<Long> {
 		this.ensayo = ensayo;
 	}
 
-	public ConfiguracionPruebaParametro getConfiguracion() {
-		return configuracion;
+	public Double getMinimo() {
+		return minimo;
 	}
 
-	public void setConfiguracion(ConfiguracionPruebaParametro configuracion) {
-		this.configuracion = configuracion;
+	public void setMinimo(Double minimo) {
+		this.minimo = minimo;
+	}
+
+	public Double getMaximo() {
+		return maximo;
+	}
+
+	public void setMaximo(Double maximo) {
+		this.maximo = maximo;
 	}
 
 }

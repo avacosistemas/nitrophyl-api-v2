@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 
 import ar.com.avaco.commons.exception.BusinessException;
 import ar.com.avaco.nitrophyl.domain.entities.formula.ConfiguracionPrueba;
-import ar.com.avaco.nitrophyl.domain.entities.formula.ConfiguracionPruebaParametro;
 import ar.com.avaco.nitrophyl.domain.entities.lote.Ensayo;
 import ar.com.avaco.nitrophyl.domain.entities.lote.EnsayoResultado;
 import ar.com.avaco.nitrophyl.domain.entities.lote.Lote;
@@ -47,9 +46,9 @@ public class EnsayoEPServiceImpl extends CRUDEPBaseService<Long, EnsayoDTO, Ensa
 		Set<EnsayoResultado> resultados = new HashSet<>();
 		dto.getResultados().forEach(res -> {
 			EnsayoResultado er = new EnsayoResultado();
-			ConfiguracionPruebaParametro conf = new ConfiguracionPruebaParametro();
-			conf.setId(res.getIdConfiguracionPruebaParametro());
-			er.setConfiguracion(conf);
+			er.setMaximo(res.getMaximo());
+			er.setMinimo(res.getMinimo());
+			er.setNombre(res.getNombre());
 			er.setEnsayo(ensayo);
 			er.setRedondeo(res.getRedondeo());
 			er.setResultado(res.getResultado());
