@@ -5,4 +5,8 @@ import ar.com.avaco.ws.rest.service.CRUDEPService;
 
 public interface LoteEPService extends CRUDEPService<Long, LoteDTO> {
 
+	void aprobar(Long idLote, String estado, String observaciones);
+
+	void rechazar(Long idLote, String observaciones);
+
 }

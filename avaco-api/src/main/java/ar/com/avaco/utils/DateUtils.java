@@ -11,6 +11,7 @@ import java.util.Date;
 
 public class DateUtils {
 
+	private static final String PATTERN_SOLO_FECHA = "dd/MM/yyyy";
 	public final static String PATTERN_yyyyMMdd = "yyyyMMdd";
 	public final static String PATTERN_FULL_24_HS = "dd/MM/yyyy HH:mm:ss";
 
@@ -43,8 +44,24 @@ public class DateUtils {
 		return toDate(dia, PATTERN_yyyyMMdd);
 	}
 
-	public static String toString(Date fecha) {
-		return toString(fecha, "dd/MM/yyyy");
+	/**
+	 * Convierte fecha a string con pattern dd/MM/yyyy
+	 * 
+	 * @param fecha
+	 * @return
+	 */
+	public static String toStringFecha(Date fecha) {
+		return toString(fecha, PATTERN_SOLO_FECHA);
+	}
+
+	/**
+	 * Convierte fecha a string con pattern dd/MM/yyyy HH:mm:sss
+	 * 
+	 * @param fecha
+	 * @return
+	 */
+	public static String toStringFechaHora(Date fecha) {
+		return toString(fecha, PATTERN_FULL_24_HS);
 	}
 
 	public static String toString(Date fecha, String pattern) {

@@ -7,6 +7,8 @@ import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -47,6 +49,16 @@ public class Lote extends ar.com.avaco.arc.core.domain.Entity<Long> {
 
 	@Column(name = "FECHA")
 	private Date fecha;
+
+	@Column(name = "OBS_ESTADO")
+	private String observacionesEstado;
+
+	@Column(name = "FECHA_ESTADO")
+	private Date fechaEstado;
+
+	@Enumerated(EnumType.STRING)
+	@Column(name = "ESTADO")
+	private EstadoLote estado;
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private Set<Ensayo> ensayos = new HashSet<Ensayo>();
@@ -97,6 +109,30 @@ public class Lote extends ar.com.avaco.arc.core.domain.Entity<Long> {
 
 	public void setNroLote(String nroLote) {
 		this.nroLote = nroLote;
+	}
+
+	public String getObservacionesEstado() {
+		return observacionesEstado;
+	}
+
+	public void setObservacionesEstado(String observacionesEstado) {
+		this.observacionesEstado = observacionesEstado;
+	}
+
+	public Date getFechaEstado() {
+		return fechaEstado;
+	}
+
+	public void setFechaEstado(Date fechaEstado) {
+		this.fechaEstado = fechaEstado;
+	}
+
+	public EstadoLote getEstado() {
+		return estado;
+	}
+
+	public void setEstado(EstadoLote estado) {
+		this.estado = estado;
 	}
 
 }

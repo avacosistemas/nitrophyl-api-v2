@@ -62,7 +62,7 @@ public class EnsayoEPServiceImpl extends CRUDEPBaseService<Long, EnsayoDTO, Ensa
 	@Override
 	protected EnsayoDTO convertToDto(Ensayo entity) {
 		EnsayoDTO dto = new EnsayoDTO();
-		dto.setFecha(DateUtils.toString(entity.getFecha()));
+		dto.setFecha(DateUtils.toStringFecha(entity.getFecha()));
 		dto.setId(entity.getId());
 		dto.setIdConfiguracionPrueba(entity.getConfiguracion().getId());
 		dto.setIdLote(entity.getLote().getId());

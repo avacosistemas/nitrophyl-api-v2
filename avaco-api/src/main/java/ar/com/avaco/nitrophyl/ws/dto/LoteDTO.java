@@ -16,6 +16,12 @@ public class LoteDTO extends DTOEntity<Long> {
 
 	private String nroLote;
 
+	private String observacionesEstado;
+
+	private String fechaEstado;
+
+	private String estado;
+
 	public String getNroLote() {
 		return nroLote;
 	}
@@ -62,6 +68,30 @@ public class LoteDTO extends DTOEntity<Long> {
 
 	public void setId(Long id) {
 		this.id = id;
+	}
+
+	public String getObservacionesEstado() {
+		return observacionesEstado;
+	}
+
+	public void setObservacionesEstado(String observacionesEstado) {
+		this.observacionesEstado = observacionesEstado;
+	}
+
+	public String getFechaEstado() {
+		return fechaEstado;
+	}
+
+	public void setFechaEstado(String fechaEstado) {
+		this.fechaEstado = fechaEstado;
+	}
+
+	public String getEstado() {
+		return estado;
+	}
+
+	public void setEstado(String estado) {
+		this.estado = estado;
 	}
 
 }

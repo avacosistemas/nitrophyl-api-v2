@@ -61,7 +61,7 @@ public class ConfiguracionPruebaEPServiceImpl
 		ConfiguracionPruebaDTO dto = new ConfiguracionPruebaDTO();
 		dto.setCondiciones(entity.getCondiciones().stream().map(x -> convertCondToDto(x)).collect(Collectors.toList()));
 		dto.setParametros(entity.getParametros().stream().map(x -> convertParamToDto(x)).collect(Collectors.toList()));
-		dto.setFecha(DateUtils.toString(entity.getFecha()));
+		dto.setFecha(DateUtils.toStringFecha(entity.getFecha()));
 		dto.setId(entity.getId());
 		dto.setIdFormula(entity.getFormula().getId());
 		dto.setIdMaquina(entity.getMaquina().getId());
@@ -71,7 +71,7 @@ public class ConfiguracionPruebaEPServiceImpl
 
 	protected ConfiguracionPruebaDTO convertToDtoSinCondicionParametro(ConfiguracionPrueba entity) {
 		ConfiguracionPruebaDTO dto = new ConfiguracionPruebaDTO();
-		dto.setFecha(DateUtils.toString(entity.getFecha()));
+		dto.setFecha(DateUtils.toStringFecha(entity.getFecha()));
 		dto.setId(entity.getId());
 		dto.setIdFormula(entity.getFormula().getId());
 		dto.setIdMaquina(entity.getMaquina().getId());

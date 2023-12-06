@@ -14,8 +14,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import ar.com.avaco.commons.exception.BusinessException;
+import ar.com.avaco.nitrophyl.ws.dto.LoteAprobarDTO;
 import ar.com.avaco.nitrophyl.ws.dto.LoteDTO;
 import ar.com.avaco.nitrophyl.ws.dto.LoteFilterDTO;
+import ar.com.avaco.nitrophyl.ws.dto.LoteRechazarDTO;
 import ar.com.avaco.nitrophyl.ws.service.LoteEPService;
 import ar.com.avaco.nitrophyl.ws.service.filter.LoteFilter;
 import ar.com.avaco.ws.rest.dto.JSONResponse;
@@ -39,12 +41,32 @@ public class LoteRestController extends AbstractDTORestController<LoteDTO, Long,
 
 	@RequestMapping(value = "/lote", method = RequestMethod.POST)
 	public ResponseEntity<JSONResponse> create(@RequestBody LoteDTO loteDTO) throws BusinessException {
-		loteDTO.setId(null);
 		LoteDTO saved = this.service.save(loteDTO);
 		JSONResponse response = new JSONResponse();
 		response.setData(saved);
 		response.setStatus(JSONResponse.OK);
 		return new ResponseEntity<JSONResponse>(response, HttpStatus.OK);
 	}
+
+	@RequestMapping(value = "/lote/aprobar/{idLote}", method = RequestMethod.PUT)
+	public ResponseEntity<JSONResponse> aprobar(@PathVariable("idLote") Long idLote, @RequestBody LoteAprobarDTO dto)
+			throws BusinessException {
+		this.service.aprobar(idLote, dto.getEstado(), dto.getObservaciones());
+		JSONResponse response = new JSONResponse();
+		response.setData(dto);
+		response.setStatus(JSONResponse.OK);
+		return new ResponseEntity<JSONResponse>(response, HttpStatus.OK);
+	}
+	
+	@RequestMapping(value = "/lote/rechazar/{idLote}", method = RequestMethod.PUT)
+	public ResponseEntity<JSONResponse> rechazar(@PathVariable("idLote") Long idLote, @RequestBody LoteRechazarDTO dto)
+			throws BusinessException {
+		this.service.rechazar(idLote, dto.getObservaciones());
+		JSONResponse response = new JSONResponse();
+		response.setData(dto);
+		response.setStatus(JSONResponse.OK);
+		return new ResponseEntity<JSONResponse>(response, HttpStatus.OK);
+	}
+
 
 }

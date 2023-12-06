@@ -51,7 +51,7 @@ public class FormulaEPServiceImpl extends CRUDEPBaseService<Long, FormulaDTO, Fo
 		dto.setMaterial(entity.getMaterial().getNombre());
 		dto.setNombre(entity.getNombre());
 		dto.setVersion(entity.getVersion());
-		dto.setFecha(DateUtils.toString(entity.getFecha().getTime()));
+		dto.setFecha(DateUtils.toStringFecha(entity.getFecha().getTime()));
 		dto.setNorma(entity.getNorma());
 		dto.setObservaciones(entity.getObservaciones());
 		return dto;
