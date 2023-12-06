@@ -19,6 +19,8 @@ public class EnsayoDTO extends DTOEntity<Long> {
 
 	private String maquina;
 
+	private String estado;
+
 	private List<EnsayoResultadoDTO> resultados = new ArrayList<EnsayoResultadoDTO>();
 
 	public Long getIdConfiguracionPrueba() {
@@ -75,6 +77,14 @@ public class EnsayoDTO extends DTOEntity<Long> {
 
 	public void setResultados(List<EnsayoResultadoDTO> resultados) {
 		this.resultados = resultados;
+	}
+
+	public String getEstado() {
+		return estado;
+	}
+
+	public void setEstado(String estado) {
+		this.estado = estado;
 	}
 
 }

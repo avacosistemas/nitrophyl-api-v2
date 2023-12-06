@@ -37,7 +37,6 @@ public class EnsayoRestController extends AbstractDTORestController<EnsayoDTO, L
 
 	@RequestMapping(value = "/ensayo", method = RequestMethod.POST)
 	public ResponseEntity<JSONResponse> create(@RequestBody EnsayoDTO ensayoDTO) throws BusinessException {
-		ensayoDTO.setId(null);
 		EnsayoDTO saved = this.service.save(ensayoDTO);
 		JSONResponse response = new JSONResponse();
 		response.setData(saved);

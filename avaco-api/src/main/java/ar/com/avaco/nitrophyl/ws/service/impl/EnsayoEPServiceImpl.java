@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import javax.annotation.Resource;
 
@@ -11,10 +13,14 @@ import org.springframework.stereotype.Service;
 
 import ar.com.avaco.commons.exception.BusinessException;
 import ar.com.avaco.nitrophyl.domain.entities.formula.ConfiguracionPrueba;
+import ar.com.avaco.nitrophyl.domain.entities.formula.ConfiguracionPruebaCondicion;
 import ar.com.avaco.nitrophyl.domain.entities.lote.Ensayo;
 import ar.com.avaco.nitrophyl.domain.entities.lote.EnsayoResultado;
+import ar.com.avaco.nitrophyl.domain.entities.lote.EstadoEnsayo;
 import ar.com.avaco.nitrophyl.domain.entities.lote.Lote;
 import ar.com.avaco.nitrophyl.service.lote.EnsayoService;
+import ar.com.avaco.nitrophyl.service.maquina.ConfiguracionPruebaService;
+import ar.com.avaco.nitrophyl.ws.dto.ConfiguracionPruebaCondicionDTO;
 import ar.com.avaco.nitrophyl.ws.dto.EnsayoDTO;
 import ar.com.avaco.nitrophyl.ws.service.EnsayoEPService;
 import ar.com.avaco.utils.DateUtils;
@@ -24,6 +30,7 @@ import ar.com.avaco.ws.rest.service.CRUDEPBaseService;
 public class EnsayoEPServiceImpl extends CRUDEPBaseService<Long, EnsayoDTO, Ensayo, EnsayoService>
 		implements EnsayoEPService {
 
+	private ConfiguracionPruebaService configuracionPruebaService;
 
 	@Override
 	@Resource(name = "ensayoService")
@@ -31,13 +38,14 @@ public class EnsayoEPServiceImpl extends CRUDEPBaseService<Long, EnsayoDTO, Ensa
 		this.service = service;
 	}
 
+	@Resource(name = "configuracionPruebaService")
+	public void setConfiguracionPruebaService(ConfiguracionPruebaService configuracionPruebaService) {
+		this.configuracionPruebaService = configuracionPruebaService;
+	}
+
 	@Override
 	protected Ensayo convertToEntity(EnsayoDTO dto) {
 		Ensayo ensayo = new Ensayo();
-		ConfiguracionPrueba configuracion = new ConfiguracionPrueba();
-		configuracion.setId(dto.getIdConfiguracionPrueba());
-		ensayo.setConfiguracion(configuracion);
-		ensayo.setFecha(DateUtils.getFechaYHoraActual());
 		ensayo.setId(dto.getId());
 		Lote lote = new Lote();
 		lote.setId(dto.getIdLote());
@@ -63,10 +71,10 @@ public class EnsayoEPServiceImpl extends CRUDEPBaseService<Long, EnsayoDTO, Ensa
 		EnsayoDTO dto = new EnsayoDTO();
 		dto.setFecha(DateUtils.toStringFecha(entity.getFecha()));
 		dto.setId(entity.getId());
-		dto.setIdConfiguracionPrueba(entity.getConfiguracion().getId());
 		dto.setIdLote(entity.getLote().getId());
-		dto.setMaquina(entity.getConfiguracion().getMaquina().getNombre());
+		dto.setMaquina(entity.getMaquina());
 		dto.setObservaciones(entity.getObservaciones());
+		dto.setEstado(entity.getEstado().toString());
 		return dto;
 	}
 
@@ -74,15 +82,28 @@ public class EnsayoEPServiceImpl extends CRUDEPBaseService<Long, EnsayoDTO, Ensa
 	public List<EnsayoDTO> listByLote(Long idLote) {
 		List<Ensayo> ensayos = this.service.listByLote(idLote);
 		List<EnsayoDTO> dtos = new ArrayList<EnsayoDTO>();
-		ensayos.forEach(x-> dtos.add(convertToDto(x)));
+		ensayos.forEach(x -> dtos.add(convertToDto(x)));
 		return dtos;
 	}
-	
+
 	@Override
 	public EnsayoDTO save(EnsayoDTO dto) throws BusinessException {
-		Ensayo save = this.service.save(convertToEntity(dto));
+		Ensayo entity = convertToEntity(dto);
+		entity.setId(null);
+		ConfiguracionPrueba configuracionPrueba = configuracionPruebaService.get(dto.getIdConfiguracionPrueba());
+		entity.setMaquina(configuracionPrueba.getMaquina().getNombre());
+		entity.setCondiciones(condicionesToString(configuracionPrueba.getCondiciones()));
+		entity.setFecha(DateUtils.getFechaYHoraActual());
+		entity.setEstado(EstadoEnsayo.valueOf(dto.getEstado()));
+		Ensayo save = this.service.save(entity);
 		dto.setId(save.getId());
 		return dto;
+	}
+
+	private String condicionesToString(Set<ConfiguracionPruebaCondicion> condiciones) {
+		Stream<String> map = condiciones.stream().map(x -> x.getNombre() + "=" + x.getValor());
+		List<String> collect = map.collect(Collectors.toList());
+		return String.join(";", collect);
 	}
 
 }

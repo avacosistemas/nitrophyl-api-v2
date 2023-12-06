@@ -8,6 +8,15 @@ public class ConfiguracionPruebaCondicionDTO extends DTOEntity<Long> {
 	private String nombre;
 	private Double valor;
 
+	public ConfiguracionPruebaCondicionDTO() {
+	}
+
+	public ConfiguracionPruebaCondicionDTO(String nombre, Double valor) {
+		super();
+		this.nombre = nombre;
+		this.valor = valor;
+	}
+
 	public String getNombre() {
 		return nombre;
 	}

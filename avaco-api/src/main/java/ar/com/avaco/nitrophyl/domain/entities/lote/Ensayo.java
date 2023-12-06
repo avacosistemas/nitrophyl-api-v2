@@ -7,6 +7,8 @@ import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -16,8 +18,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
-
-import ar.com.avaco.nitrophyl.domain.entities.formula.ConfiguracionPrueba;
 
 @Entity
 @Table(name = "ENSAYO")
@@ -41,9 +41,15 @@ public class Ensayo extends ar.com.avaco.arc.core.domain.Entity<Long> {
 	@Column(name = "observaciones")
 	private String observaciones;
 
-	@ManyToOne(fetch = FetchType.EAGER, optional = false)
-	@JoinColumn(name = "ID_CONFIG_PRUEBA")
-	private ConfiguracionPrueba configuracion;
+	@Column(name = "maquina")
+	private String maquina;
+
+	@Column(name = "condiciones")
+	private String condiciones;
+
+	@Column(name = "estado")
+	@Enumerated(EnumType.STRING)
+	private EstadoEnsayo estado;
 
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST, mappedBy = "ensayo")
 	private Set<EnsayoResultado> resultados = new HashSet<>();
@@ -80,12 +86,12 @@ public class Ensayo extends ar.com.avaco.arc.core.domain.Entity<Long> {
 		this.observaciones = observaciones;
 	}
 
-	public ConfiguracionPrueba getConfiguracion() {
-		return configuracion;
+	public String getMaquina() {
+		return maquina;
 	}
 
-	public void setConfiguracion(ConfiguracionPrueba configuracion) {
-		this.configuracion = configuracion;
+	public void setMaquina(String maquina) {
+		this.maquina = maquina;
 	}
 
 	public Set<EnsayoResultado> getResultados() {
@@ -94,6 +100,22 @@ public class Ensayo extends ar.com.avaco.arc.core.domain.Entity<Long> {
 
 	public void setResultados(Set<EnsayoResultado> resultados) {
 		this.resultados = resultados;
+	}
+
+	public String getCondiciones() {
+		return condiciones;
+	}
+
+	public void setCondiciones(String condiciones) {
+		this.condiciones = condiciones;
+	}
+
+	public EstadoEnsayo getEstado() {
+		return estado;
+	}
+
+	public void setEstado(EstadoEnsayo estado) {
+		this.estado = estado;
 	}
 
 }
