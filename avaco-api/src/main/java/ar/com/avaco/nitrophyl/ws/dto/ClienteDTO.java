@@ -18,8 +18,17 @@ public class ClienteDTO extends DTOEntity<Long> {
 	private String observacionesEntrega;
 	private String observacionesFacturacion;
 	private String telefono;
+	private Boolean activo;
 
 	public ClienteDTO() {
+	}
+
+	public Boolean getActivo() {
+		return activo;
+	}
+
+	public void setActivo(Boolean activo) {
+		this.activo = activo;
 	}
 
 	public String getTelefono() {

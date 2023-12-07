@@ -108,6 +108,9 @@ public class Cliente extends ar.com.avaco.arc.core.domain.Entity<Long> {
 	@Column(name = "OBS_FACTURACION")
 	private String observacionesFacturacion;
 
+	@Column(name = "ACTIVO")
+	private Boolean activo;
+
 	public Cliente() {
 	}
 
@@ -237,6 +240,14 @@ public class Cliente extends ar.com.avaco.arc.core.domain.Entity<Long> {
 
 	public void setTelefono(String telefono) {
 		this.telefono = telefono;
+	}
+
+	public Boolean getActivo() {
+		return activo;
+	}
+
+	public void setActivo(Boolean activo) {
+		this.activo = activo;
 	}
 
 }

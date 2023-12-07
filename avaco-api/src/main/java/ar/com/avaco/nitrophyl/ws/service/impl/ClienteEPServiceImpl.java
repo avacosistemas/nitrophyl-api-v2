@@ -116,6 +116,7 @@ public class ClienteEPServiceImpl extends CRUDEPBaseService<Long, ClienteDTO, Cl
 			clienteDTO.setObservacionesEntrega(entity.getObservacionesEntrega());
 			clienteDTO.setObservacionesFacturacion(entity.getObservacionesFacturacion());
 			clienteDTO.setTelefono(entity.getTelefono());
+			clienteDTO.setActivo(entity.getActivo());
 		}
 
 		return clienteDTO;
@@ -155,7 +156,7 @@ public class ClienteEPServiceImpl extends CRUDEPBaseService<Long, ClienteDTO, Cl
 		cliente.setObservacionesEntrega(dto.getObservacionesEntrega());
 		cliente.setObservacionesFacturacion(dto.getObservacionesFacturacion());
 		cliente.setTelefono(dto.getTelefono());
-
+		cliente.setActivo(dto.getActivo());
 		return cliente;
 	}
 

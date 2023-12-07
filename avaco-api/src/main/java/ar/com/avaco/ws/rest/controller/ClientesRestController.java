@@ -14,11 +14,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import ar.com.avaco.nitrophyl.domain.entities.cliente.Provincia;
 import ar.com.avaco.nitrophyl.ws.dto.ClienteDTO;
+import ar.com.avaco.nitrophyl.ws.dto.ClienteFilterDTO;
 import ar.com.avaco.nitrophyl.ws.dto.ComboDTO;
 import ar.com.avaco.nitrophyl.ws.dto.ContactoDTO;
 import ar.com.avaco.nitrophyl.ws.service.ClienteEPService;
@@ -36,12 +36,8 @@ public class ClientesRestController extends AbstractDTORestController<ClienteDTO
 	/* EP Clientes */
 
 	@RequestMapping(value = "/clientes", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<JSONResponse> listClientes(
-			@RequestParam(name = "razonSocial", required = false) String razonSocial,
-			@RequestParam(name = "cuit", required = false) String cuit,
-			@RequestParam(name = "nombre", required = false) String nombre) throws Exception {
-		ClienteFilter filter = new ClienteFilter(razonSocial, cuit, nombre);
-		List<ClienteDTO> listFilter = super.service.listFilter(filter);
+	public ResponseEntity<JSONResponse> listClientes(ClienteFilterDTO filterDTO) throws Exception {
+		List<ClienteDTO> listFilter = super.service.listFilter(new ClienteFilter(filterDTO));
 		JSONResponse response = new JSONResponse();
 		response.setData(listFilter);
 		response.setStatus(JSONResponse.OK);
