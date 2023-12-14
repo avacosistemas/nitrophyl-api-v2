@@ -13,7 +13,8 @@ public class DateUtils {
 
 	private static final String PATTERN_SOLO_FECHA = "dd/MM/yyyy";
 	public final static String PATTERN_yyyyMMdd = "yyyyMMdd";
-	public final static String PATTERN_FULL_24_HS = "dd/MM/yyyy HH:mm:ss";
+	public final static String PATTERN_FULL_24_HS = "dd/MM/yy HH:mm";
+	public final static String PATTERN_FULL_24_HS_CON_SEGUNDOS = "dd/MM/yyyy HH:mm:ss";
 
 	public static Date toDate(LocalDate date) {
 		return Date.from(date.atStartOfDay(ZoneId.systemDefault()).toInstant());
@@ -55,12 +56,16 @@ public class DateUtils {
 	}
 
 	/**
-	 * Convierte fecha a string con pattern dd/MM/yyyy HH:mm:sss
+	 * Convierte fecha a string con pattern dd/MM/yy HH:mm
 	 * 
 	 * @param fecha
 	 * @return
 	 */
 	public static String toStringFechaHora(Date fecha) {
+		return toString(fecha, PATTERN_FULL_24_HS);
+	}
+	
+	public static String toStringFechaHoraSinSegundos(Date fecha) {
 		return toString(fecha, PATTERN_FULL_24_HS);
 	}
 

@@ -14,6 +14,9 @@ CREATE TABLE public.ensayo
         ON DELETE NO ACTION
 );
 
+ALTER TABLE public.ensayo
+    ALTER COLUMN fecha TYPE timestamp without time zone ;
+
 CREATE SEQUENCE public.ensayo_seq
     INCREMENT 1
     START 1
