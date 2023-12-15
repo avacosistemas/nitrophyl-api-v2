@@ -11,7 +11,7 @@ import java.util.Date;
 
 public class DateUtils {
 
-	private static final String PATTERN_SOLO_FECHA = "dd/MM/yyyy";
+	public final static String PATTERN_SOLO_FECHA = "dd/MM/yyyy";
 	public final static String PATTERN_yyyyMMdd = "yyyyMMdd";
 	public final static String PATTERN_FULL_24_HS = "dd/MM/yy HH:mm";
 	public final static String PATTERN_FULL_24_HS_CON_SEGUNDOS = "dd/MM/yyyy HH:mm:ss";

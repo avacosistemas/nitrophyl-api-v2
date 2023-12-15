@@ -32,7 +32,7 @@ public class MaquinaServiceImpl extends NJBaseService<Long, Maquina, MaquinaRepo
 
 	@Override
 	public List<MaquinaPrueba> listPruebasByMaquina(Long idMaquina) {
-		return this.maquinaPruebaRepository.findByIdMaquinaOrderByNombre(idMaquina);
+		return this.maquinaPruebaRepository.findByIdMaquina(idMaquina);
 	}
 
 	@Resource(name = "maquinaRepository")

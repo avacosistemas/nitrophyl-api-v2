@@ -20,7 +20,6 @@ import ar.com.avaco.nitrophyl.domain.entities.lote.EstadoEnsayo;
 import ar.com.avaco.nitrophyl.domain.entities.lote.Lote;
 import ar.com.avaco.nitrophyl.service.lote.EnsayoService;
 import ar.com.avaco.nitrophyl.service.maquina.ConfiguracionPruebaService;
-import ar.com.avaco.nitrophyl.ws.dto.ConfiguracionPruebaCondicionDTO;
 import ar.com.avaco.nitrophyl.ws.dto.EnsayoDTO;
 import ar.com.avaco.nitrophyl.ws.service.EnsayoEPService;
 import ar.com.avaco.utils.DateUtils;
@@ -69,7 +68,7 @@ public class EnsayoEPServiceImpl extends CRUDEPBaseService<Long, EnsayoDTO, Ensa
 	@Override
 	protected EnsayoDTO convertToDto(Ensayo entity) {
 		EnsayoDTO dto = new EnsayoDTO();
-		dto.setFecha(DateUtils.toStringFechaHora(entity.getFecha()));
+		dto.setFecha(DateUtils.toStringFecha(entity.getFecha()));
 		dto.setId(entity.getId());
 		dto.setIdLote(entity.getLote().getId());
 		dto.setMaquina(entity.getMaquina());
@@ -93,7 +92,7 @@ public class EnsayoEPServiceImpl extends CRUDEPBaseService<Long, EnsayoDTO, Ensa
 		ConfiguracionPrueba configuracionPrueba = configuracionPruebaService.get(dto.getIdConfiguracionPrueba());
 		entity.setMaquina(configuracionPrueba.getMaquina().getNombre());
 		entity.setCondiciones(condicionesToString(configuracionPrueba.getCondiciones()));
-		entity.setFecha(DateUtils.getFechaYHoraActual());
+		entity.setFecha(DateUtils.toDate(dto.getFecha(), DateUtils.PATTERN_SOLO_FECHA));
 		entity.setEstado(EstadoEnsayo.valueOf(dto.getEstado()));
 		Ensayo save = this.service.save(entity);
 		dto.setId(save.getId());

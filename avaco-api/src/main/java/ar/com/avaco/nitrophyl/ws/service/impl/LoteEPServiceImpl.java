@@ -27,6 +27,7 @@ public class LoteEPServiceImpl extends CRUDEPBaseService<Long, LoteDTO, Lote, Lo
 		Formula formula = new Formula();
 		formula.setId(dto.getIdFormula());
 		lote.setFormula(formula);
+		lote.setFecha(DateUtils.toDate(dto.getFecha(), DateUtils.PATTERN_SOLO_FECHA));
 		lote.setObservaciones(dto.getObservaciones());
 		lote.setNroLote(dto.getNroLote());
 		return lote;
@@ -35,7 +36,7 @@ public class LoteEPServiceImpl extends CRUDEPBaseService<Long, LoteDTO, Lote, Lo
 	@Override
 	protected LoteDTO convertToDto(Lote entity) {
 		LoteDTO dto = new LoteDTO();
-		dto.setFecha(DateUtils.toStringFechaHora(entity.getFecha()));
+		dto.setFecha(DateUtils.toStringFecha(entity.getFecha()));
 		dto.setFormula(entity.getFormula().toString());
 		dto.setId(entity.getId());
 		dto.setIdFormula(entity.getFormula().getId());
@@ -43,7 +44,7 @@ public class LoteEPServiceImpl extends CRUDEPBaseService<Long, LoteDTO, Lote, Lo
 		dto.setNroLote(entity.getNroLote());
 		dto.setEstado(entity.getEstado().toString());
 		if (entity.getFechaEstado() != null) {
-			dto.setFechaEstado(DateUtils.toStringFechaHora(entity.getFechaEstado()));
+			dto.setFechaEstado(DateUtils.toStringFecha(entity.getFechaEstado()));
 		}
 		dto.setObservacionesEstado(entity.getObservacionesEstado());
 		return dto;
