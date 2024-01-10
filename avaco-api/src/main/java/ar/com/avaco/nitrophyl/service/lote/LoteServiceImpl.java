@@ -23,7 +23,6 @@ public class LoteServiceImpl extends NJBaseService<Long, Lote, LoteRepository> i
 	@Override
 	public Lote save(Lote entity) {
 		entity.setId(null);
-		entity.setFecha(DateUtils.getFechaYHoraActual());
 		entity.setEstado(EstadoLote.PENDIENTE_APROBACION);
 		return super.save(entity);
 	}
