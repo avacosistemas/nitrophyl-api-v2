@@ -39,16 +39,20 @@ public class ConfiguracionPruebaParametro extends ar.com.avaco.arc.core.domain.E
 	@Column(name = "VALOR_MAXIMO")
 	private Double maximo;
 
+	@Column(name = "NORMA")
+	private String norma;
+
 	public ConfiguracionPruebaParametro() {
 	}
 
 	public ConfiguracionPruebaParametro(ConfiguracionPrueba configuracionPrueba, String nombre, Double minimo,
-			Double maximo) {
+			Double maximo, String norma) {
 		super();
 		this.nombre = nombre;
 		this.minimo = minimo;
 		this.maximo = maximo;
 		this.configuracionPrueba = configuracionPrueba;
+		this.norma = norma;
 	}
 
 	public Long getId() {
@@ -66,14 +70,6 @@ public class ConfiguracionPruebaParametro extends ar.com.avaco.arc.core.domain.E
 	public void setConfiguracionPrueba(ConfiguracionPrueba configuracionPrueba) {
 		this.configuracionPrueba = configuracionPrueba;
 	}
-
-//	public Long getIdConfiguracionPrueba() {
-//		return idConfiguracionPrueba;
-//	}
-//
-//	public void setIdConfiguracionPrueba(Long idConfiguracionPrueba) {
-//		this.idConfiguracionPrueba = idConfiguracionPrueba;
-//	}
 
 	public String getNombre() {
 		return nombre;
@@ -97,6 +93,14 @@ public class ConfiguracionPruebaParametro extends ar.com.avaco.arc.core.domain.E
 
 	public void setMaximo(Double maximo) {
 		this.maximo = maximo;
+	}
+
+	public String getNorma() {
+		return norma;
+	}
+
+	public void setNorma(String norma) {
+		this.norma = norma;
 	}
 
 }

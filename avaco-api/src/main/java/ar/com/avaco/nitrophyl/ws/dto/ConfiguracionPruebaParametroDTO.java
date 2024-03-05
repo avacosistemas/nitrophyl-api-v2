@@ -6,6 +6,15 @@ public class ConfiguracionPruebaParametroDTO {
 	private String nombre;
 	private Double minimo;
 	private Double maximo;
+	private String norma;
+
+	public String getNorma() {
+		return norma;
+	}
+
+	public void setNorma(String norma) {
+		this.norma = norma;
+	}
 
 	public String getNombre() {
 		return nombre;
@@ -38,5 +47,5 @@ public class ConfiguracionPruebaParametroDTO {
 	public void setId(Long id) {
 		this.id = id;
 	}
-	
+
 }

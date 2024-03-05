@@ -45,6 +45,9 @@ public class ConfiguracionPrueba extends ar.com.avaco.arc.core.domain.Entity<Lon
 	@JoinColumn(name = "ID_FORMULA")
 	private Formula formula;
 
+	@Column(name = "OBSERVACIONES_REPORTE")
+	private String observacionesReporte;
+
 	@OneToMany(fetch = FetchType.LAZY, orphanRemoval = true, cascade = CascadeType.ALL, mappedBy = "configuracionPrueba")
 	private Set<ConfiguracionPruebaParametro> parametros = new HashSet<>();
 
@@ -97,6 +100,14 @@ public class ConfiguracionPrueba extends ar.com.avaco.arc.core.domain.Entity<Lon
 
 	public void setCondiciones(Set<ConfiguracionPruebaCondicion> condiciones) {
 		this.condiciones = condiciones;
+	}
+
+	public String getObservacionesReporte() {
+		return observacionesReporte;
+	}
+
+	public void setObservacionesReporte(String observacionesReporte) {
+		this.observacionesReporte = observacionesReporte;
 	}
 
 }

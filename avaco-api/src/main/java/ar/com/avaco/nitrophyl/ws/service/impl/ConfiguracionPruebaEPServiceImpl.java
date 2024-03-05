@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import javax.annotation.Resource;
-import javax.transaction.Transactional;
 
 import org.springframework.stereotype.Service;
 
@@ -47,8 +46,10 @@ public class ConfiguracionPruebaEPServiceImpl
 		maquina.setId(dto.getIdMaquina());
 		cf.setMaquina(maquina);
 
+		cf.setObservacionesReporte(dto.getObservacionesReporte());
+		
 		cf.setParametros(new HashSet<>(dto.getParametros().stream()
-				.map(x -> new ConfiguracionPruebaParametro(cf, x.getNombre(), x.getMinimo(), x.getMaximo()))
+				.map(x -> new ConfiguracionPruebaParametro(cf, x.getNombre(), x.getMinimo(), x.getMaximo(), x.getNorma()))
 				.collect(Collectors.toList())));
 		cf.setCondiciones(new HashSet<>(dto.getCondiciones().stream()
 				.map(x -> new ConfiguracionPruebaCondicion(cf, x.getNombre(), x.getValor()))
@@ -66,6 +67,7 @@ public class ConfiguracionPruebaEPServiceImpl
 		dto.setIdFormula(entity.getFormula().getId());
 		dto.setIdMaquina(entity.getMaquina().getId());
 		dto.setMaquina(entity.getMaquina().getNombre());
+		dto.setObservacionesReporte(entity.getObservacionesReporte());
 		return dto;
 	}
 
@@ -76,6 +78,7 @@ public class ConfiguracionPruebaEPServiceImpl
 		dto.setIdFormula(entity.getFormula().getId());
 		dto.setIdMaquina(entity.getMaquina().getId());
 		dto.setMaquina(entity.getMaquina().getNombre());
+		dto.setObservacionesReporte(entity.getObservacionesReporte());
 		return dto;
 	}
 
@@ -85,6 +88,7 @@ public class ConfiguracionPruebaEPServiceImpl
 		dto.setMaximo(cfp.getMaximo());
 		dto.setMinimo(cfp.getMinimo());
 		dto.setNombre(cfp.getNombre());
+		dto.setNorma(cfp.getNorma());
 		return dto;
 	}
 

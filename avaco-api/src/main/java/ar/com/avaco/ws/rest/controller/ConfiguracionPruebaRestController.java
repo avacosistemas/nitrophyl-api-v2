@@ -11,14 +11,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import ar.com.avaco.commons.exception.BusinessException;
 import ar.com.avaco.nitrophyl.ws.dto.ConfiguracionPruebaDTO;
-import ar.com.avaco.nitrophyl.ws.dto.ConfiguracionPruebaFilterDTO;
 import ar.com.avaco.nitrophyl.ws.service.ConfiguracionPruebaEPService;
-import ar.com.avaco.nitrophyl.ws.service.filter.ConfiguracionPruebaFilter;
 import ar.com.avaco.ws.rest.dto.JSONResponse;
 
 @RestController

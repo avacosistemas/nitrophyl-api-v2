@@ -3,7 +3,6 @@ package ar.com.avaco.nitrophyl.ws.dto;
 import java.util.ArrayList;
 import java.util.List;
 
-import ar.com.avaco.nitrophyl.domain.entities.formula.Formula;
 import ar.com.avaco.ws.rest.dto.DTOEntity;
 
 public class ConfiguracionPruebaDTO extends DTOEntity<Long> {
@@ -21,6 +20,8 @@ public class ConfiguracionPruebaDTO extends DTOEntity<Long> {
 	private List<ConfiguracionPruebaCondicionDTO> condiciones = new ArrayList<ConfiguracionPruebaCondicionDTO>();
 
 	private List<ConfiguracionPruebaParametroDTO> parametros = new ArrayList<ConfiguracionPruebaParametroDTO>();
+
+	private String observacionesReporte;
 
 	public Long getIdMaquina() {
 		return idMaquina;
@@ -76,6 +77,14 @@ public class ConfiguracionPruebaDTO extends DTOEntity<Long> {
 
 	public void setMaquina(String maquina) {
 		this.maquina = maquina;
+	}
+
+	public String getObservacionesReporte() {
+		return observacionesReporte;
+	}
+
+	public void setObservacionesReporte(String observacionesReporte) {
+		this.observacionesReporte = observacionesReporte;
 	}
 
 }
