@@ -24,9 +24,6 @@ import ar.com.avaco.nitrophyl.domain.entities.maquina.Maquina;
 @SequenceGenerator(name = "CONF_PRUEBA_SEQ", sequenceName = "CONF_PRUEBA_SEQ", allocationSize = 1)
 public class ConfiguracionPrueba extends ar.com.avaco.arc.core.domain.Entity<Long> {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -2296428532611007942L;
 
 	@Id
@@ -47,6 +44,9 @@ public class ConfiguracionPrueba extends ar.com.avaco.arc.core.domain.Entity<Lon
 
 	@Column(name = "OBSERVACIONES_REPORTE")
 	private String observacionesReporte;
+
+	@Column(name = "MOSTRAR_RESULTADO_REPORTE")
+	private boolean mostrarResultadosReporte;
 
 	@OneToMany(fetch = FetchType.LAZY, orphanRemoval = true, cascade = CascadeType.ALL, mappedBy = "configuracionPrueba")
 	private Set<ConfiguracionPruebaParametro> parametros = new HashSet<>();
@@ -108,6 +108,14 @@ public class ConfiguracionPrueba extends ar.com.avaco.arc.core.domain.Entity<Lon
 
 	public void setObservacionesReporte(String observacionesReporte) {
 		this.observacionesReporte = observacionesReporte;
+	}
+
+	public boolean isMostrarResultadosReporte() {
+		return mostrarResultadosReporte;
+	}
+
+	public void setMostrarResultadosReporte(boolean mostrarResultadosReporte) {
+		this.mostrarResultadosReporte = mostrarResultadosReporte;
 	}
 
 }

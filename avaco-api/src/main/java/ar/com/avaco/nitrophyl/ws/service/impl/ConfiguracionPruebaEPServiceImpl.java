@@ -47,6 +47,7 @@ public class ConfiguracionPruebaEPServiceImpl
 		cf.setMaquina(maquina);
 
 		cf.setObservacionesReporte(dto.getObservacionesReporte());
+		cf.setMostrarResultadosReporte(dto.isMostrarResultadosReporte());
 		
 		cf.setParametros(new HashSet<>(dto.getParametros().stream()
 				.map(x -> new ConfiguracionPruebaParametro(cf, x.getNombre(), x.getMinimo(), x.getMaximo(), x.getNorma()))
@@ -59,15 +60,9 @@ public class ConfiguracionPruebaEPServiceImpl
 
 	@Override
 	protected ConfiguracionPruebaDTO convertToDto(ConfiguracionPrueba entity) {
-		ConfiguracionPruebaDTO dto = new ConfiguracionPruebaDTO();
+		ConfiguracionPruebaDTO dto = convertToDtoSinCondicionParametro(entity);
 		dto.setCondiciones(entity.getCondiciones().stream().map(x -> convertCondToDto(x)).collect(Collectors.toList()));
 		dto.setParametros(entity.getParametros().stream().map(x -> convertParamToDto(x)).collect(Collectors.toList()));
-		dto.setFecha(DateUtils.toStringFecha(entity.getFecha()));
-		dto.setId(entity.getId());
-		dto.setIdFormula(entity.getFormula().getId());
-		dto.setIdMaquina(entity.getMaquina().getId());
-		dto.setMaquina(entity.getMaquina().getNombre());
-		dto.setObservacionesReporte(entity.getObservacionesReporte());
 		return dto;
 	}
 
@@ -79,6 +74,7 @@ public class ConfiguracionPruebaEPServiceImpl
 		dto.setIdMaquina(entity.getMaquina().getId());
 		dto.setMaquina(entity.getMaquina().getNombre());
 		dto.setObservacionesReporte(entity.getObservacionesReporte());
+		dto.setMostrarResultadosReporte(entity.isMostrarResultadosReporte());
 		return dto;
 	}
 

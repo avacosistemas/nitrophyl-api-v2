@@ -23,6 +23,8 @@ public class ConfiguracionPruebaDTO extends DTOEntity<Long> {
 
 	private String observacionesReporte;
 
+	private boolean mostrarResultadosReporte;
+
 	public Long getIdMaquina() {
 		return idMaquina;
 	}
@@ -85,6 +87,14 @@ public class ConfiguracionPruebaDTO extends DTOEntity<Long> {
 
 	public void setObservacionesReporte(String observacionesReporte) {
 		this.observacionesReporte = observacionesReporte;
+	}
+
+	public boolean isMostrarResultadosReporte() {
+		return mostrarResultadosReporte;
+	}
+
+	public void setMostrarResultadosReporte(boolean mostrarResultadosReporte) {
+		this.mostrarResultadosReporte = mostrarResultadosReporte;
 	}
 
 }
