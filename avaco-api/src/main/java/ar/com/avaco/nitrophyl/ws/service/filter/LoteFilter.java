@@ -10,6 +10,7 @@ import org.apache.commons.lang3.StringUtils;
 import ar.com.avaco.arc.core.domain.filter.AbstractFilter;
 import ar.com.avaco.arc.core.domain.filter.FilterData;
 import ar.com.avaco.arc.core.domain.filter.FilterDataType;
+import ar.com.avaco.nitrophyl.domain.entities.lote.EstadoLote;
 import ar.com.avaco.nitrophyl.ws.dto.LoteFilterDTO;
 import ar.com.avaco.utils.DateUtils;
 
@@ -22,6 +23,8 @@ public class LoteFilter extends AbstractFilter {
 	private String fechaDesde;
 
 	private String fechaHasta;
+	
+	private String estado;
 
 	public LoteFilter() {
 	}
@@ -32,6 +35,7 @@ public class LoteFilter extends AbstractFilter {
 		this.idFormula = filter.getIdFormula();
 		this.fechaDesde = filter.getFechaDesde();
 		this.fechaHasta = filter.getFechaHasta();
+		this.estado = filter.getEstado();
 	}
 
 	@Override
@@ -44,20 +48,17 @@ public class LoteFilter extends AbstractFilter {
 			list.add(new FilterData("formula.id", idFormula, FilterDataType.EQUALS));
 		}
 		if (StringUtils.isNotBlank(fechaDesde)) {
-			try {
-				Date desde = DateUtils.toDate(fechaDesde);
-				list.add(new FilterData("fechaDesde", desde, FilterDataType.EQUALS_MORE_THAN));
-			} catch (ParseException e) {
-			}
+			Date desde = DateUtils.toDate(fechaDesde, "dd/MM/yyyy");
+			list.add(new FilterData("fecha", desde, FilterDataType.EQUALS_MORE_THAN));
 
 		}
 		if (StringUtils.isNotBlank(fechaHasta)) {
-			try {
-				Date hasta = DateUtils.toDate(fechaHasta);
-				list.add(new FilterData("fechaHasta", hasta, FilterDataType.EQUALS_LESS_THAN));
-			} catch (ParseException e) {
-			}
-
+			Date hasta = DateUtils.toDate(fechaHasta, "dd/MM/yyyy");
+			list.add(new FilterData("fecha", hasta, FilterDataType.EQUALS_LESS_THAN));
+		}
+		
+		if (StringUtils.isNotBlank(estado)) {
+			list.add(new FilterData("estado", EstadoLote.valueOf(estado), FilterDataType.EQUALS));
 		}
 		return list;
 	}

@@ -10,6 +10,16 @@ public class LoteFilterDTO extends SortPageDTO {
 
 	private String fechaHasta;
 
+	private String estado;
+
+	public String getEstado() {
+		return estado;
+	}
+
+	public void setEstado(String estado) {
+		this.estado = estado;
+	}
+
 	public String getNroLote() {
 		return nroLote;
 	}
