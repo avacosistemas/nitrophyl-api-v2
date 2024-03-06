@@ -7,6 +7,7 @@ public class MaquinaDTO extends DTOEntity<Long> {
 	private Long id;
 	private String nombre;
 	private String estado;
+	private String observacionesReporte;
 
 	public Long getId() {
 		return id;
@@ -30,6 +31,14 @@ public class MaquinaDTO extends DTOEntity<Long> {
 
 	public void setEstado(String estado) {
 		this.estado = estado;
+	}
+
+	public String getObservacionesReporte() {
+		return observacionesReporte;
+	}
+
+	public void setObservacionesReporte(String observacionesReporte) {
+		this.observacionesReporte = observacionesReporte;
 	}
 
 }

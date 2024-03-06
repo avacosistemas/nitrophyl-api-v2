@@ -17,11 +17,6 @@ import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
-import org.hibernate.annotations.LazyCollection;
-import org.hibernate.annotations.LazyCollectionOption;
-
-import ar.com.avaco.nitrophyl.domain.entities.cliente.Contacto;
-
 @Entity
 @Table(name = "MAQUINA")
 @Inheritance(strategy = InheritanceType.JOINED)
@@ -40,6 +35,9 @@ public class Maquina extends ar.com.avaco.arc.core.domain.Entity<Long> {
 
 	@Column(name = "NOMBRE")
 	private String nombre;
+
+	@Column(name = "OBSERVACIONES_REPORTE")
+	private String observacionesReporte;
 
 	@Column(name = "ESTADO")
 	@Enumerated(EnumType.STRING)
@@ -78,6 +76,14 @@ public class Maquina extends ar.com.avaco.arc.core.domain.Entity<Long> {
 
 	public void setPruebas(Set<MaquinaPrueba> pruebas) {
 		this.pruebas = pruebas;
+	}
+
+	public String getObservacionesReporte() {
+		return observacionesReporte;
+	}
+
+	public void setObservacionesReporte(String observacionesReporte) {
+		this.observacionesReporte = observacionesReporte;
 	}
 
 }
