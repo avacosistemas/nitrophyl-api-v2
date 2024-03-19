@@ -23,6 +23,8 @@ public class LoteFilter extends AbstractFilter {
 
 	private String fechaHasta;
 
+	private boolean excluirPendientes = false;
+
 	public LoteFilter() {
 	}
 
@@ -32,6 +34,7 @@ public class LoteFilter extends AbstractFilter {
 		this.idFormula = filter.getIdFormula();
 		this.fechaDesde = filter.getFechaDesde();
 		this.fechaHasta = filter.getFechaHasta();
+		this.excluirPendientes = filter.isExcluirPendientes();
 	}
 
 	@Override
@@ -46,7 +49,7 @@ public class LoteFilter extends AbstractFilter {
 		if (StringUtils.isNotBlank(fechaDesde)) {
 			try {
 				Date desde = DateUtils.toDate(fechaDesde);
-				list.add(new FilterData("fechaDesde", desde, FilterDataType.EQUALS_MORE_THAN));
+				list.add(new FilterData("fecha", desde, FilterDataType.EQUALS_MORE_THAN));
 			} catch (ParseException e) {
 			}
 
@@ -54,11 +57,15 @@ public class LoteFilter extends AbstractFilter {
 		if (StringUtils.isNotBlank(fechaHasta)) {
 			try {
 				Date hasta = DateUtils.toDate(fechaHasta);
-				list.add(new FilterData("fechaHasta", hasta, FilterDataType.EQUALS_LESS_THAN));
+				list.add(new FilterData("fecha", hasta, FilterDataType.EQUALS_LESS_THAN));
 			} catch (ParseException e) {
 			}
 
 		}
+		if (excluirPendientes) {
+			list.add(new FilterData("fechaEstado", null, FilterDataType.IS_NOT_NULL));
+		}
+		
 		return list;
 	}
 
@@ -92,6 +99,14 @@ public class LoteFilter extends AbstractFilter {
 
 	public void setFechaHasta(String fechaHasta) {
 		this.fechaHasta = fechaHasta;
+	}
+
+	public boolean isIncluirPendientes() {
+		return excluirPendientes;
+	}
+
+	public void setIncluirPendientes(boolean incluirPendientes) {
+		this.excluirPendientes = incluirPendientes;
 	}
 
 }

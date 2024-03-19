@@ -39,6 +39,18 @@ public class LoteRestController extends AbstractDTORestController<LoteDTO, Long,
 		return new ResponseEntity<JSONResponse>(response, HttpStatus.OK);
 	}
 
+	@RequestMapping(value = "/lote/monitor", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<JSONResponse> listMonitor(LoteFilterDTO filter) {
+		filter.setAsc(false);
+		filter.setIdx("fechaEstado");
+		filter.setExcluirPendientes(true);
+		List<LoteDTO> listFilter = super.service.listFilter(new LoteFilter(filter));
+		JSONResponse response = new JSONResponse();
+		response.setData(listFilter);
+		response.setStatus(JSONResponse.OK);
+		return new ResponseEntity<JSONResponse>(response, HttpStatus.OK);
+	}
+
 	@RequestMapping(value = "/lote", method = RequestMethod.POST)
 	public ResponseEntity<JSONResponse> create(@RequestBody LoteDTO loteDTO) throws BusinessException {
 		LoteDTO saved = this.service.save(loteDTO);
