@@ -10,6 +10,8 @@ public class LoteFilterDTO extends SortPageDTO {
 
 	private String fechaHasta;
 
+	private boolean excluirPendientes = false;
+
 	private String estado;
 
 	public String getEstado() {
@@ -50,6 +52,14 @@ public class LoteFilterDTO extends SortPageDTO {
 
 	public void setFechaHasta(String fechaHasta) {
 		this.fechaHasta = fechaHasta;
+	}
+
+	public boolean isExcluirPendientes() {
+		return excluirPendientes;
+	}
+
+	public void setExcluirPendientes(boolean excluirPendientes) {
+		this.excluirPendientes = excluirPendientes;
 	}
 
 }

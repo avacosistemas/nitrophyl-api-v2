@@ -162,6 +162,15 @@ public class NJBaseRepository<ID extends Serializable, E extends ar.com.avaco.ar
 			case EQUALS_MORE_THAN:
 				criterion = Restrictions.ge(property, data.getObject());
 				break;
+			case NOT_EQUALS:
+				criterion = Restrictions.not(Restrictions.eq(property, data.getObject()));
+				break;
+			case IS_NULL:
+				criterion = Restrictions.isNull(property);
+				break;
+			case IS_NOT_NULL:
+				criterion = Restrictions.isNotNull(property);
+				break;
 		default:
 			break;
 		}
