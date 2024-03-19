@@ -34,6 +34,9 @@ public class EnsayoResultado extends ar.com.avaco.arc.core.domain.Entity<Long> {
 	@Column(name = "maximo")
 	private Double maximo;
 
+	@Column(name = "norma")
+	private String norma;
+
 	@ManyToOne(optional = false)
 	@JoinColumn(name = "ID_ENSAYO")
 	private Ensayo ensayo;
@@ -95,6 +98,14 @@ public class EnsayoResultado extends ar.com.avaco.arc.core.domain.Entity<Long> {
 
 	public void setMaximo(Double maximo) {
 		this.maximo = maximo;
+	}
+
+	public String getNorma() {
+		return norma;
+	}
+
+	public void setNorma(String norma) {
+		this.norma = norma;
 	}
 
 }

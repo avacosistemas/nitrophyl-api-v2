@@ -37,6 +37,7 @@ public class EnsayoResultadoEPServiceImpl
 		erdto.setMaximo(entity.getMaximo());
 		erdto.setMinimo(entity.getMinimo());
 		erdto.setNombre(entity.getNombre());
+		erdto.setNorma(entity.getNorma());
 		erdto.setRedondeo(entity.getRedondeo());
 		erdto.setResultado(entity.getResultado());
 		return erdto;

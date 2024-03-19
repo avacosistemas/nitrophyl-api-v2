@@ -55,6 +55,7 @@ public class EnsayoEPServiceImpl extends CRUDEPBaseService<Long, EnsayoDTO, Ensa
 			EnsayoResultado er = new EnsayoResultado();
 			er.setMaximo(res.getMaximo());
 			er.setMinimo(res.getMinimo());
+			er.setNorma(res.getNorma());
 			er.setNombre(res.getNombre());
 			er.setEnsayo(ensayo);
 			er.setRedondeo(res.getRedondeo());
@@ -87,14 +88,29 @@ public class EnsayoEPServiceImpl extends CRUDEPBaseService<Long, EnsayoDTO, Ensa
 
 	@Override
 	public EnsayoDTO save(EnsayoDTO dto) throws BusinessException {
-		Ensayo entity = convertToEntity(dto);
-		entity.setId(null);
+		// Convierto el dto en entidad
+		Ensayo ensayo = convertToEntity(dto);
+		
+		//Obtengo la configuracion de la prueba
 		ConfiguracionPrueba configuracionPrueba = configuracionPruebaService.get(dto.getIdConfiguracionPrueba());
-		entity.setMaquina(configuracionPrueba.getMaquina().getNombre());
-		entity.setCondiciones(condicionesToString(configuracionPrueba.getCondiciones()));
-		entity.setFecha(DateUtils.toDate(dto.getFecha(), DateUtils.PATTERN_SOLO_FECHA));
-		entity.setEstado(EstadoEnsayo.valueOf(dto.getEstado()));
-		Ensayo save = this.service.save(entity);
+
+		// Limpio el ID
+		ensayo.setId(null);
+		
+		// Seteo la máquina
+		ensayo.setMaquina(configuracionPrueba.getMaquina().getNombre());
+		
+		
+		// Seteo las condiciones aplanandolas
+		ensayo.setCondiciones(condicionesToString(configuracionPrueba.getCondiciones()));
+		
+		// Seteo la fecha
+		ensayo.setFecha(DateUtils.toDate(dto.getFecha(), DateUtils.PATTERN_SOLO_FECHA));
+		
+		//Seteo la fecha
+		ensayo.setEstado(EstadoEnsayo.valueOf(dto.getEstado()));
+		
+		Ensayo save = this.service.save(ensayo);
 		dto.setId(save.getId());
 		return dto;
 	}

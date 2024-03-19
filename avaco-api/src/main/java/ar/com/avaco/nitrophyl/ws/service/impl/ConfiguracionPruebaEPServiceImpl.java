@@ -48,6 +48,7 @@ public class ConfiguracionPruebaEPServiceImpl
 
 		cf.setObservacionesReporte(dto.getObservacionesReporte());
 		cf.setMostrarResultadosReporte(dto.isMostrarResultadosReporte());
+		cf.setMostrarParametroReporte(dto.isMostrarParametroReporte());
 		
 		cf.setParametros(new HashSet<>(dto.getParametros().stream()
 				.map(x -> new ConfiguracionPruebaParametro(cf, x.getNombre(), x.getMinimo(), x.getMaximo(), x.getNorma()))
@@ -75,6 +76,7 @@ public class ConfiguracionPruebaEPServiceImpl
 		dto.setMaquina(entity.getMaquina().getNombre());
 		dto.setObservacionesReporte(entity.getObservacionesReporte());
 		dto.setMostrarResultadosReporte(entity.isMostrarResultadosReporte());
+		dto.setMostrarParametroReporte(entity.isMostrarParametroReporte());
 		return dto;
 	}
 

@@ -5,7 +5,7 @@ import ar.com.avaco.ws.rest.dto.DTOEntity;
 public class EnsayoResultadoDTO extends DTOEntity<Long> {
 
 	private Long id;
-	
+
 	private Long idEnsayo;
 
 	private Long idConfiguracionPruebaParametro;
@@ -19,7 +19,17 @@ public class EnsayoResultadoDTO extends DTOEntity<Long> {
 	private Double resultado;
 
 	private Double redondeo;
-	
+
+	private String norma;
+
+	public String getNorma() {
+		return norma;
+	}
+
+	public void setNorma(String norma) {
+		this.norma = norma;
+	}
+
 	public Double getResultado() {
 		return resultado;
 	}

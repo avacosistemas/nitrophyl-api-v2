@@ -1,5 +1,7 @@
 package ar.com.avaco.ws.rest.controller;
 
+import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -11,7 +13,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.itextpdf.text.DocumentException;
 
 import ar.com.avaco.commons.exception.BusinessException;
 import ar.com.avaco.nitrophyl.ws.dto.LoteAprobarDTO;
@@ -21,6 +26,7 @@ import ar.com.avaco.nitrophyl.ws.dto.LoteRechazarDTO;
 import ar.com.avaco.nitrophyl.ws.service.LoteEPService;
 import ar.com.avaco.nitrophyl.ws.service.filter.LoteFilter;
 import ar.com.avaco.ws.rest.dto.JSONResponse;
+import ar.com.avaco.ws.rest.informe.InformeBuilder;
 
 @RestController
 public class LoteRestController extends AbstractDTORestController<LoteDTO, Long, LoteEPService> {
@@ -35,6 +41,16 @@ public class LoteRestController extends AbstractDTORestController<LoteDTO, Long,
 		List<LoteDTO> listFilter = super.service.listFilter(new LoteFilter(filter));
 		JSONResponse response = new JSONResponse();
 		response.setData(listFilter);
+		response.setStatus(JSONResponse.OK);
+		return new ResponseEntity<JSONResponse>(response, HttpStatus.OK);
+	}
+
+	@RequestMapping(value = "/reporte", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<JSONResponse> reporte(@RequestParam Long idLote) throws DocumentException, IOException, URISyntaxException {
+		InformeBuilder ib = new InformeBuilder();
+//		ib.generarReporte(idLote);
+		JSONResponse response = new JSONResponse();
+		response.setData(true);
 		response.setStatus(JSONResponse.OK);
 		return new ResponseEntity<JSONResponse>(response, HttpStatus.OK);
 	}

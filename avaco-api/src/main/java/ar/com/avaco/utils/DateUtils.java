@@ -11,9 +11,24 @@ import java.util.Date;
 
 public class DateUtils {
 
+	/**
+	 * dd/MM/yyyy
+	 */
 	public final static String PATTERN_SOLO_FECHA = "dd/MM/yyyy";
+
+	/**
+	 * yyyyMMdd
+	 */
 	public final static String PATTERN_yyyyMMdd = "yyyyMMdd";
+
+	/**
+	 * dd/MM/yy HH:mm
+	 */
 	public final static String PATTERN_FULL_24_HS = "dd/MM/yy HH:mm";
+
+	/**
+	 * dd/MM/yyyy HH:mm:ss
+	 */
 	public final static String PATTERN_FULL_24_HS_CON_SEGUNDOS = "dd/MM/yyyy HH:mm:ss";
 
 	public static Date toDate(LocalDate date) {
@@ -64,7 +79,7 @@ public class DateUtils {
 	public static String toStringFechaHora(Date fecha) {
 		return toString(fecha, PATTERN_FULL_24_HS);
 	}
-	
+
 	public static String toStringFechaHoraSinSegundos(Date fecha) {
 		return toString(fecha, PATTERN_FULL_24_HS);
 	}
