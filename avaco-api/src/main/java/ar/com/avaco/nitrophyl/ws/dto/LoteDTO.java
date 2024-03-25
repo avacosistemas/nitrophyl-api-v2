@@ -10,6 +10,8 @@ public class LoteDTO extends DTOEntity<Long> {
 
 	private String formula;
 
+	private String formulaSimple;
+
 	private Long idFormula;
 
 	private String fecha;
@@ -92,6 +94,14 @@ public class LoteDTO extends DTOEntity<Long> {
 
 	public void setEstado(String estado) {
 		this.estado = estado;
+	}
+
+	public String getFormulaSimple() {
+		return formulaSimple;
+	}
+
+	public void setFormulaSimple(String formulaSimple) {
+		this.formulaSimple = formulaSimple;
 	}
 
 }

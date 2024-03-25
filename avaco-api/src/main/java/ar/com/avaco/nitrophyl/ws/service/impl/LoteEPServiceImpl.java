@@ -43,6 +43,7 @@ public class LoteEPServiceImpl extends CRUDEPBaseService<Long, LoteDTO, Lote, Lo
 		dto.setObservaciones(entity.getObservaciones());
 		dto.setNroLote(entity.getNroLote());
 		dto.setEstado(entity.getEstado().toString());
+		dto.setFormulaSimple(entity.getFormula().getNombre());
 		if (entity.getFechaEstado() != null) {
 			dto.setFechaEstado(DateUtils.toStringFecha(entity.getFechaEstado()));
 		}
