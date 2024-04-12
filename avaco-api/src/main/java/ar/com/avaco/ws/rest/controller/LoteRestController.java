@@ -43,7 +43,7 @@ public class LoteRestController extends AbstractDTORestController<LoteDTO, Long,
 	public ResponseEntity<JSONResponse> listMonitor(LoteFilterDTO filter) {
 		filter.setAsc(false);
 		filter.setIdx("fechaEstado");
-		filter.setExcluirPendientes(true);
+		filter.setExcluirPendientes(false);
 		List<LoteDTO> listFilter = super.service.listFilter(new LoteFilter(filter));
 		JSONResponse response = new JSONResponse();
 		response.setData(listFilter);
