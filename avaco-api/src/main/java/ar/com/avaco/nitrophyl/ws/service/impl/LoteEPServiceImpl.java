@@ -61,4 +61,9 @@ public class LoteEPServiceImpl extends CRUDEPBaseService<Long, LoteDTO, Lote, Lo
 		this.service.rechazar(idLote, observaciones);
 	}
 
+	@Override
+	public void borrar(Long idLote) {
+		this.service.borrar(idLote);
+	}
+
 }

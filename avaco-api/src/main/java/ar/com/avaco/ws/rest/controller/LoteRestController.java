@@ -79,6 +79,15 @@ public class LoteRestController extends AbstractDTORestController<LoteDTO, Long,
 		response.setStatus(JSONResponse.OK);
 		return new ResponseEntity<JSONResponse>(response, HttpStatus.OK);
 	}
+	
+	@RequestMapping(value = "/lote/delete/{idLote}", method = RequestMethod.DELETE)
+	public ResponseEntity<JSONResponse> borrar(@PathVariable("idLote") Long idLote)
+			throws BusinessException {
+		this.service.borrar(idLote);
+		JSONResponse response = new JSONResponse();
+		response.setStatus(JSONResponse.OK);
+		return new ResponseEntity<JSONResponse>(response, HttpStatus.OK);
+	}
 
 
 }

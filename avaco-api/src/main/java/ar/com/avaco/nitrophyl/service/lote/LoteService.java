@@ -8,5 +8,7 @@ public interface LoteService extends NJService<Long, Lote> {
 	void aprobar(Long idLote, String estado, String observaciones);
 
 	void rechazar(Long idLote, String observaciones);
+	
+	void borrar(Long idLote);
 
 }

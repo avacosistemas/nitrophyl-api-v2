@@ -38,4 +38,9 @@ public class LoteServiceImpl extends NJBaseService<Long, Lote, LoteRepository> i
 		this.repository.updateEstadoLote(idLote, EstadoLote.RECHAZADO, observaciones, DateUtils.getFechaYHoraActual());
 	}
 
+	@Override
+	public void borrar(Long idLote) {
+		this.repository.delete(idLote);		
+	}
+
 }
