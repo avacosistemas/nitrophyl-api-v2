@@ -21,6 +21,8 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import ar.com.avaco.nitrophyl.domain.entities.formula.Formula;
 
@@ -60,7 +62,7 @@ public class Lote extends ar.com.avaco.arc.core.domain.Entity<Long> {
 	@Column(name = "ESTADO")
 	private EstadoLote estado;
 
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "lote")
 	private Set<Ensayo> ensayos = new HashSet<Ensayo>();
 
 	public Long getId() {
