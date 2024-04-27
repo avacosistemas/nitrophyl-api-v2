@@ -29,6 +29,15 @@ public class LoteRestController extends AbstractDTORestController<LoteDTO, Long,
 	public void setService(LoteEPService loteEPService) {
 		super.service = loteEPService;
 	}
+	
+	@RequestMapping(value = "/lote/{idLote}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<JSONResponse> read(@PathVariable("idLote") Long idLote) throws BusinessException {
+		ResponseEntity<JSONResponse> lote = super.get(idLote);
+		JSONResponse response = new JSONResponse();
+		response.setData(lote);
+		response.setStatus(JSONResponse.OK);
+		return new ResponseEntity<JSONResponse>(response, HttpStatus.OK);
+	}
 
 	@RequestMapping(value = "/lote", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<JSONResponse> list(LoteFilterDTO filter) {
