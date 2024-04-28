@@ -89,6 +89,16 @@ public class LoteRestController extends AbstractDTORestController<LoteDTO, Long,
 		return new ResponseEntity<JSONResponse>(response, HttpStatus.OK);
 	}
 	
+	@RequestMapping(value = "/lote/update/{idLote}", method = RequestMethod.PUT)
+	public ResponseEntity<JSONResponse> update(@PathVariable("idLote") Long idLote, @RequestBody LoteDTO loteDTO)
+			throws BusinessException {
+		super.update(idLote, loteDTO);
+		JSONResponse response = new JSONResponse();
+		response.setData(loteDTO);
+		response.setStatus(JSONResponse.OK);
+		return new ResponseEntity<JSONResponse>(response, HttpStatus.OK);
+	}
+	
 	@RequestMapping(value = "/lote/delete/{idLote}", method = RequestMethod.DELETE)
 	public ResponseEntity<JSONResponse> borrar(@PathVariable("idLote") Long idLote)
 			throws BusinessException {
