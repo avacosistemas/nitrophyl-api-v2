@@ -1,5 +1,6 @@
 package ar.com.avaco.ws.rest.controller;
 
+import java.text.MessageFormat;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -20,6 +21,7 @@ import ar.com.avaco.nitrophyl.ws.dto.LoteFilterDTO;
 import ar.com.avaco.nitrophyl.ws.dto.LoteRechazarDTO;
 import ar.com.avaco.nitrophyl.ws.service.LoteEPService;
 import ar.com.avaco.nitrophyl.ws.service.filter.LoteFilter;
+import ar.com.avaco.ws.rest.dto.ErrorResponse;
 import ar.com.avaco.ws.rest.dto.JSONResponse;
 
 @RestController
@@ -83,9 +85,16 @@ public class LoteRestController extends AbstractDTORestController<LoteDTO, Long,
 	@RequestMapping(value = "/lote/delete/{idLote}", method = RequestMethod.DELETE)
 	public ResponseEntity<JSONResponse> borrar(@PathVariable("idLote") Long idLote)
 			throws BusinessException {
-		this.service.borrar(idLote);
 		JSONResponse response = new JSONResponse();
-		response.setStatus(JSONResponse.OK);
+		try {
+			this.service.borrar(idLote);
+			response.setStatus(JSONResponse.OK);
+		} catch (Exception e) {
+			ErrorResponse eresp = new ErrorResponse();
+    		eresp.setStatus(JSONResponse.ERROR);
+    		eresp.setError(e.getMessage());    		
+			response = eresp;
+		}
 		return new ResponseEntity<JSONResponse>(response, HttpStatus.OK);
 	}
 

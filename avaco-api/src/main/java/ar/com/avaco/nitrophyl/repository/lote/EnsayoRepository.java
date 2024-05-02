@@ -9,4 +9,6 @@ public interface EnsayoRepository extends NJRepository<Long, Ensayo>, EnsayoRepo
 
 	List<Ensayo> findByLoteId(Long idLote);
 
+	int countByLoteId(Long idLote);
+
 }

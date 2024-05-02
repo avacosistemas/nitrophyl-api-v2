@@ -9,6 +9,6 @@ public interface LoteEPService extends CRUDEPService<Long, LoteDTO> {
 
 	void rechazar(Long idLote, String observaciones);
 	
-	void borrar(Long idLote);
+	void borrar(Long idLote) throws Exception;
 
 }

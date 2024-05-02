@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 import ar.com.avaco.arc.core.component.bean.service.NJBaseService;
 import ar.com.avaco.nitrophyl.domain.entities.lote.EstadoLote;
 import ar.com.avaco.nitrophyl.domain.entities.lote.Lote;
+import ar.com.avaco.nitrophyl.repository.lote.EnsayoRepository;
 import ar.com.avaco.nitrophyl.repository.lote.LoteRepository;
 import ar.com.avaco.utils.DateUtils;
 
@@ -15,10 +16,9 @@ import ar.com.avaco.utils.DateUtils;
 @Service("loteService")
 public class LoteServiceImpl extends NJBaseService<Long, Lote, LoteRepository> implements LoteService {
 
-	@Resource(name = "loteRepository")
-	public void setLoteRepository(LoteRepository loteRepository) {
-		this.repository = loteRepository;
-	}
+	private EnsayoRepository ensayoRepository;
+	
+	
 
 	@Override
 	public Lote save(Lote entity) {
@@ -43,4 +43,19 @@ public class LoteServiceImpl extends NJBaseService<Long, Lote, LoteRepository> i
 		this.repository.delete(idLote);		
 	}
 
+	@Override
+	public boolean hasEnsayos(Long idLote) {
+		return this.ensayoRepository.countByLoteId(idLote) > 0;
+	}
+
+	@Resource(name = "loteRepository")
+	public void setLoteRepository(LoteRepository loteRepository) {
+		this.repository = loteRepository;
+	}
+	
+	@Resource(name = "ensayoRepository")
+	public void setEnsayoRepository(EnsayoRepository ensayoRepository) {
+		this.ensayoRepository = ensayoRepository;
+	}
+	
 }
