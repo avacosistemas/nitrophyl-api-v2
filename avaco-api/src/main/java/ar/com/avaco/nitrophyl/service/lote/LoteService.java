@@ -11,4 +11,6 @@ public interface LoteService extends NJService<Long, Lote> {
 	
 	void borrar(Long idLote);
 
+	boolean hasEnsayos(Long idLote);
+
 }

@@ -80,7 +80,9 @@ public class LoteEPServiceImpl extends CRUDEPBaseService<Long, LoteDTO, Lote, Lo
 	}
 
 	@Override
-	public void borrar(Long idLote) {
+	public void borrar(Long idLote) throws Exception {
+		if (this.service.hasEnsayos(idLote))
+			throw new Exception("No se puede borrar el lote porque tiene ensayos asociados");
 		this.service.borrar(idLote);
 	}
 
