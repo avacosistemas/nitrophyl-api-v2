@@ -28,6 +28,9 @@ public class LoteEPServiceImpl extends CRUDEPBaseService<Long, LoteDTO, Lote, Lo
 	public LoteDTO update(LoteDTO dto) throws BusinessException {
 		LoteDTO update = this.get(dto.getId());
 		update.setFecha(dto.getFecha());
+		if (dto.getIdFormula() != update.getIdFormula() && this.service.hasEnsayos(dto.getId())) {
+			throw new BusinessException("No puede actualizarse la fórmula porque tiene ensayos asociados");
+		}
 		update.setIdFormula(dto.getIdFormula());
 		update.setNroLote(dto.getNroLote());
 		update.setObservaciones(dto.getObservaciones());
@@ -80,9 +83,9 @@ public class LoteEPServiceImpl extends CRUDEPBaseService<Long, LoteDTO, Lote, Lo
 	}
 
 	@Override
-	public void borrar(Long idLote) throws Exception {
+	public void borrar(Long idLote) throws BusinessException {
 		if (this.service.hasEnsayos(idLote))
-			throw new Exception("No se puede borrar el lote porque tiene ensayos asociados");
+			throw new BusinessException("No se puede borrar el lote porque tiene ensayos asociados");
 		this.service.borrar(idLote);
 	}
 
