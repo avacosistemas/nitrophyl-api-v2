@@ -2,9 +2,12 @@ package ar.com.avaco.nitrophyl.ws.service.impl;
 
 import javax.annotation.Resource;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
+import ar.com.avaco.commons.exception.BusinessException;
 import ar.com.avaco.nitrophyl.domain.entities.formula.Formula;
+import ar.com.avaco.nitrophyl.domain.entities.lote.EstadoLote;
 import ar.com.avaco.nitrophyl.domain.entities.lote.Lote;
 import ar.com.avaco.nitrophyl.service.lote.LoteService;
 import ar.com.avaco.nitrophyl.ws.dto.LoteDTO;
@@ -22,6 +25,16 @@ public class LoteEPServiceImpl extends CRUDEPBaseService<Long, LoteDTO, Lote, Lo
 	}
 
 	@Override
+	public LoteDTO update(LoteDTO dto) throws BusinessException {
+		LoteDTO update = this.get(dto.getId());
+		update.setFecha(dto.getFecha());
+		update.setIdFormula(dto.getIdFormula());
+		update.setNroLote(dto.getNroLote());
+		update.setObservaciones(dto.getObservaciones());
+		return super.update(update);
+	}
+	
+	@Override
 	protected Lote convertToEntity(LoteDTO dto) {
 		Lote lote = new Lote();
 		Formula formula = new Formula();
@@ -30,6 +43,11 @@ public class LoteEPServiceImpl extends CRUDEPBaseService<Long, LoteDTO, Lote, Lo
 		lote.setFecha(DateUtils.toDate(dto.getFecha(), DateUtils.PATTERN_SOLO_FECHA));
 		lote.setObservaciones(dto.getObservaciones());
 		lote.setNroLote(dto.getNroLote());
+		lote.setEstado(EstadoLote.valueOf(dto.getEstado()));
+		if (StringUtils.isNotBlank(dto.getFechaEstado())) {
+			lote.setFechaEstado(DateUtils.toDate(dto.getFechaEstado(), DateUtils.PATTERN_SOLO_FECHA));
+		}
+		lote.setObservacionesEstado(dto.getObservacionesEstado());
 		return lote;
 	}
 
