@@ -1,5 +1,7 @@
 package ar.com.avaco.nitrophyl.service.lote;
 
+import java.util.Date;
+
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
@@ -28,14 +30,14 @@ public class LoteServiceImpl extends NJBaseService<Long, Lote, LoteRepository> i
 	}
 
 	@Override
-	public void aprobar(Long idLote, String estado, String observaciones) {
+	public void aprobar(Long idLote, String estado, String observaciones, Date fecha) {
 		this.repository.updateEstadoLote(idLote, EstadoLote.valueOf(estado), observaciones,
-				DateUtils.getFechaYHoraActual());
+				fecha);
 	}
 
 	@Override
-	public void rechazar(Long idLote, String observaciones) {
-		this.repository.updateEstadoLote(idLote, EstadoLote.RECHAZADO, observaciones, DateUtils.getFechaYHoraActual());
+	public void rechazar(Long idLote, String observaciones, Date fecha) {
+		this.repository.updateEstadoLote(idLote, EstadoLote.RECHAZADO, observaciones, fecha);
 	}
 
 	@Override

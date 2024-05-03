@@ -23,7 +23,7 @@ public class MoldePlanoListadoDTO {
 		this.idMolde = mp.getIdMolde();
 		this.nombreArchivo = mp.getNombreArchivo();
 		this.version = mp.getVersion();
-		this.fecha = DateUtils.toString(mp.getFecha(), DateUtils.PATTERN_FULL_24_HS);
+		this.fecha = DateUtils.toString(mp.getFecha(), DateUtils.PATTERN_dd_MM_yyyy_HH_mm);
 		this.descripcion = mp.getDescripcion();
 	}
 

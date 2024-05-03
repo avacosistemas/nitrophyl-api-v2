@@ -1,6 +1,5 @@
 package ar.com.avaco.ws.rest.controller;
 
-import java.text.MessageFormat;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -65,38 +64,36 @@ public class LoteRestController extends AbstractDTORestController<LoteDTO, Long,
 	@RequestMapping(value = "/lote/aprobar/{idLote}", method = RequestMethod.PUT)
 	public ResponseEntity<JSONResponse> aprobar(@PathVariable("idLote") Long idLote, @RequestBody LoteAprobarDTO dto)
 			throws BusinessException {
-		this.service.aprobar(idLote, dto.getEstado(), dto.getObservaciones());
+		this.service.aprobar(idLote, dto.getEstado(), dto.getObservaciones(), dto.getFecha());
 		JSONResponse response = new JSONResponse();
 		response.setData(dto);
 		response.setStatus(JSONResponse.OK);
 		return new ResponseEntity<JSONResponse>(response, HttpStatus.OK);
 	}
-	
+
 	@RequestMapping(value = "/lote/rechazar/{idLote}", method = RequestMethod.PUT)
 	public ResponseEntity<JSONResponse> rechazar(@PathVariable("idLote") Long idLote, @RequestBody LoteRechazarDTO dto)
 			throws BusinessException {
-		this.service.rechazar(idLote, dto.getObservaciones());
+		this.service.rechazar(idLote, dto.getObservaciones(), dto.getFecha());
 		JSONResponse response = new JSONResponse();
 		response.setData(dto);
 		response.setStatus(JSONResponse.OK);
 		return new ResponseEntity<JSONResponse>(response, HttpStatus.OK);
 	}
-	
+
 	@RequestMapping(value = "/lote/delete/{idLote}", method = RequestMethod.DELETE)
-	public ResponseEntity<JSONResponse> borrar(@PathVariable("idLote") Long idLote)
-			throws BusinessException {
+	public ResponseEntity<JSONResponse> borrar(@PathVariable("idLote") Long idLote) throws BusinessException {
 		JSONResponse response = new JSONResponse();
 		try {
 			this.service.borrar(idLote);
 			response.setStatus(JSONResponse.OK);
 		} catch (Exception e) {
 			ErrorResponse eresp = new ErrorResponse();
-    		eresp.setStatus(JSONResponse.ERROR);
-    		eresp.setError(e.getMessage());    		
+			eresp.setStatus(JSONResponse.ERROR);
+			eresp.setError(e.getMessage());
 			response = eresp;
 		}
 		return new ResponseEntity<JSONResponse>(response, HttpStatus.OK);
 	}
-
 
 }

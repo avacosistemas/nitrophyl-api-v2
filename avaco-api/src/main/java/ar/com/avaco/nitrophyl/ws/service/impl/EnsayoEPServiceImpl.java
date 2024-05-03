@@ -92,7 +92,7 @@ public class EnsayoEPServiceImpl extends CRUDEPBaseService<Long, EnsayoDTO, Ensa
 		ConfiguracionPrueba configuracionPrueba = configuracionPruebaService.get(dto.getIdConfiguracionPrueba());
 		entity.setMaquina(configuracionPrueba.getMaquina().getNombre());
 		entity.setCondiciones(condicionesToString(configuracionPrueba.getCondiciones()));
-		entity.setFecha(DateUtils.toDate(dto.getFecha(), DateUtils.PATTERN_SOLO_FECHA));
+		entity.setFecha(DateUtils.toDate(dto.getFecha(), DateUtils.PATTERN_dd_MM_yyyy));
 		entity.setEstado(EstadoEnsayo.valueOf(dto.getEstado()));
 		Ensayo save = this.service.save(entity);
 		dto.setId(save.getId());

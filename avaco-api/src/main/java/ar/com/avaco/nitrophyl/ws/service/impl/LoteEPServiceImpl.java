@@ -27,7 +27,7 @@ public class LoteEPServiceImpl extends CRUDEPBaseService<Long, LoteDTO, Lote, Lo
 		Formula formula = new Formula();
 		formula.setId(dto.getIdFormula());
 		lote.setFormula(formula);
-		lote.setFecha(DateUtils.toDate(dto.getFecha(), DateUtils.PATTERN_SOLO_FECHA));
+		lote.setFecha(DateUtils.toDate(dto.getFecha(), DateUtils.PATTERN_dd_MM_yyyy));
 		lote.setObservaciones(dto.getObservaciones());
 		lote.setNroLote(dto.getNroLote());
 		return lote;
@@ -52,13 +52,13 @@ public class LoteEPServiceImpl extends CRUDEPBaseService<Long, LoteDTO, Lote, Lo
 	}
 
 	@Override
-	public void aprobar(Long idLote, String estado, String observaciones) {
-		this.service.aprobar(idLote, estado, observaciones);
+	public void aprobar(Long idLote, String estado, String observaciones, String fecha) {
+		this.service.aprobar(idLote, estado, observaciones, DateUtils.toDate(fecha, DateUtils.PATTERN_dd_MM_yyyy));
 	}
 
 	@Override
-	public void rechazar(Long idLote, String observaciones) {
-		this.service.rechazar(idLote, observaciones);
+	public void rechazar(Long idLote, String observaciones, String fecha) {
+		this.service.rechazar(idLote, observaciones, DateUtils.toDate(fecha, DateUtils.PATTERN_dd_MM_yyyy));
 	}
 
 	@Override

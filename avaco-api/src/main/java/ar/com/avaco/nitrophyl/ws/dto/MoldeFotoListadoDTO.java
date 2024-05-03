@@ -23,7 +23,7 @@ public class MoldeFotoListadoDTO {
 		this.idMolde = mf.getIdMolde();
 		this.nombreArchivo = mf.getNombreArchivo();
 		this.version = mf.getVersion();
-		this.fecha = DateUtils.toString(mf.getFecha(), DateUtils.PATTERN_FULL_24_HS);
+		this.fecha = DateUtils.toString(mf.getFecha(), DateUtils.PATTERN_dd_MM_yyyy_HH_mm);
 		this.descripcion = mf.getDescripcion();
 	}
 

@@ -2,6 +2,8 @@ package ar.com.avaco.nitrophyl.ws.dto;
 
 public class LoteAprobarDTO {
 
+	private String fecha;
+
 	private String observaciones;
 
 	private String estado;
@@ -20,6 +22,14 @@ public class LoteAprobarDTO {
 
 	public void setEstado(String estado) {
 		this.estado = estado;
+	}
+
+	public String getFecha() {
+		return fecha;
+	}
+
+	public void setFecha(String fecha) {
+		this.fecha = fecha;
 	}
 
 }

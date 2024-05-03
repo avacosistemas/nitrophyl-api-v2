@@ -11,10 +11,10 @@ import java.util.Date;
 
 public class DateUtils {
 
-	public final static String PATTERN_SOLO_FECHA = "dd/MM/yyyy";
+	public final static String PATTERN_dd_MM_yyyy = "dd/MM/yyyy";
 	public final static String PATTERN_yyyyMMdd = "yyyyMMdd";
-	public final static String PATTERN_FULL_24_HS = "dd/MM/yy HH:mm";
-	public final static String PATTERN_FULL_24_HS_CON_SEGUNDOS = "dd/MM/yyyy HH:mm:ss";
+	public final static String PATTERN_dd_MM_yyyy_HH_mm = "dd/MM/yy HH:mm";
+	public final static String PATTERN_dd_MM_yyyy_HH_mm_ss = "dd/MM/yyyy HH:mm:ss";
 
 	public static Date toDate(LocalDate date) {
 		return Date.from(date.atStartOfDay(ZoneId.systemDefault()).toInstant());
@@ -52,7 +52,7 @@ public class DateUtils {
 	 * @return
 	 */
 	public static String toStringFecha(Date fecha) {
-		return toString(fecha, PATTERN_SOLO_FECHA);
+		return toString(fecha, PATTERN_dd_MM_yyyy);
 	}
 
 	/**
@@ -62,11 +62,11 @@ public class DateUtils {
 	 * @return
 	 */
 	public static String toStringFechaHora(Date fecha) {
-		return toString(fecha, PATTERN_FULL_24_HS);
+		return toString(fecha, PATTERN_dd_MM_yyyy_HH_mm);
 	}
-	
+
 	public static String toStringFechaHoraSinSegundos(Date fecha) {
-		return toString(fecha, PATTERN_FULL_24_HS);
+		return toString(fecha, PATTERN_dd_MM_yyyy_HH_mm);
 	}
 
 	public static String toString(Date fecha, String pattern) {

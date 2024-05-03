@@ -74,7 +74,7 @@ public class NotificacionServiceImpl implements NotificacionService {
 
 	public void notificarInicioServer() {
 		mailSenderSMTPService.sendMail(from, supportMail, "Inicio Server Tomcat",
-				"Se inicio el server. " + DateUtils.toString(new Date(), DateUtils.PATTERN_FULL_24_HS), null);
+				"Se inicio el server. " + DateUtils.toString(new Date(), DateUtils.PATTERN_dd_MM_yyyy_HH_mm), null);
 		
 	}
 
