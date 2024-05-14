@@ -25,6 +25,12 @@ public class LoteEPServiceImpl extends CRUDEPBaseService<Long, LoteDTO, Lote, Lo
 	}
 
 	@Override
+	public LoteDTO save(LoteDTO dto) throws BusinessException {
+		dto.setEstado(EstadoLote.PENDIENTE_APROBACION.name());
+		return super.save(dto);
+	}
+	
+	@Override
 	public LoteDTO update(LoteDTO dto) throws BusinessException {
 		LoteDTO update = this.get(dto.getId());
 		update.setFecha(dto.getFecha());
