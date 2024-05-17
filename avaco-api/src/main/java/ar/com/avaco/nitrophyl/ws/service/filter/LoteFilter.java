@@ -1,6 +1,7 @@
 package ar.com.avaco.nitrophyl.ws.service.filter;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
@@ -10,6 +11,7 @@ import ar.com.avaco.arc.core.domain.filter.FilterData;
 import ar.com.avaco.arc.core.domain.filter.FilterDataType;
 import ar.com.avaco.nitrophyl.domain.entities.lote.EstadoLote;
 import ar.com.avaco.nitrophyl.ws.dto.LoteFilterDTO;
+import ar.com.avaco.utils.DateUtils;
 
 public class LoteFilter extends AbstractFilter {
 
@@ -17,9 +19,9 @@ public class LoteFilter extends AbstractFilter {
 
 	private Long idFormula;
 
-	private String fechaDesde;
+	private Date fechaDesde;
 
-	private String fechaHasta;
+	private Date fechaHasta;
 	
 	private boolean excluirPendientes = false;
 
@@ -30,8 +32,12 @@ public class LoteFilter extends AbstractFilter {
 		super(filter.getRows(), filter.getFirst(), filter.getAsc(), filter.getIdx());
 		this.nroLote = filter.getNroLote();
 		this.idFormula = filter.getIdFormula();
-		this.fechaDesde = filter.getFechaDesde();
-		this.fechaHasta = filter.getFechaHasta();
+		if (StringUtils.isNotEmpty(filter.getFechaDesde())) {
+			this.fechaDesde = DateUtils.toDate(filter.getFechaDesde(), "dd/MM/yyyy");
+		}
+		if (StringUtils.isNotEmpty(filter.getFechaHasta())) {
+			this.fechaHasta = DateUtils.toDate(filter.getFechaHasta(), "dd/MM/yyyy");
+		}
 		this.excluirPendientes = filter.isExcluirPendientes();
 		this.estado = filter.getEstado();
 	}
@@ -45,11 +51,11 @@ public class LoteFilter extends AbstractFilter {
 		if (idFormula != null && idFormula > 0) {
 			list.add(new FilterData("formula.id", idFormula, FilterDataType.EQUALS));
 		}
-		if (StringUtils.isNotBlank(fechaDesde)) {
+		if (fechaDesde!=null) {
 				list.add(new FilterData("fecha", fechaDesde, FilterDataType.EQUALS_MORE_THAN));
 
 		}
-		if (StringUtils.isNotBlank(fechaHasta)) {
+		if (fechaHasta!=null) {
 				list.add(new FilterData("fecha", fechaHasta, FilterDataType.EQUALS_LESS_THAN));
 		}
 		
@@ -80,25 +86,41 @@ public class LoteFilter extends AbstractFilter {
 		this.idFormula = idFormula;
 	}
 
-	public String getFechaDesde() {
+	public boolean isIncluirPendientes() {
+		return excluirPendientes;
+	}
+
+	public Date getFechaDesde() {
 		return fechaDesde;
 	}
 
-	public void setFechaDesde(String fechaDesde) {
+	public void setFechaDesde(Date fechaDesde) {
 		this.fechaDesde = fechaDesde;
 	}
 
-	public String getFechaHasta() {
+	public Date getFechaHasta() {
 		return fechaHasta;
 	}
 
-	public void setFechaHasta(String fechaHasta) {
+	public void setFechaHasta(Date fechaHasta) {
 		this.fechaHasta = fechaHasta;
 	}
 
-	public boolean isIncluirPendientes() {
+	public boolean isExcluirPendientes() {
 		return excluirPendientes;
-}
+	}
+
+	public void setExcluirPendientes(boolean excluirPendientes) {
+		this.excluirPendientes = excluirPendientes;
+	}
+
+	public String getEstado() {
+		return estado;
+	}
+
+	public void setEstado(String estado) {
+		this.estado = estado;
+	}
 
 	public void setIncluirPendientes(boolean incluirPendientes) {
 		this.excluirPendientes = incluirPendientes;
