@@ -39,6 +39,15 @@ public class LoteRestController extends AbstractDTORestController<LoteDTO, Long,
 		return new ResponseEntity<JSONResponse>(response, HttpStatus.OK);
 	}
 
+	@RequestMapping(value = "/lote/count", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<JSONResponse> listCount(LoteFilterDTO filter) {
+		int listCount = super.service.listCount(new LoteFilter(filter));
+		JSONResponse response = new JSONResponse();
+		response.setData(listCount);
+		response.setStatus(JSONResponse.OK);
+		return new ResponseEntity<JSONResponse>(response, HttpStatus.OK);
+	}
+	
 	@RequestMapping(value = "/lote/monitor", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<JSONResponse> listMonitor(LoteFilterDTO filter) {
 		filter.setAsc(false);
@@ -47,6 +56,18 @@ public class LoteRestController extends AbstractDTORestController<LoteDTO, Long,
 		List<LoteDTO> listFilter = super.service.listFilter(new LoteFilter(filter));
 		JSONResponse response = new JSONResponse();
 		response.setData(listFilter);
+		response.setStatus(JSONResponse.OK);
+		return new ResponseEntity<JSONResponse>(response, HttpStatus.OK);
+	}
+	
+	@RequestMapping(value = "/lote/monitor/count", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<JSONResponse> listMonitorCount(LoteFilterDTO filter) {
+		filter.setAsc(false);
+		filter.setIdx("fechaEstado");
+		filter.setExcluirPendientes(false);
+		int listCount = super.service.listCount(new LoteFilter(filter));
+		JSONResponse response = new JSONResponse();
+		response.setData(listCount);
 		response.setStatus(JSONResponse.OK);
 		return new ResponseEntity<JSONResponse>(response, HttpStatus.OK);
 	}
