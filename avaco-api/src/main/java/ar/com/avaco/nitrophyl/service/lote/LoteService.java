@@ -9,4 +9,6 @@ public interface LoteService extends NJService<Long, Lote> {
 
 	void rechazar(Long idLote, String observaciones);
 
+	Lote getLoteCompleto(Long idLote);
+
 }

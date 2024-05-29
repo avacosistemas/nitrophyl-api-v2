@@ -1,8 +1,13 @@
 package ar.com.avaco.nitrophyl.ws.service.impl;
 
+import java.io.IOException;
+import java.net.URISyntaxException;
+
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
+
+import com.itextpdf.text.DocumentException;
 
 import ar.com.avaco.nitrophyl.domain.entities.formula.Formula;
 import ar.com.avaco.nitrophyl.domain.entities.lote.Lote;
@@ -10,6 +15,7 @@ import ar.com.avaco.nitrophyl.service.lote.LoteService;
 import ar.com.avaco.nitrophyl.ws.dto.LoteDTO;
 import ar.com.avaco.nitrophyl.ws.service.LoteEPService;
 import ar.com.avaco.utils.DateUtils;
+import ar.com.avaco.ws.rest.informe.InformeBuilder;
 import ar.com.avaco.ws.rest.service.CRUDEPBaseService;
 
 @Service("loteEPService")
@@ -58,6 +64,19 @@ public class LoteEPServiceImpl extends CRUDEPBaseService<Long, LoteDTO, Lote, Lo
 	@Override
 	public void rechazar(Long idLote, String observaciones) {
 		this.service.rechazar(idLote, observaciones);
+	}
+
+	@Override
+	public void generarReporteLoteCliente(Long idLote, Long idCliente) {
+		// TODO obtener cliente y luego la configuracion para ver que se muestra
+		Lote lote = this.service.getLoteCompleto(idLote);
+		InformeBuilder ib = new InformeBuilder();
+		try {
+			ib.generarReporte(lote);
+		} catch (DocumentException | IOException | URISyntaxException e) {
+			e.printStackTrace();
+		}
+
 	}
 
 }

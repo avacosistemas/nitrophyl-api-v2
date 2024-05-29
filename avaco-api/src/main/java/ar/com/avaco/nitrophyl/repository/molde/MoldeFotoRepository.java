@@ -4,7 +4,6 @@ import java.util.List;
 
 import ar.com.avaco.arc.core.component.bean.repository.NJRepository;
 import ar.com.avaco.nitrophyl.domain.entities.moldes.MoldeFoto;
-import ar.com.avaco.nitrophyl.domain.entities.moldes.MoldeRegistro;
 
 public interface MoldeFotoRepository extends NJRepository<Long, MoldeFoto>, MoldeFotoRepositoryCustom {
 

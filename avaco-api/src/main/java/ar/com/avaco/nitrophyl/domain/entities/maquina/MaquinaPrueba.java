@@ -46,6 +46,10 @@ public class MaquinaPrueba extends ar.com.avaco.arc.core.domain.Entity<Long> {
 		this.idMaquina = idMaquina;
 	}
 
+	public MaquinaPrueba(Long idMaquinaPrueba) {
+		this.id = idMaquinaPrueba;
+	}
+
 	public Long getId() {
 		return id;
 	}

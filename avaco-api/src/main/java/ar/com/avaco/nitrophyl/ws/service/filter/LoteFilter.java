@@ -1,6 +1,5 @@
 package ar.com.avaco.nitrophyl.ws.service.filter;
 
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;

@@ -6,7 +6,6 @@ public class MaquinaPruebaDTO extends DTOEntity<Long> {
 
 	private Long id;
 	private Long idMaquina;
-	private String Maquina;
 	private String nombre;
 
 	public Long getId() {
@@ -23,14 +22,6 @@ public class MaquinaPruebaDTO extends DTOEntity<Long> {
 
 	public void setIdMaquina(Long idMaquina) {
 		this.idMaquina = idMaquina;
-	}
-
-	public String getMaquina() {
-		return Maquina;
-	}
-
-	public void setMaquina(String maquina) {
-		Maquina = maquina;
 	}
 
 	public String getNombre() {

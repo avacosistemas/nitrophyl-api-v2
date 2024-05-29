@@ -10,6 +10,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
+import ar.com.avaco.nitrophyl.domain.entities.formula.ConfiguracionPruebaParametro;
+
 @Entity
 @Table(name = "ENSAYO_RESULTADO")
 @SequenceGenerator(name = "ENSAYO_RESULTADO_SEQ", sequenceName = "ENSAYO_RESULTADO_SEQ", allocationSize = 1)
@@ -28,29 +30,13 @@ public class EnsayoResultado extends ar.com.avaco.arc.core.domain.Entity<Long> {
 	@Column(name = "redondeo")
 	private Double redondeo;
 
-	@Column(name = "minimo")
-	private Double minimo;
-
-	@Column(name = "maximo")
-	private Double maximo;
-
-	@Column(name = "norma")
-	private String norma;
-
 	@ManyToOne(optional = false)
 	@JoinColumn(name = "ID_ENSAYO")
 	private Ensayo ensayo;
 
-	@Column(name = "nombre")
-	private String nombre;
-
-	public String getNombre() {
-		return nombre;
-	}
-
-	public void setNombre(String nombre) {
-		this.nombre = nombre;
-	}
+	@ManyToOne(optional = false)
+	@JoinColumn(name = "ID_CONF_PRUEBA_PARAM")
+	private ConfiguracionPruebaParametro configuracionPruebaParametro;
 
 	public Long getId() {
 		return id;
@@ -84,28 +70,12 @@ public class EnsayoResultado extends ar.com.avaco.arc.core.domain.Entity<Long> {
 		this.ensayo = ensayo;
 	}
 
-	public Double getMinimo() {
-		return minimo;
+	public ConfiguracionPruebaParametro getConfiguracionPruebaParametro() {
+		return configuracionPruebaParametro;
 	}
 
-	public void setMinimo(Double minimo) {
-		this.minimo = minimo;
-	}
-
-	public Double getMaximo() {
-		return maximo;
-	}
-
-	public void setMaximo(Double maximo) {
-		this.maximo = maximo;
-	}
-
-	public String getNorma() {
-		return norma;
-	}
-
-	public void setNorma(String norma) {
-		this.norma = norma;
+	public void setConfiguracionPruebaParametro(ConfiguracionPruebaParametro configuracionPruebaParametro) {
+		this.configuracionPruebaParametro = configuracionPruebaParametro;
 	}
 
 }

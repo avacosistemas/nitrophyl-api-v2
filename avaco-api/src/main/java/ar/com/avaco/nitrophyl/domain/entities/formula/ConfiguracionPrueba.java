@@ -45,17 +45,19 @@ public class ConfiguracionPrueba extends ar.com.avaco.arc.core.domain.Entity<Lon
 	@Column(name = "OBSERVACIONES_REPORTE")
 	private String observacionesReporte;
 
-	@Column(name = "MOSTRAR_RESULTADO_REPORTE")
-	private boolean mostrarResultadosReporte;
-
-	@Column(name = "MOSTRAR_PARAMETRO_REPORTE")
-	private boolean mostrarParametroReporte;
-
 	@OneToMany(fetch = FetchType.LAZY, orphanRemoval = true, cascade = CascadeType.ALL, mappedBy = "configuracionPrueba")
 	private Set<ConfiguracionPruebaParametro> parametros = new HashSet<>();
 
 	@OneToMany(fetch = FetchType.LAZY, orphanRemoval = true, cascade = CascadeType.ALL, mappedBy = "configuracionPrueba")
 	private Set<ConfiguracionPruebaCondicion> condiciones = new HashSet<>();
+
+	public ConfiguracionPrueba() {
+		// TODO Auto-generated constructor stub
+	}
+
+	public ConfiguracionPrueba(Long idConfiguracionPrueba) {
+		this.id = idConfiguracionPrueba;
+	}
 
 	public Long getId() {
 		return id;
@@ -111,22 +113,6 @@ public class ConfiguracionPrueba extends ar.com.avaco.arc.core.domain.Entity<Lon
 
 	public void setObservacionesReporte(String observacionesReporte) {
 		this.observacionesReporte = observacionesReporte;
-	}
-
-	public boolean isMostrarResultadosReporte() {
-		return mostrarResultadosReporte;
-	}
-
-	public void setMostrarResultadosReporte(boolean mostrarResultadosReporte) {
-		this.mostrarResultadosReporte = mostrarResultadosReporte;
-	}
-
-	public boolean isMostrarParametroReporte() {
-		return mostrarParametroReporte;
-	}
-
-	public void setMostrarParametroReporte(boolean mostrarParametroReporte) {
-		this.mostrarParametroReporte = mostrarParametroReporte;
 	}
 
 }

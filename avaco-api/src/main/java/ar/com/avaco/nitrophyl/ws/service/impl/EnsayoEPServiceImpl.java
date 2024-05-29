@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import javax.annotation.Resource;
 
@@ -13,7 +11,7 @@ import org.springframework.stereotype.Service;
 
 import ar.com.avaco.commons.exception.BusinessException;
 import ar.com.avaco.nitrophyl.domain.entities.formula.ConfiguracionPrueba;
-import ar.com.avaco.nitrophyl.domain.entities.formula.ConfiguracionPruebaCondicion;
+import ar.com.avaco.nitrophyl.domain.entities.formula.ConfiguracionPruebaParametro;
 import ar.com.avaco.nitrophyl.domain.entities.lote.Ensayo;
 import ar.com.avaco.nitrophyl.domain.entities.lote.EnsayoResultado;
 import ar.com.avaco.nitrophyl.domain.entities.lote.EstadoEnsayo;
@@ -53,10 +51,8 @@ public class EnsayoEPServiceImpl extends CRUDEPBaseService<Long, EnsayoDTO, Ensa
 		Set<EnsayoResultado> resultados = new HashSet<>();
 		dto.getResultados().forEach(res -> {
 			EnsayoResultado er = new EnsayoResultado();
-			er.setMaximo(res.getMaximo());
-			er.setMinimo(res.getMinimo());
-			er.setNorma(res.getNorma());
-			er.setNombre(res.getNombre());
+			er.setConfiguracionPruebaParametro(
+					new ConfiguracionPruebaParametro(res.getIdConfiguracionPruebaParametro()));
 			er.setEnsayo(ensayo);
 			er.setRedondeo(res.getRedondeo());
 			er.setResultado(res.getResultado());
@@ -72,7 +68,7 @@ public class EnsayoEPServiceImpl extends CRUDEPBaseService<Long, EnsayoDTO, Ensa
 		dto.setFecha(DateUtils.toStringFecha(entity.getFecha()));
 		dto.setId(entity.getId());
 		dto.setIdLote(entity.getLote().getId());
-		dto.setMaquina(entity.getMaquina());
+		dto.setMaquina(entity.getConfiguracionPrueba().getMaquina().getNombre());
 		dto.setObservaciones(entity.getObservaciones());
 		dto.setEstado(entity.getEstado().toString());
 		return dto;
@@ -90,35 +86,31 @@ public class EnsayoEPServiceImpl extends CRUDEPBaseService<Long, EnsayoDTO, Ensa
 	public EnsayoDTO save(EnsayoDTO dto) throws BusinessException {
 		// Convierto el dto en entidad
 		Ensayo ensayo = convertToEntity(dto);
-		
-		//Obtengo la configuracion de la prueba
+
+		// Obtengo la configuracion de la prueba
 		ConfiguracionPrueba configuracionPrueba = configuracionPruebaService.get(dto.getIdConfiguracionPrueba());
 
 		// Limpio el ID
 		ensayo.setId(null);
-		
-		// Seteo la máquina
-		ensayo.setMaquina(configuracionPrueba.getMaquina().getNombre());
-		
-		
-		// Seteo las condiciones aplanandolas
-		ensayo.setCondiciones(condicionesToString(configuracionPrueba.getCondiciones()));
-		
+
+		// Seteo la configuracion
+		ensayo.setConfiguracionPrueba(configuracionPrueba);
+
 		// Seteo la fecha
 		ensayo.setFecha(DateUtils.toDate(dto.getFecha(), DateUtils.PATTERN_SOLO_FECHA));
-		
-		//Seteo la fecha
+
+		// Seteo la fecha
 		ensayo.setEstado(EstadoEnsayo.valueOf(dto.getEstado()));
-		
+
 		Ensayo save = this.service.save(ensayo);
 		dto.setId(save.getId());
 		return dto;
 	}
 
-	private String condicionesToString(Set<ConfiguracionPruebaCondicion> condiciones) {
-		Stream<String> map = condiciones.stream().map(x -> x.getNombre() + "=" + x.getValor());
-		List<String> collect = map.collect(Collectors.toList());
-		return String.join(";", collect);
-	}
+//	private String condicionesToString(Set<ConfiguracionPruebaCondicion> condiciones) {
+//		Stream<String> map = condiciones.stream().map(x -> x.getNombre() + "=" + x.getValor());
+//		List<String> collect = map.collect(Collectors.toList());
+//		return String.join(";", collect);
+//	}
 
 }

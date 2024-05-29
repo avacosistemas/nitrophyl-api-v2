@@ -3,6 +3,7 @@ package ar.com.avaco.nitrophyl.ws.dto;
 public class ConfiguracionPruebaParametroDTO {
 
 	private Long id;
+	private Long idMaquinaPrueba;
 	private String nombre;
 	private Double minimo;
 	private Double maximo;
@@ -14,14 +15,6 @@ public class ConfiguracionPruebaParametroDTO {
 
 	public void setNorma(String norma) {
 		this.norma = norma;
-	}
-
-	public String getNombre() {
-		return nombre;
-	}
-
-	public void setNombre(String nombre) {
-		this.nombre = nombre;
 	}
 
 	public Double getMinimo() {
@@ -46,6 +39,22 @@ public class ConfiguracionPruebaParametroDTO {
 
 	public void setId(Long id) {
 		this.id = id;
+	}
+
+	public Long getIdMaquinaPrueba() {
+		return idMaquinaPrueba;
+	}
+
+	public void setIdMaquinaPrueba(Long idMaquinaPrueba) {
+		this.idMaquinaPrueba = idMaquinaPrueba;
+	}
+
+	public String getNombre() {
+		return nombre;
+	}
+
+	public void setNombre(String nombre) {
+		this.nombre = nombre;
 	}
 
 }

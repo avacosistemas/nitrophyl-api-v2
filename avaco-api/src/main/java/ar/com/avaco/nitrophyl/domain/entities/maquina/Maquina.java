@@ -36,6 +36,7 @@ public class Maquina extends ar.com.avaco.arc.core.domain.Entity<Long> {
 	@Column(name = "NOMBRE")
 	private String nombre;
 
+	// Esto queda aca, no mover
 	@Column(name = "OBSERVACIONES_REPORTE")
 	private String observacionesReporte;
 

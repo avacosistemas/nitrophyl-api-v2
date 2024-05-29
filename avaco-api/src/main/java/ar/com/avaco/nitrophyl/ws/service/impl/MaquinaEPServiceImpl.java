@@ -1,7 +1,7 @@
 package ar.com.avaco.nitrophyl.ws.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import javax.annotation.Resource;
 
@@ -10,14 +10,18 @@ import org.springframework.stereotype.Service;
 import ar.com.avaco.nitrophyl.domain.entities.maquina.EstadoMaquina;
 import ar.com.avaco.nitrophyl.domain.entities.maquina.Maquina;
 import ar.com.avaco.nitrophyl.domain.entities.maquina.MaquinaPrueba;
+import ar.com.avaco.nitrophyl.service.maquina.MaquinaPruebaService;
 import ar.com.avaco.nitrophyl.service.maquina.MaquinaService;
 import ar.com.avaco.nitrophyl.ws.dto.MaquinaDTO;
+import ar.com.avaco.nitrophyl.ws.dto.MaquinaPruebaDTO;
 import ar.com.avaco.nitrophyl.ws.service.MaquinaEPService;
 import ar.com.avaco.ws.rest.service.CRUDEPBaseService;
 
 @Service("maquinaEPService")
 public class MaquinaEPServiceImpl extends CRUDEPBaseService<Long, MaquinaDTO, Maquina, MaquinaService>
 		implements MaquinaEPService {
+
+	private MaquinaPruebaService maquinaPruebaService;
 
 	@Override
 	@Resource(name = "maquinaService")
@@ -45,16 +49,5 @@ public class MaquinaEPServiceImpl extends CRUDEPBaseService<Long, MaquinaDTO, Ma
 		return dto;
 	}
 
-	@Override
-	public List<String> updateMaquinaPrueba(Long idMaquina, List<String> pruebas) {
-		this.service.updatePruebasByMaquina(idMaquina, pruebas);
-		return listPruebas(idMaquina);
-	}
-
-	@Override
-	public List<String> listPruebas(Long idMaquina) {
-		return this.service.listPruebasByMaquina(idMaquina).stream().map(MaquinaPrueba::getNombre)
-				.collect(Collectors.toList());
-	}
-
+	
 }

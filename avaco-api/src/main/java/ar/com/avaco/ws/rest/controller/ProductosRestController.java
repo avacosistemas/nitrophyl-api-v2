@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import ar.com.avaco.arc.core.domain.filter.AbstractFilter;
 import ar.com.avaco.nitrophyl.domain.entities.pieza.TipoPieza;
 import ar.com.avaco.nitrophyl.ws.dto.PiezaDTO;
 import ar.com.avaco.nitrophyl.ws.service.PiezaEPService;

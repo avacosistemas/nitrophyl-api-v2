@@ -19,6 +19,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
+import ar.com.avaco.nitrophyl.domain.entities.formula.ConfiguracionPrueba;
+
 @Entity
 @Table(name = "ENSAYO")
 @SequenceGenerator(name = "ENSAYO_SEQ", sequenceName = "ENSAYO_SEQ", allocationSize = 1)
@@ -35,23 +37,21 @@ public class Ensayo extends ar.com.avaco.arc.core.domain.Entity<Long> {
 	@JoinColumn(name = "ID_LOTE")
 	private Lote lote;
 
+	@ManyToOne(fetch = FetchType.LAZY, optional = false)
+	@JoinColumn(name = "ID_CONF_PRUEBA")
+	private ConfiguracionPrueba configuracionPrueba;
+
 	@Column(name = "fecha")
 	private Date fecha;
 
 	@Column(name = "observaciones")
 	private String observaciones;
 
-	@Column(name = "maquina")
-	private String maquina;
-
-	@Column(name = "condiciones")
-	private String condiciones;
-
 	@Column(name = "estado")
 	@Enumerated(EnumType.STRING)
 	private EstadoEnsayo estado;
 
-	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST, mappedBy = "ensayo")
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "ensayo")
 	private Set<EnsayoResultado> resultados = new HashSet<>();
 
 	public Long getId() {
@@ -86,14 +86,6 @@ public class Ensayo extends ar.com.avaco.arc.core.domain.Entity<Long> {
 		this.observaciones = observaciones;
 	}
 
-	public String getMaquina() {
-		return maquina;
-	}
-
-	public void setMaquina(String maquina) {
-		this.maquina = maquina;
-	}
-
 	public Set<EnsayoResultado> getResultados() {
 		return resultados;
 	}
@@ -102,20 +94,20 @@ public class Ensayo extends ar.com.avaco.arc.core.domain.Entity<Long> {
 		this.resultados = resultados;
 	}
 
-	public String getCondiciones() {
-		return condiciones;
-	}
-
-	public void setCondiciones(String condiciones) {
-		this.condiciones = condiciones;
-	}
-
 	public EstadoEnsayo getEstado() {
 		return estado;
 	}
 
 	public void setEstado(EstadoEnsayo estado) {
 		this.estado = estado;
+	}
+
+	public ConfiguracionPrueba getConfiguracionPrueba() {
+		return configuracionPrueba;
+	}
+
+	public void setConfiguracionPrueba(ConfiguracionPrueba configuracionPrueba) {
+		this.configuracionPrueba = configuracionPrueba;
 	}
 
 }

@@ -11,6 +11,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
+import ar.com.avaco.nitrophyl.domain.entities.maquina.MaquinaPrueba;
+
 @Entity
 @Table(name = "CONF_PRUEBA_PARAM")
 @SequenceGenerator(name = "CONF_PRUEBA_PARAM_SEQ", sequenceName = "CONF_PRUEBA_PARAM_SEQ", allocationSize = 1)
@@ -30,8 +32,9 @@ public class ConfiguracionPruebaParametro extends ar.com.avaco.arc.core.domain.E
 	@JoinColumn(name = "ID_CONF_PRUEBA")
 	private ConfiguracionPrueba configuracionPrueba;
 
-	@Column(name = "NOMBRE")
-	private String nombre;
+	@ManyToOne(fetch = FetchType.LAZY, optional = false)
+	@JoinColumn(name = "ID_MAQUINA_PRUEBA")
+	private MaquinaPrueba maquinaPrueba;
 
 	@Column(name = "VALOR_MINIMO")
 	private Double minimo;
@@ -45,14 +48,18 @@ public class ConfiguracionPruebaParametro extends ar.com.avaco.arc.core.domain.E
 	public ConfiguracionPruebaParametro() {
 	}
 
-	public ConfiguracionPruebaParametro(ConfiguracionPrueba configuracionPrueba, String nombre, Double minimo,
-			Double maximo, String norma) {
+	public ConfiguracionPruebaParametro(ConfiguracionPrueba configuracionPrueba, MaquinaPrueba maquinaPrueba,
+			Double minimo, Double maximo, String norma) {
 		super();
-		this.nombre = nombre;
 		this.minimo = minimo;
 		this.maximo = maximo;
 		this.configuracionPrueba = configuracionPrueba;
 		this.norma = norma;
+		this.maquinaPrueba = maquinaPrueba;
+	}
+
+	public ConfiguracionPruebaParametro(Long idConfiguracionPruebaParametro) {
+		this.id = idConfiguracionPruebaParametro;
 	}
 
 	public Long getId() {
@@ -69,14 +76,6 @@ public class ConfiguracionPruebaParametro extends ar.com.avaco.arc.core.domain.E
 
 	public void setConfiguracionPrueba(ConfiguracionPrueba configuracionPrueba) {
 		this.configuracionPrueba = configuracionPrueba;
-	}
-
-	public String getNombre() {
-		return nombre;
-	}
-
-	public void setNombre(String nombre) {
-		this.nombre = nombre;
 	}
 
 	public Double getMinimo() {
@@ -101,6 +100,14 @@ public class ConfiguracionPruebaParametro extends ar.com.avaco.arc.core.domain.E
 
 	public void setNorma(String norma) {
 		this.norma = norma;
+	}
+
+	public MaquinaPrueba getMaquinaPrueba() {
+		return maquinaPrueba;
+	}
+
+	public void setMaquinaPrueba(MaquinaPrueba maquinaPrueba) {
+		this.maquinaPrueba = maquinaPrueba;
 	}
 
 }

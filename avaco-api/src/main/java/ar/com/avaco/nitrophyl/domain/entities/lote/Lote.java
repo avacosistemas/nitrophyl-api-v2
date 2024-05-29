@@ -60,7 +60,7 @@ public class Lote extends ar.com.avaco.arc.core.domain.Entity<Long> {
 	@Column(name = "ESTADO")
 	private EstadoLote estado;
 
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "lote")
 	private Set<Ensayo> ensayos = new HashSet<Ensayo>();
 
 	public Long getId() {

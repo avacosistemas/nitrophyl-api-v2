@@ -1,6 +1,5 @@
 package ar.com.avaco.nitrophyl.ws.service.impl;
 
-import java.util.Calendar;
 import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -14,6 +13,7 @@ import ar.com.avaco.nitrophyl.domain.entities.formula.ConfiguracionPruebaCondici
 import ar.com.avaco.nitrophyl.domain.entities.formula.ConfiguracionPruebaParametro;
 import ar.com.avaco.nitrophyl.domain.entities.formula.Formula;
 import ar.com.avaco.nitrophyl.domain.entities.maquina.Maquina;
+import ar.com.avaco.nitrophyl.domain.entities.maquina.MaquinaPrueba;
 import ar.com.avaco.nitrophyl.service.maquina.ConfiguracionPruebaService;
 import ar.com.avaco.nitrophyl.ws.dto.ConfiguracionPruebaCondicionDTO;
 import ar.com.avaco.nitrophyl.ws.dto.ConfiguracionPruebaDTO;
@@ -36,7 +36,8 @@ public class ConfiguracionPruebaEPServiceImpl
 	@Override
 	protected ConfiguracionPrueba convertToEntity(ConfiguracionPruebaDTO dto) {
 		ConfiguracionPrueba cf = new ConfiguracionPrueba();
-		cf.setFecha(Calendar.getInstance().getTime());
+		// FIXME cambiar por fecha y hora recibida por parametro
+		cf.setFecha(DateUtils.getFechaYHoraActual());
 
 		Formula formula = new Formula();
 		formula.setId(dto.getIdFormula());
@@ -47,15 +48,16 @@ public class ConfiguracionPruebaEPServiceImpl
 		cf.setMaquina(maquina);
 
 		cf.setObservacionesReporte(dto.getObservacionesReporte());
-		cf.setMostrarResultadosReporte(dto.isMostrarResultadosReporte());
-		cf.setMostrarParametroReporte(dto.isMostrarParametroReporte());
-		
-		cf.setParametros(new HashSet<>(dto.getParametros().stream()
-				.map(x -> new ConfiguracionPruebaParametro(cf, x.getNombre(), x.getMinimo(), x.getMaximo(), x.getNorma()))
+
+		cf.setParametros(new HashSet<>(dto
+				.getParametros().stream().map(x -> new ConfiguracionPruebaParametro(cf,
+						new MaquinaPrueba(x.getIdMaquinaPrueba()), x.getMinimo(), x.getMaximo(), x.getNorma()))
 				.collect(Collectors.toList())));
+
 		cf.setCondiciones(new HashSet<>(dto.getCondiciones().stream()
 				.map(x -> new ConfiguracionPruebaCondicion(cf, x.getNombre(), x.getValor()))
 				.collect(Collectors.toList())));
+
 		return cf;
 	}
 
@@ -75,8 +77,6 @@ public class ConfiguracionPruebaEPServiceImpl
 		dto.setIdMaquina(entity.getMaquina().getId());
 		dto.setMaquina(entity.getMaquina().getNombre());
 		dto.setObservacionesReporte(entity.getObservacionesReporte());
-		dto.setMostrarResultadosReporte(entity.isMostrarResultadosReporte());
-		dto.setMostrarParametroReporte(entity.isMostrarParametroReporte());
 		return dto;
 	}
 
@@ -85,7 +85,8 @@ public class ConfiguracionPruebaEPServiceImpl
 		dto.setId(cfp.getId());
 		dto.setMaximo(cfp.getMaximo());
 		dto.setMinimo(cfp.getMinimo());
-		dto.setNombre(cfp.getNombre());
+		dto.setIdMaquinaPrueba(cfp.getMaquinaPrueba().getId());
+		dto.setNombre(cfp.getMaquinaPrueba().getNombre());
 		dto.setNorma(cfp.getNorma());
 		return dto;
 	}

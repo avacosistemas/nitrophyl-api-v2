@@ -9,4 +9,6 @@ public interface LoteEPService extends CRUDEPService<Long, LoteDTO> {
 
 	void rechazar(Long idLote, String observaciones);
 
+	void generarReporteLoteCliente(Long idLote, Long idCliente);
+
 }

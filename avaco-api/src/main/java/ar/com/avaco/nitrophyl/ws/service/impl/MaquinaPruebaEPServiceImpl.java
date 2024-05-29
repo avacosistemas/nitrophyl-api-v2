@@ -1,5 +1,7 @@
 package ar.com.avaco.nitrophyl.ws.service.impl;
 
+import java.util.List;
+
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
@@ -11,7 +13,8 @@ import ar.com.avaco.nitrophyl.ws.service.MaquinaPruebaEPService;
 import ar.com.avaco.ws.rest.service.CRUDEPBaseService;
 
 @Service("maquinaPruebaEPService")
-public class MaquinaPruebaEPServiceImpl extends CRUDEPBaseService<Long, MaquinaPruebaDTO, MaquinaPrueba, MaquinaPruebaService>
+public class MaquinaPruebaEPServiceImpl
+		extends CRUDEPBaseService<Long, MaquinaPruebaDTO, MaquinaPrueba, MaquinaPruebaService>
 		implements MaquinaPruebaEPService {
 
 	@Override
@@ -35,8 +38,19 @@ public class MaquinaPruebaEPServiceImpl extends CRUDEPBaseService<Long, MaquinaP
 		dto.setId(entity.getId());
 		dto.setNombre(entity.getNombre());
 		dto.setIdMaquina(entity.getIdMaquina());
-		dto.setMaquina(entity.getMaquina().getNombre());
 		return dto;
+	}
+
+	@Override
+	public List<MaquinaPruebaDTO> updateMaquinaPrueba(Long idMaquina, List<String> pruebas) {
+		this.service.updatePruebasByMaquina(idMaquina, pruebas);
+		return listPruebasByMaquina(idMaquina);
+	}
+
+	@Override
+	public List<MaquinaPruebaDTO> listPruebasByMaquina(Long idMaquina) {
+		List<MaquinaPrueba> listByMaquina = this.service.listByMaquina(idMaquina);
+		return convertToDtos(listByMaquina);
 	}
 
 }

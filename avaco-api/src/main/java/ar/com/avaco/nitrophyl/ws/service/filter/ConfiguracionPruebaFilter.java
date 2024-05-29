@@ -9,8 +9,6 @@ import ar.com.avaco.arc.core.domain.filter.AbstractFilter;
 import ar.com.avaco.arc.core.domain.filter.FilterData;
 import ar.com.avaco.arc.core.domain.filter.FilterDataType;
 import ar.com.avaco.nitrophyl.ws.dto.ConfiguracionPruebaFilterDTO;
-import ar.com.avaco.nitrophyl.ws.dto.FormulaFilterDTO;
-import ar.com.avaco.nitrophyl.ws.dto.MaterialFilterDTO;
 
 public class ConfiguracionPruebaFilter extends AbstractFilter {
 

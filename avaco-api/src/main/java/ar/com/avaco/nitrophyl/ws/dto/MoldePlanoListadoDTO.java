@@ -1,7 +1,5 @@
 package ar.com.avaco.nitrophyl.ws.dto;
 
-import java.util.Date;
-
 import ar.com.avaco.nitrophyl.domain.entities.moldes.MoldePlano;
 import ar.com.avaco.utils.DateUtils;
 
