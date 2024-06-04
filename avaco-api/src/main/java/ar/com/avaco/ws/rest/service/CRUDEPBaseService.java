@@ -11,16 +11,15 @@ import ar.com.avaco.arc.core.component.bean.service.NJService;
 import ar.com.avaco.arc.core.domain.Entity;
 import ar.com.avaco.arc.core.domain.filter.AbstractFilter;
 import ar.com.avaco.commons.exception.BusinessException;
+import ar.com.avaco.nitrophyl.ws.dto.PageDTO;
 import ar.com.avaco.ws.rest.dto.DTOEntity;
 
 @Transactional
 public abstract class CRUDEPBaseService<ID extends Serializable, DTO extends DTOEntity<ID>, T extends Entity<ID>, S extends NJService<ID, T>>
 		implements CRUDEPService<ID, DTO> {
 
-	
-	
 	protected S service;
-	
+
 	@Override
 	public DTO save(DTO dto) throws BusinessException {
 		validationSave(dto);
@@ -32,7 +31,7 @@ public abstract class CRUDEPBaseService<ID extends Serializable, DTO extends DTO
 	protected void validationSave(DTO dto) {
 		// Implementar en los hijos
 	}
-	
+
 	protected void validationUpdate(DTO dto) {
 		// Implementar en los hijos
 	}
@@ -108,7 +107,17 @@ public abstract class CRUDEPBaseService<ID extends Serializable, DTO extends DTO
 	protected final S getService() {
 		return this.service;
 	}
-	
+
 	protected abstract void setService(S service);
-	
+
+	@Override
+	public PageDTO<DTO> listFilterCount(AbstractFilter abstractFilter) {
+		PageDTO<DTO> page = new PageDTO<DTO>();
+		List<DTO> listFilter = listFilter(abstractFilter);
+		int listCount = listCount(abstractFilter);
+		page.setPage(listFilter);
+		page.setTotalReg(listCount);
+		return page;
+	}
+
 }

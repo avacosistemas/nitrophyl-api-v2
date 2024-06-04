@@ -10,21 +10,24 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import ar.com.avaco.nitrophyl.ws.dto.LoteDTO;
+import ar.com.avaco.nitrophyl.ws.dto.ReporteLoteConfiguracionClienteDTO;
 import ar.com.avaco.nitrophyl.ws.dto.ReporteLoteClienteDTO;
+import ar.com.avaco.nitrophyl.ws.dto.ReporteLoteConfiguracionClienteFilterDTO;
 import ar.com.avaco.nitrophyl.ws.service.LoteEPService;
+import ar.com.avaco.nitrophyl.ws.service.ReporteConfiguracionClienteEPService;
 import ar.com.avaco.ws.rest.dto.JSONResponse;
 
 @RestController
-public class ReporteRestController extends AbstractDTORestController<LoteDTO, Long, LoteEPService> {
+public class ReporteLoteConfiguracionClienteRestController extends AbstractDTORestController<ReporteLoteConfiguracionClienteDTO, Long, ReporteConfiguracionClienteEPService> {
 
-	@Resource(name = "loteEPService")
-	public void setService(LoteEPService loteEPService) {
-		super.service = loteEPService;
+	@Resource(name = "reporteConfiguracionClienteEPService")
+	public void setService(ReporteConfiguracionClienteEPService reporteConfiguracionClienteEPService) {
+		super.service = reporteConfiguracionClienteEPService;
 	}
 
 	@RequestMapping(value = "/loteReporte", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<JSONResponse> list(ReporteLoteClienteDTO dto) {
-		this.service.generarReporteLoteCliente(dto.getIdLote(), dto.getIdCliente());
+	public ResponseEntity<JSONResponse> list(ReporteLoteConfiguracionClienteFilterDTO dto) {
+		this.service.listFilterCount(abstractFilter);
 		JSONResponse response = new JSONResponse();
 		response.setData(true);
 		response.setStatus(JSONResponse.OK);
