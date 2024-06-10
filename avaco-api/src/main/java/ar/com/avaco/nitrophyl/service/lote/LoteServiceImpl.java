@@ -46,7 +46,6 @@ public class LoteServiceImpl extends NJBaseService<Long, Lote, LoteRepository> i
 	@Override
 	public Lote getLoteCompleto(Long idLote) {
 		Lote one = this.repository.findOne(idLote);
-		List<Ensayo> ensayos = ensayoService.listByLote(idLote);
 		return one;
 	}
 

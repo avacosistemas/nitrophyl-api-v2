@@ -7,26 +7,26 @@ import org.springframework.stereotype.Service;
 import ar.com.avaco.nitrophyl.domain.entities.cliente.Cliente;
 import ar.com.avaco.nitrophyl.domain.entities.formula.Formula;
 import ar.com.avaco.nitrophyl.domain.entities.maquina.Maquina;
-import ar.com.avaco.nitrophyl.domain.entities.reporte.ReporteConfiguracionCliente;
-import ar.com.avaco.nitrophyl.service.reporte.ReporteConfiguracionClienteService;
+import ar.com.avaco.nitrophyl.domain.entities.reporte.ReporteLoteConfiguracionCliente;
+import ar.com.avaco.nitrophyl.service.reporte.ReporteLoteConfiguracionClienteService;
 import ar.com.avaco.nitrophyl.ws.dto.ReporteLoteConfiguracionClienteDTO;
-import ar.com.avaco.nitrophyl.ws.service.ReporteConfiguracionClienteEPService;
+import ar.com.avaco.nitrophyl.ws.service.ReporteLoteConfiguracionClienteEPService;
 import ar.com.avaco.ws.rest.service.CRUDEPBaseService;
 
-@Service("reporteConfiguracionClienteEPService")
-public class ReporteConfiguracionClienteEPServiceImpl extends
-		CRUDEPBaseService<Long, ReporteLoteConfiguracionClienteDTO, ReporteConfiguracionCliente, ReporteConfiguracionClienteService>
-		implements ReporteConfiguracionClienteEPService {
+@Service("reporteLoteConfiguracionClienteEPService")
+public class ReporteLoteConfiguracionClienteEPServiceImpl extends
+		CRUDEPBaseService<Long, ReporteLoteConfiguracionClienteDTO, ReporteLoteConfiguracionCliente, ReporteLoteConfiguracionClienteService>
+		implements ReporteLoteConfiguracionClienteEPService {
 
 	@Override
-	@Resource(name = "reporteConfiguracionClienteService")
-	protected void setService(ReporteConfiguracionClienteService service) {
+	@Resource(name = "reporteLoteConfiguracionClienteService")
+	protected void setService(ReporteLoteConfiguracionClienteService service) {
 		this.service = service;
 	}
 
 	@Override
-	protected ReporteConfiguracionCliente convertToEntity(ReporteLoteConfiguracionClienteDTO dto) {
-		ReporteConfiguracionCliente entity = new ReporteConfiguracionCliente();
+	protected ReporteLoteConfiguracionCliente convertToEntity(ReporteLoteConfiguracionClienteDTO dto) {
+		ReporteLoteConfiguracionCliente entity = new ReporteLoteConfiguracionCliente();
 		entity.setId(dto.getId());
 		Cliente cliente = new Cliente();
 		cliente.setId(dto.getIdCliente());
@@ -37,7 +37,7 @@ public class ReporteConfiguracionClienteEPServiceImpl extends
 		Maquina maquina = new Maquina();
 		maquina.setId(dto.getIdMaquina());
 		entity.setMaquina(maquina);
-		entity.setMostraObervacionesMaquina(dto.isMostraObervacionesMaquina());
+		entity.setMostrarObservacionesParametro(dto.isMostrarObservacionesParametro());
 		entity.setMostrarCondiciones(dto.isMostrarCondiciones());
 		entity.setMostrarParametros(dto.isMostrarParametros());
 		entity.setMostrarResultados(dto.isMostrarResultados());
@@ -45,7 +45,7 @@ public class ReporteConfiguracionClienteEPServiceImpl extends
 	}
 
 	@Override
-	protected ReporteLoteConfiguracionClienteDTO convertToDto(ReporteConfiguracionCliente entity) {
+	protected ReporteLoteConfiguracionClienteDTO convertToDto(ReporteLoteConfiguracionCliente entity) {
 		ReporteLoteConfiguracionClienteDTO dto = new ReporteLoteConfiguracionClienteDTO();
 		dto.setId(entity.getId());
 		dto.setCliente(entity.getCliente().getNombre());
@@ -54,7 +54,7 @@ public class ReporteConfiguracionClienteEPServiceImpl extends
 		dto.setIdFormula(entity.getFormula().getId());
 		dto.setIdMaquina(entity.getMaquina().getId());
 		dto.setMaquina(entity.getMaquina().getNombre());
-		dto.setMostraObervacionesMaquina(entity.isMostraObervacionesMaquina());
+		dto.setMostrarObservacionesParametro(entity.isMostrarObservacionesParametro());
 		dto.setMostrarCondiciones(entity.isMostrarCondiciones());
 		dto.setMostrarParametros(entity.isMostrarParametros());
 		dto.setMostrarResultados(entity.isMostrarResultados());

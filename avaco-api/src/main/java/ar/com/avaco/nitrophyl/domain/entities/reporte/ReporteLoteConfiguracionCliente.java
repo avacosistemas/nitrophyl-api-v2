@@ -16,15 +16,15 @@ import ar.com.avaco.nitrophyl.domain.entities.formula.Formula;
 import ar.com.avaco.nitrophyl.domain.entities.maquina.Maquina;
 
 @Entity
-@Table(name = "REPORTE_CONF_CLIENTE")
-@SequenceGenerator(name = "REPORTE_CONF_CLIENTE_SEQ", sequenceName = "REPORTE_CONF_CLIENTE_SEQ", allocationSize = 1)
-public class ReporteConfiguracionCliente extends ar.com.avaco.arc.core.domain.Entity<Long> {
+@Table(name = "REPORTE_LOTE_CONF_CLIENTE")
+@SequenceGenerator(name = "REPORTE_LOTE_CONF_CLIENTE_SEQ", sequenceName = "REPORTE_LOTE_CONF_CLIENTE_SEQ", allocationSize = 1)
+public class ReporteLoteConfiguracionCliente extends ar.com.avaco.arc.core.domain.Entity<Long> {
 
 	private static final long serialVersionUID = -8915059528176139461L;
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "MATERIAL_SEQ")
-	@Column(name = "ID_REPORTE_CONF_CLIENTE")
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "REPORTE_LOTE_CONF_CLIENTE_SEQ")
+	@Column(name = "ID_REPORTE_LOTE_CONF_CLIENTE")
 	private Long id;
 
 	@JoinColumn(name = "ID_CLIENTE", nullable = false)
@@ -48,8 +48,8 @@ public class ReporteConfiguracionCliente extends ar.com.avaco.arc.core.domain.En
 	@Column(name = "MOSTRAR_CONDICIONES")
 	private boolean mostrarCondiciones;
 
-	@Column(name = "MOSTRAR_OBS_MAQUINA")
-	private boolean mostraObervacionesMaquina;
+	@Column(name = "MOSTRAR_OBS_PARAM")
+	private boolean mostrarObservacionesParametro;
 
 	public Long getId() {
 		return id;
@@ -107,12 +107,12 @@ public class ReporteConfiguracionCliente extends ar.com.avaco.arc.core.domain.En
 		this.mostrarCondiciones = mostrarCondiciones;
 	}
 
-	public boolean isMostraObervacionesMaquina() {
-		return mostraObervacionesMaquina;
+	public boolean isMostrarObservacionesParametro() {
+		return mostrarObservacionesParametro;
 	}
 
-	public void setMostraObervacionesMaquina(boolean mostraObervacionesMaquina) {
-		this.mostraObervacionesMaquina = mostraObervacionesMaquina;
+	public void setMostrarObservacionesParametro(boolean mostrarObservacionesParametro) {
+		this.mostrarObservacionesParametro = mostrarObservacionesParametro;
 	}
 
 }

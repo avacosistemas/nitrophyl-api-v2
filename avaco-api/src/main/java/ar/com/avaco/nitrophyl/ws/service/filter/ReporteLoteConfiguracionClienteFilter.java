@@ -3,12 +3,10 @@ package ar.com.avaco.nitrophyl.ws.service.filter;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.lang3.StringUtils;
-
 import ar.com.avaco.arc.core.domain.filter.AbstractFilter;
 import ar.com.avaco.arc.core.domain.filter.FilterData;
 import ar.com.avaco.arc.core.domain.filter.FilterDataType;
-import ar.com.avaco.nitrophyl.ws.dto.FormulaFilterDTO;
+import ar.com.avaco.nitrophyl.ws.dto.ReporteLoteConfiguracionClienteFilterDTO;
 
 public class ReporteLoteConfiguracionClienteFilter extends AbstractFilter {
 
@@ -64,8 +62,71 @@ public class ReporteLoteConfiguracionClienteFilter extends AbstractFilter {
 	public ReporteLoteConfiguracionClienteFilter() {
 	}
 
-	public ReporteLoteConfiguracionClienteFilter(FormulaFilterDTO ffdto) {
-		super(ffdto.getRows(), ffdto.getFirst(), ffdto.getAsc(), ffdto.getIdx());
+	public ReporteLoteConfiguracionClienteFilter(ReporteLoteConfiguracionClienteFilterDTO dto) {
+		super(dto.getRows(), dto.getFirst(), dto.getAsc(), dto.getIdx());
+		this.idCliente = dto.getIdCliente();
+		this.idFormula = dto.getIdFormula();
+		this.idMaquina = dto.getIdMaquina();
+		this.mostraObervacionesMaquina = dto.getMostraObervacionesMaquina();
+		this.mostrarCondiciones = dto.getMostrarCondiciones();
+		this.mostrarParametros = dto.getMostrarParametros();
+		this.mostrarResultados = dto.getMostrarResultados();
+	}
+
+	public Long getIdCliente() {
+		return idCliente;
+	}
+
+	public void setIdCliente(Long idCliente) {
+		this.idCliente = idCliente;
+	}
+
+	public Long getIdFormula() {
+		return idFormula;
+	}
+
+	public void setIdFormula(Long idFormula) {
+		this.idFormula = idFormula;
+	}
+
+	public Long getIdMaquina() {
+		return idMaquina;
+	}
+
+	public void setIdMaquina(Long idMaquina) {
+		this.idMaquina = idMaquina;
+	}
+
+	public Boolean getMostrarParametros() {
+		return mostrarParametros;
+	}
+
+	public void setMostrarParametros(Boolean mostrarParametros) {
+		this.mostrarParametros = mostrarParametros;
+	}
+
+	public Boolean getMostrarResultados() {
+		return mostrarResultados;
+	}
+
+	public void setMostrarResultados(Boolean mostrarResultados) {
+		this.mostrarResultados = mostrarResultados;
+	}
+
+	public Boolean getMostrarCondiciones() {
+		return mostrarCondiciones;
+	}
+
+	public void setMostrarCondiciones(Boolean mostrarCondiciones) {
+		this.mostrarCondiciones = mostrarCondiciones;
+	}
+
+	public Boolean getMostraObervacionesMaquina() {
+		return mostraObervacionesMaquina;
+	}
+
+	public void setMostraObervacionesMaquina(Boolean mostraObervacionesMaquina) {
+		this.mostraObervacionesMaquina = mostraObervacionesMaquina;
 	}
 
 }

@@ -2,6 +2,7 @@ package ar.com.avaco.nitrophyl.ws.service.impl;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.util.List;
 
 import javax.annotation.Resource;
 
@@ -11,7 +12,9 @@ import com.itextpdf.text.DocumentException;
 
 import ar.com.avaco.nitrophyl.domain.entities.formula.Formula;
 import ar.com.avaco.nitrophyl.domain.entities.lote.Lote;
+import ar.com.avaco.nitrophyl.domain.entities.reporte.ReporteLoteConfiguracionCliente;
 import ar.com.avaco.nitrophyl.service.lote.LoteService;
+import ar.com.avaco.nitrophyl.service.reporte.ReporteLoteConfiguracionClienteService;
 import ar.com.avaco.nitrophyl.ws.dto.LoteDTO;
 import ar.com.avaco.nitrophyl.ws.service.LoteEPService;
 import ar.com.avaco.utils.DateUtils;
@@ -21,10 +24,18 @@ import ar.com.avaco.ws.rest.service.CRUDEPBaseService;
 @Service("loteEPService")
 public class LoteEPServiceImpl extends CRUDEPBaseService<Long, LoteDTO, Lote, LoteService> implements LoteEPService {
 
+	private ReporteLoteConfiguracionClienteService reporteLoteConfigClienteService;
+
 	@Override
 	@Resource(name = "loteService")
 	protected void setService(LoteService service) {
 		this.service = service;
+	}
+
+	@Resource(name = "reporteLoteConfiguracionClienteService")
+	public void setReporteLoteConfigClienteService(
+			ReporteLoteConfiguracionClienteService reporteLoteConfigClienteService) {
+		this.reporteLoteConfigClienteService = reporteLoteConfigClienteService;
 	}
 
 	@Override
@@ -68,11 +79,12 @@ public class LoteEPServiceImpl extends CRUDEPBaseService<Long, LoteDTO, Lote, Lo
 
 	@Override
 	public void generarReporteLoteCliente(Long idLote, Long idCliente) {
-		// TODO obtener cliente y luego la configuracion para ver que se muestra
 		Lote lote = this.service.getLoteCompleto(idLote);
+		List<ReporteLoteConfiguracionCliente> configuraciones = reporteLoteConfigClienteService
+				.listEqField("cliente.id", idCliente);
 		InformeBuilder ib = new InformeBuilder();
 		try {
-			ib.generarReporte(lote);
+			ib.generarReporte(lote, configuraciones);
 		} catch (DocumentException | IOException | URISyntaxException e) {
 			e.printStackTrace();
 		}

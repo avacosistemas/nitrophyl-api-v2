@@ -76,6 +76,13 @@ public class NJBaseRepository<ID extends Serializable, E extends ar.com.avaco.ar
 		return criteria.list();
 	}
 	
+	@Override
+	public List<E> listEqField(String field, Object value) {
+		Criteria criteria = getCurrentSession().createCriteria(getHandledClass());
+		criteria.add(Restrictions.eq(field, value));
+		return criteria.list();
+	}
+	
 	protected void applyPagination(Criteria criteria, AbstractFilter abstractFilter) {
 		if (abstractFilter.getFirst() != null && abstractFilter.getRows() != null) {
 			criteria.setFirstResult(abstractFilter.getFirst());

@@ -3,6 +3,8 @@
  */
 package ar.com.avaco.ws.rest.security.service.impl;
 
+import java.util.List;
+
 import javax.annotation.Resource;
 import javax.transaction.Transactional;
 
@@ -44,4 +46,10 @@ public class PermissionServiceImpl extends AbstractConvertService<Permission, Lo
 		return entity;
 	}
 
+	@Override
+	public List<Permission> listEqField(String field, Object pattern) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
 }

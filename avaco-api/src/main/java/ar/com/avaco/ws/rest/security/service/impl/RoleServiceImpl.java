@@ -3,6 +3,8 @@
  */
 package ar.com.avaco.ws.rest.security.service.impl;
 
+import java.util.List;
+
 import javax.annotation.Resource;
 import javax.transaction.Transactional;
 
@@ -26,6 +28,12 @@ public class RoleServiceImpl extends AbstractConvertService<Role, Long, Rol> imp
 		return new Role(permiso.getId(), permiso.getCodigo(), permiso.getNombre());
 	}
 
+	@Override
+	public List<Role> listEqField(String field, Object pattern) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
 	@Resource(name = "rolService")
 	public void setRolService(RolService rolService) {
 		this.service = rolService;

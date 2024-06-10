@@ -74,7 +74,12 @@ public class ProfileServiceImpl extends AbstractConvertService<Profile, Long, Pe
 		entity.setPermisos(permisos);
 		return entity;
 	}
-	
+
+	@Override
+	public List<Profile> listEqField(String field, Object pattern) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 	
 	@Resource(name = "perfilService")
 	public void setPermisoService(PerfilService perfilService) {

@@ -24,7 +24,7 @@ public class ReporteLoteConfiguracionClienteDTO extends DTOEntity<Long> {
 
 	private boolean mostrarCondiciones;
 
-	private boolean mostraObervacionesMaquina;
+	private boolean mostrarObservacionesParametro;
 
 	public Long getId() {
 		return id;
@@ -106,12 +106,12 @@ public class ReporteLoteConfiguracionClienteDTO extends DTOEntity<Long> {
 		this.mostrarCondiciones = mostrarCondiciones;
 	}
 
-	public boolean isMostraObervacionesMaquina() {
-		return mostraObervacionesMaquina;
+	public boolean isMostrarObservacionesParametro() {
+		return mostrarObservacionesParametro;
 	}
 
-	public void setMostraObervacionesMaquina(boolean mostraObervacionesMaquina) {
-		this.mostraObervacionesMaquina = mostraObervacionesMaquina;
+	public void setMostrarObservacionesParametro(boolean mostrarObservacionesParametro) {
+		this.mostrarObservacionesParametro = mostrarObservacionesParametro;
 	}
 
 }

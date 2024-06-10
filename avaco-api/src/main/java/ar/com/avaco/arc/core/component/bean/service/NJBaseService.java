@@ -82,6 +82,11 @@ public abstract class NJBaseService<ID extends Serializable, T extends Entity<ID
 		return getRepository().listPattern(field, pattern);
 	}
 
+	@Override
+	public List<T> listEqField(String field, Object pattern) {
+		return getRepository().listEqField(field, pattern);
+	}
+	
 	/**
 	 * Gets the repository that handled the CRUD operations on the service.
 	 * 

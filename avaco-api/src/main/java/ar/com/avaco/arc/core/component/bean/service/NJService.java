@@ -73,6 +73,8 @@ public interface NJService<ID extends Serializable, T extends Entity<ID>> {
 	List<T> listFilter(AbstractFilter abstractFilter);
 	
 	List<T> listPattern(String field, String pattern);
+	
+	List<T> listEqField(String field, Object pattern);
 
 	
 }
