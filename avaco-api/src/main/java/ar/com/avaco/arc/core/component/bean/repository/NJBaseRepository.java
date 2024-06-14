@@ -78,7 +78,7 @@ public class NJBaseRepository<ID extends Serializable, E extends ar.com.avaco.ar
 
 	protected void applyPagination(Criteria criteria, AbstractFilter abstractFilter) {
 		if (abstractFilter.getFirst() != null && abstractFilter.getRows() != null) {
-			Integer page = abstractFilter.getFirst();
+			Integer page = abstractFilter.getFirst() + 1;
 			Integer rows = abstractFilter.getRows();
 			criteria.setFirstResult(((page * rows) - rows));
 			criteria.setMaxResults(abstractFilter.getRows());
