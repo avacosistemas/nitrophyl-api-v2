@@ -1,6 +1,5 @@
 package ar.com.avaco.ws.rest.controller;
 
-import java.text.MessageFormat;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -30,6 +29,15 @@ public class LoteRestController extends AbstractDTORestController<LoteDTO, Long,
 	@Resource(name = "loteEPService")
 	public void setService(LoteEPService loteEPService) {
 		super.service = loteEPService;
+	}
+
+	@RequestMapping(value = "/lote/{idLote}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<JSONResponse> read(@PathVariable("idLote") Long idLote) throws BusinessException {
+		ResponseEntity<JSONResponse> lote = super.get(idLote);
+		JSONResponse response = new JSONResponse();
+		response.setData(lote);
+		response.setStatus(JSONResponse.OK);
+		return new ResponseEntity<JSONResponse>(response, HttpStatus.OK);
 	}
 
 	@RequestMapping(value = "/lote", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -92,7 +100,7 @@ public class LoteRestController extends AbstractDTORestController<LoteDTO, Long,
 		response.setStatus(JSONResponse.OK);
 		return new ResponseEntity<JSONResponse>(response, HttpStatus.OK);
 	}
-	
+
 	@RequestMapping(value = "/lote/rechazar/{idLote}", method = RequestMethod.PUT)
 	public ResponseEntity<JSONResponse> rechazar(@PathVariable("idLote") Long idLote, @RequestBody LoteRechazarDTO dto)
 			throws BusinessException {
@@ -102,22 +110,37 @@ public class LoteRestController extends AbstractDTORestController<LoteDTO, Long,
 		response.setStatus(JSONResponse.OK);
 		return new ResponseEntity<JSONResponse>(response, HttpStatus.OK);
 	}
-	
-	@RequestMapping(value = "/lote/delete/{idLote}", method = RequestMethod.DELETE)
-	public ResponseEntity<JSONResponse> borrar(@PathVariable("idLote") Long idLote)
+
+	@RequestMapping(value = "/lote/update/{idLote}", method = RequestMethod.PUT)
+	public ResponseEntity<JSONResponse> update(@PathVariable("idLote") Long idLote, @RequestBody LoteDTO loteDTO)
 			throws BusinessException {
 		JSONResponse response = new JSONResponse();
+		response.setStatus(JSONResponse.OK);
+		response.setData(loteDTO);
 		try {
-			this.service.borrar(idLote);
-			response.setStatus(JSONResponse.OK);
-		} catch (Exception e) {
+			super.update(idLote, loteDTO);
+		} catch (BusinessException e) {
 			ErrorResponse eresp = new ErrorResponse();
-    		eresp.setStatus(JSONResponse.ERROR);
-    		eresp.setError(e.getMessage());    		
+			eresp.setStatus(JSONResponse.ERROR);
+			eresp.setError(e.getMessage());
 			response = eresp;
 		}
 		return new ResponseEntity<JSONResponse>(response, HttpStatus.OK);
 	}
 
+	@RequestMapping(value = "/lote/delete/{idLote}", method = RequestMethod.DELETE)
+	public ResponseEntity<JSONResponse> borrar(@PathVariable("idLote") Long idLote) throws BusinessException {
+		JSONResponse response = new JSONResponse();
+		try {
+			this.service.borrar(idLote);
+			response.setStatus(JSONResponse.OK);
+		} catch (BusinessException e) {
+			ErrorResponse eresp = new ErrorResponse();
+			eresp.setStatus(JSONResponse.ERROR);
+			eresp.setError(e.getMessage());
+			response = eresp;
+		}
+		return new ResponseEntity<JSONResponse>(response, HttpStatus.OK);
+	}
 
 }
