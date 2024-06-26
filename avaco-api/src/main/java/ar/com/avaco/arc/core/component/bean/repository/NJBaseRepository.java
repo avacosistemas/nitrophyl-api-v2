@@ -36,13 +36,13 @@ public class NJBaseRepository<ID extends Serializable, E extends ar.com.avaco.ar
 	private Class<E> javaType;
 
 	private EntityManager entityManager;
-	
+
 	public NJBaseRepository(Class<E> domainClass, EntityManager entityManager) {
 		super(domainClass, entityManager);
 		this.javaType = domainClass;
 		this.entityManager = entityManager;
 	}
-	
+
 	@Override
 	@SuppressWarnings("unchecked")
 	public List<E> listFilter(AbstractFilter abstractFilter) {
@@ -67,7 +67,7 @@ public class NJBaseRepository<ID extends Serializable, E extends ar.com.avaco.ar
 		Long uniqueResult = (Long) criteria.setProjection(Projections.rowCount()).uniqueResult();
 		return uniqueResult.intValue();
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<E> listPattern(String field, String pattern) {
@@ -75,14 +75,16 @@ public class NJBaseRepository<ID extends Serializable, E extends ar.com.avaco.ar
 		criteria.add(Restrictions.like(field, pattern, MatchMode.ANYWHERE).ignoreCase());
 		return criteria.list();
 	}
-	
+
 	protected void applyPagination(Criteria criteria, AbstractFilter abstractFilter) {
 		if (abstractFilter.getFirst() != null && abstractFilter.getRows() != null) {
-			criteria.setFirstResult(abstractFilter.getFirst());
+			Integer page = abstractFilter.getFirst() + 1;
+			Integer rows = abstractFilter.getRows();
+			criteria.setFirstResult(((page * rows) - rows));
 			criteria.setMaxResults(abstractFilter.getRows());
 		}
 	}
-	
+
 	protected void applyOrdering(Criteria criteria, AbstractFilter abstractFilter) {
 		if (abstractFilter.getAsc() != null && !StringUtils.isEmpty(abstractFilter.getSidx())) {
 			criteria = containsAlias(criteria, abstractFilter.getIdx());
@@ -105,19 +107,19 @@ public class NJBaseRepository<ID extends Serializable, E extends ar.com.avaco.ar
 
 		StringBuilder field = new StringBuilder();
 
-		for (int i = 0 ; i < prop.length; i++) {
-			if (i != 0 && i == prop.length -1) {
+		for (int i = 0; i < prop.length; i++) {
+			if (i != 0 && i == prop.length - 1) {
 				field.append(".");
 			}
 			field.append(prop[i]);
 		}
 		return field.toString();
 	}
-	
+
 	protected void applyFilters(Criteria criteria, AbstractFilter abstractFilter) {
 
-        for (List<FilterData> fdl : abstractFilter.getOrFilterDatas()) {
-        	Disjunction or = Restrictions.disjunction();
+		for (List<FilterData> fdl : abstractFilter.getOrFilterDatas()) {
+			Disjunction or = Restrictions.disjunction();
 			for (FilterData ofd : fdl) {
 				criteria = containsAlias(criteria, ofd.getProperty());
 				or.add(createCriterion(ofd));
@@ -126,51 +128,51 @@ public class NJBaseRepository<ID extends Serializable, E extends ar.com.avaco.ar
 		}
 
 		List<FilterData> filters = abstractFilter.getFilterDatas();
-		
+
 		for (FilterData data : filters) {
-			criteria = containsAlias(criteria,data.getProperty());
+			criteria = containsAlias(criteria, data.getProperty());
 			Criterion criterion = createCriterion(data);
 			criteria.add(criterion);
 		}
-		
+
 	}
 
 	private Criterion createCriterion(FilterData data) {
-		Criterion criterion = null; 
-		
+		Criterion criterion = null;
+
 		String property = data.getProperty();
 		if (!isPropertyEmbeddable(property)) {
 			property = getAliasedProperty(data.getProperty());
 		}
-		
+
 		switch (data.getFilterDataType()) {
-			case LESS_THAN:
-				criterion = Restrictions.lt(property, data.getObject());
-				break;
-			case MORE_THAN:
-				criterion = Restrictions.gt(property, data.getObject());
-				break;
-			case EQUALS:
-				criterion = Restrictions.eq(property, data.getObject());
-				break;
-			case LIKE:
-				criterion = Restrictions.ilike(property, data.getObject().toString(), MatchMode.ANYWHERE);
-				break;
-			case EQUALS_LESS_THAN:
-				criterion = Restrictions.le(property, data.getObject());
-				break;
-			case EQUALS_MORE_THAN:
-				criterion = Restrictions.ge(property, data.getObject());
-				break;
-			case NOT_EQUALS:
-				criterion = Restrictions.not(Restrictions.eq(property, data.getObject()));
-				break;
-			case IS_NULL:
-				criterion = Restrictions.isNull(property);
-				break;
-			case IS_NOT_NULL:
-				criterion = Restrictions.isNotNull(property);
-				break;
+		case LESS_THAN:
+			criterion = Restrictions.lt(property, data.getObject());
+			break;
+		case MORE_THAN:
+			criterion = Restrictions.gt(property, data.getObject());
+			break;
+		case EQUALS:
+			criterion = Restrictions.eq(property, data.getObject());
+			break;
+		case LIKE:
+			criterion = Restrictions.ilike(property, data.getObject().toString(), MatchMode.ANYWHERE);
+			break;
+		case EQUALS_LESS_THAN:
+			criterion = Restrictions.le(property, data.getObject());
+			break;
+		case EQUALS_MORE_THAN:
+			criterion = Restrictions.ge(property, data.getObject());
+			break;
+		case NOT_EQUALS:
+			criterion = Restrictions.not(Restrictions.eq(property, data.getObject()));
+			break;
+		case IS_NULL:
+			criterion = Restrictions.isNull(property);
+			break;
+		case IS_NOT_NULL:
+			criterion = Restrictions.isNotNull(property);
+			break;
 		default:
 			break;
 		}
@@ -182,10 +184,10 @@ public class NJBaseRepository<ID extends Serializable, E extends ar.com.avaco.ar
 		if (property.contains(".")) {
 			theProperty = property.substring(0, property.indexOf("."));
 		}
-		
+
 		Class<?> clazz = getHandledClass();
-		
-		Annotation[] lt = null; 
+
+		Annotation[] lt = null;
 		while (clazz != null) {
 			try {
 				lt = clazz.getDeclaredField(theProperty).getType().getAnnotations();
@@ -193,7 +195,8 @@ public class NJBaseRepository<ID extends Serializable, E extends ar.com.avaco.ar
 			} catch (NoSuchFieldException e) {
 				clazz = clazz.getSuperclass();
 				if (clazz.equals(Object.class)) {
-					throw new RuntimeException("Property " + property + " not present in class " + getHandledClass().getName());
+					throw new RuntimeException(
+							"Property " + property + " not present in class " + getHandledClass().getName());
 				}
 			}
 		}
@@ -208,7 +211,7 @@ public class NJBaseRepository<ID extends Serializable, E extends ar.com.avaco.ar
 	}
 
 	private Criteria containsAlias(Criteria criteria, String property) {
-		
+
 		if (!isPropertyEmbeddable(property) && property.contains(".")) {
 			String[] prop = property.split("\\.");
 
@@ -246,11 +249,11 @@ public class NJBaseRepository<ID extends Serializable, E extends ar.com.avaco.ar
 	protected void initialize(E entity) {
 		// Implementar si es necesario
 	}
-	
+
 	public Session getCurrentSession() {
 		return sessionFactory.getCurrentSession();
 	}
-	
+
 	/**
 	 * Gets the {@link SessionFactory} that will handle the Hibernate
 	 * {@link org.hibernate.Session}s.
@@ -265,13 +268,12 @@ public class NJBaseRepository<ID extends Serializable, E extends ar.com.avaco.ar
 	 * Sets the {@link SessionFactory} that will handle the Hibernate
 	 * {@link org.hibernate.Session}s.
 	 * 
-	 * @param sessionFactory
-	 *            The factory.
+	 * @param sessionFactory The factory.
 	 */
 	public void setSessionFactory(SessionFactory sessionFactory) {
 		this.sessionFactory = sessionFactory;
 	}
-	
+
 	protected EntityManager getEntityManager() {
 		return entityManager;
 	}
