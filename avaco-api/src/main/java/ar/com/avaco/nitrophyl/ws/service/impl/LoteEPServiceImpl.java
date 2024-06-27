@@ -1,5 +1,7 @@
 package ar.com.avaco.nitrophyl.ws.service.impl;
 
+import java.util.List;
+
 import javax.annotation.Resource;
 
 import org.apache.commons.lang3.StringUtils;
@@ -26,6 +28,12 @@ public class LoteEPServiceImpl extends CRUDEPBaseService<Long, LoteDTO, Lote, Lo
 
 	@Override
 	public LoteDTO save(LoteDTO dto) throws BusinessException {
+		
+		List<Lote> listPattern = this.service.listPattern("nroLote", dto.getNroLote());
+		if (!listPattern.isEmpty()) {
+			throw new BusinessException("El número de lote ya existe");
+		}
+		
 		dto.setEstado(EstadoLote.PENDIENTE_APROBACION.name());
 		return super.save(dto);
 	}
@@ -35,8 +43,14 @@ public class LoteEPServiceImpl extends CRUDEPBaseService<Long, LoteDTO, Lote, Lo
 		LoteDTO update = this.get(dto.getId());
 		update.setFecha(dto.getFecha());
 		if (dto.getIdFormula() != update.getIdFormula() && this.service.hasEnsayos(dto.getId())) {
-			throw new BusinessException("No puede actualizarse la fórmula porque tiene ensayos asociados");
+			throw new BusinessException("No puede cambiarse la fórmula del lote porque tiene ensayos asociados");
 		}
+		
+		List<Lote> listPattern = this.service.listPattern("nroLote", dto.getNroLote());
+		if (!listPattern.isEmpty() && listPattern.get(0).getId() != dto.getId()) {
+			throw new BusinessException("No puede cambiarse el número de lote porque ya existe");
+		}
+		
 		update.setIdFormula(dto.getIdFormula());
 		update.setNroLote(dto.getNroLote());
 		update.setObservaciones(dto.getObservaciones());

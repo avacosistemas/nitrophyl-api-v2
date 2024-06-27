@@ -84,10 +84,17 @@ public class LoteRestController extends AbstractDTORestController<LoteDTO, Long,
 
 	@RequestMapping(value = "/lote", method = RequestMethod.POST)
 	public ResponseEntity<JSONResponse> create(@RequestBody LoteDTO loteDTO) throws BusinessException {
-		LoteDTO saved = this.service.save(loteDTO);
 		JSONResponse response = new JSONResponse();
-		response.setData(saved);
 		response.setStatus(JSONResponse.OK);
+		try {
+			LoteDTO saved = this.service.save(loteDTO);
+			response.setData(saved);
+		} catch (BusinessException e) {
+			ErrorResponse eresp = new ErrorResponse();
+			eresp.setStatus(JSONResponse.ERROR);
+			eresp.setError(e.getMessage());
+			response = eresp;
+		}
 		return new ResponseEntity<JSONResponse>(response, HttpStatus.OK);
 	}
 
@@ -116,9 +123,9 @@ public class LoteRestController extends AbstractDTORestController<LoteDTO, Long,
 			throws BusinessException {
 		JSONResponse response = new JSONResponse();
 		response.setStatus(JSONResponse.OK);
-		response.setData(loteDTO);
 		try {
 			super.update(idLote, loteDTO);
+			response.setData(loteDTO);
 		} catch (BusinessException e) {
 			ErrorResponse eresp = new ErrorResponse();
 			eresp.setStatus(JSONResponse.ERROR);
