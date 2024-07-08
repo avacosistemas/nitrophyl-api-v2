@@ -18,6 +18,8 @@ import ar.com.avaco.nitrophyl.service.maquina.ConfiguracionPruebaService;
 import ar.com.avaco.nitrophyl.ws.dto.ConfiguracionPruebaCondicionDTO;
 import ar.com.avaco.nitrophyl.ws.dto.ConfiguracionPruebaDTO;
 import ar.com.avaco.nitrophyl.ws.dto.ConfiguracionPruebaParametroDTO;
+import ar.com.avaco.nitrophyl.ws.dto.MaquinaDTO;
+import ar.com.avaco.nitrophyl.ws.dto.MaquinaPruebaDTO;
 import ar.com.avaco.nitrophyl.ws.service.ConfiguracionPruebaEPService;
 import ar.com.avaco.utils.DateUtils;
 import ar.com.avaco.ws.rest.service.CRUDEPBaseService;
@@ -51,7 +53,7 @@ public class ConfiguracionPruebaEPServiceImpl
 
 		cf.setParametros(new HashSet<>(dto
 				.getParametros().stream().map(x -> new ConfiguracionPruebaParametro(cf,
-						new MaquinaPrueba(x.getIdMaquinaPrueba()), x.getMinimo(), x.getMaximo(), x.getNorma()))
+						new MaquinaPrueba(x.getMaquinaPrueba().getId()), x.getMinimo(), x.getMaximo(), x.getNorma()))
 				.collect(Collectors.toList())));
 
 		cf.setCondiciones(new HashSet<>(dto.getCondiciones().stream()
@@ -74,7 +76,6 @@ public class ConfiguracionPruebaEPServiceImpl
 		dto.setFecha(DateUtils.toStringFecha(entity.getFecha()));
 		dto.setId(entity.getId());
 		dto.setIdFormula(entity.getFormula().getId());
-		dto.setIdMaquina(entity.getMaquina().getId());
 		dto.setMaquina(entity.getMaquina().getNombre());
 		dto.setObservacionesReporte(entity.getObservacionesReporte());
 		return dto;
@@ -85,8 +86,10 @@ public class ConfiguracionPruebaEPServiceImpl
 		dto.setId(cfp.getId());
 		dto.setMaximo(cfp.getMaximo());
 		dto.setMinimo(cfp.getMinimo());
-		dto.setIdMaquinaPrueba(cfp.getMaquinaPrueba().getId());
-		dto.setNombre(cfp.getMaquinaPrueba().getNombre());
+		MaquinaPruebaDTO maquinaPruebaDTO = new MaquinaPruebaDTO();
+		maquinaPruebaDTO.setId(cfp.getMaquinaPrueba().getId());
+		maquinaPruebaDTO.setNombre(cfp.getMaquinaPrueba().getNombre());
+		dto.setMaquinaPrueba(maquinaPruebaDTO);
 		dto.setNorma(cfp.getNorma());
 		return dto;
 	}
