@@ -19,6 +19,9 @@ import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 import ar.com.avaco.nitrophyl.domain.entities.formula.ConfiguracionPrueba;
 
 @Entity
@@ -35,6 +38,7 @@ public class Ensayo extends ar.com.avaco.arc.core.domain.Entity<Long> {
 
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
 	@JoinColumn(name = "ID_LOTE")
+	@OnDelete(action = OnDeleteAction.CASCADE)
 	private Lote lote;
 
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
@@ -51,7 +55,7 @@ public class Ensayo extends ar.com.avaco.arc.core.domain.Entity<Long> {
 	@Enumerated(EnumType.STRING)
 	private EstadoEnsayo estado;
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "ensayo")
+	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "ensayo")
 	private Set<EnsayoResultado> resultados = new HashSet<>();
 
 	public Long getId() {

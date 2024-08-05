@@ -10,6 +10,9 @@ import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 import ar.com.avaco.nitrophyl.domain.entities.formula.ConfiguracionPruebaParametro;
 
 @Entity
@@ -32,6 +35,7 @@ public class EnsayoResultado extends ar.com.avaco.arc.core.domain.Entity<Long> {
 
 	@ManyToOne(optional = false)
 	@JoinColumn(name = "ID_ENSAYO")
+	@OnDelete(action = OnDeleteAction.CASCADE)
 	private Ensayo ensayo;
 
 	@ManyToOne(optional = false)

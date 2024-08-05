@@ -70,7 +70,7 @@ public abstract class CRUDEPBaseService<ID extends Serializable, DTO extends DTO
 
 	@Override
 	public int listCount(AbstractFilter abstractFilter) {
-		return 0;
+		return service.listCount(abstractFilter);
 	}
 
 	@Override

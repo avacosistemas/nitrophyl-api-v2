@@ -37,6 +37,15 @@ public class FormulaRestController extends AbstractDTORestController<FormulaDTO,
 		return new ResponseEntity<JSONResponse>(response, HttpStatus.OK);
 	}
 
+	@RequestMapping(value = "/formula/count", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<JSONResponse> listCount(FormulaFilterDTO filter) {
+		int listCount = super.service.listCount(new FormulaFilter(filter));
+		JSONResponse response = new JSONResponse();
+		response.setData(listCount);
+		response.setStatus(JSONResponse.OK);
+		return new ResponseEntity<JSONResponse>(response, HttpStatus.OK);
+	}
+
 	@RequestMapping(value = "/formula", method = RequestMethod.POST)
 	public ResponseEntity<JSONResponse> create(@RequestBody FormulaDTO formulaDTO) throws BusinessException {
 		formulaDTO.setId(null);

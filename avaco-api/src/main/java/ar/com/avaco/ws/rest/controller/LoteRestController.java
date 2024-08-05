@@ -20,6 +20,7 @@ import ar.com.avaco.nitrophyl.ws.dto.LoteFilterDTO;
 import ar.com.avaco.nitrophyl.ws.dto.LoteRechazarDTO;
 import ar.com.avaco.nitrophyl.ws.service.LoteEPService;
 import ar.com.avaco.nitrophyl.ws.service.filter.LoteFilter;
+import ar.com.avaco.ws.rest.dto.ErrorResponse;
 import ar.com.avaco.ws.rest.dto.JSONResponse;
 
 @RestController
@@ -28,6 +29,15 @@ public class LoteRestController extends AbstractDTORestController<LoteDTO, Long,
 	@Resource(name = "loteEPService")
 	public void setService(LoteEPService loteEPService) {
 		super.service = loteEPService;
+	}
+
+	@RequestMapping(value = "/lote/{idLote}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<JSONResponse> read(@PathVariable("idLote") Long idLote) throws BusinessException {
+		ResponseEntity<JSONResponse> lote = super.get(idLote);
+		JSONResponse response = new JSONResponse();
+		response.setData(lote);
+		response.setStatus(JSONResponse.OK);
+		return new ResponseEntity<JSONResponse>(response, HttpStatus.OK);
 	}
 
 	@RequestMapping(value = "/lote", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -39,12 +49,52 @@ public class LoteRestController extends AbstractDTORestController<LoteDTO, Long,
 		return new ResponseEntity<JSONResponse>(response, HttpStatus.OK);
 	}
 
+	@RequestMapping(value = "/lote/count", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<JSONResponse> listCount(LoteFilterDTO filter) {
+		int listCount = super.service.listCount(new LoteFilter(filter));
+		JSONResponse response = new JSONResponse();
+		response.setData(listCount);
+		response.setStatus(JSONResponse.OK);
+		return new ResponseEntity<JSONResponse>(response, HttpStatus.OK);
+	}
+
+	@RequestMapping(value = "/lote/monitor", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<JSONResponse> listMonitor(LoteFilterDTO filter) {
+		filter.setAsc(false);
+		filter.setIdx("fechaEstado");
+		filter.setExcluirPendientes(false);
+		List<LoteDTO> listFilter = super.service.listFilter(new LoteFilter(filter));
+		JSONResponse response = new JSONResponse();
+		response.setData(listFilter);
+		response.setStatus(JSONResponse.OK);
+		return new ResponseEntity<JSONResponse>(response, HttpStatus.OK);
+	}
+
+	@RequestMapping(value = "/lote/monitor/count", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<JSONResponse> listMonitorCount(LoteFilterDTO filter) {
+		filter.setAsc(false);
+		filter.setIdx("fechaEstado");
+		filter.setExcluirPendientes(false);
+		int listCount = super.service.listCount(new LoteFilter(filter));
+		JSONResponse response = new JSONResponse();
+		response.setData(listCount);
+		response.setStatus(JSONResponse.OK);
+		return new ResponseEntity<JSONResponse>(response, HttpStatus.OK);
+	}
+
 	@RequestMapping(value = "/lote", method = RequestMethod.POST)
 	public ResponseEntity<JSONResponse> create(@RequestBody LoteDTO loteDTO) throws BusinessException {
-		LoteDTO saved = this.service.save(loteDTO);
 		JSONResponse response = new JSONResponse();
-		response.setData(saved);
 		response.setStatus(JSONResponse.OK);
+		try {
+			LoteDTO saved = this.service.save(loteDTO);
+			response.setData(saved);
+		} catch (BusinessException e) {
+			ErrorResponse eresp = new ErrorResponse();
+			eresp.setStatus(JSONResponse.ERROR);
+			eresp.setError(e.getMessage());
+			response = eresp;
+		}
 		return new ResponseEntity<JSONResponse>(response, HttpStatus.OK);
 	}
 
@@ -57,7 +107,7 @@ public class LoteRestController extends AbstractDTORestController<LoteDTO, Long,
 		response.setStatus(JSONResponse.OK);
 		return new ResponseEntity<JSONResponse>(response, HttpStatus.OK);
 	}
-	
+
 	@RequestMapping(value = "/lote/rechazar/{idLote}", method = RequestMethod.PUT)
 	public ResponseEntity<JSONResponse> rechazar(@PathVariable("idLote") Long idLote, @RequestBody LoteRechazarDTO dto)
 			throws BusinessException {
@@ -68,5 +118,36 @@ public class LoteRestController extends AbstractDTORestController<LoteDTO, Long,
 		return new ResponseEntity<JSONResponse>(response, HttpStatus.OK);
 	}
 
+	@RequestMapping(value = "/lote/update/{idLote}", method = RequestMethod.PUT)
+	public ResponseEntity<JSONResponse> update(@PathVariable("idLote") Long idLote, @RequestBody LoteDTO loteDTO)
+			throws BusinessException {
+		JSONResponse response = new JSONResponse();
+		response.setStatus(JSONResponse.OK);
+		try {
+			super.update(idLote, loteDTO);
+			response.setData(loteDTO);
+		} catch (BusinessException e) {
+			ErrorResponse eresp = new ErrorResponse();
+			eresp.setStatus(JSONResponse.ERROR);
+			eresp.setError(e.getMessage());
+			response = eresp;
+		}
+		return new ResponseEntity<JSONResponse>(response, HttpStatus.OK);
+	}
+
+	@RequestMapping(value = "/lote/delete/{idLote}", method = RequestMethod.DELETE)
+	public ResponseEntity<JSONResponse> borrar(@PathVariable("idLote") Long idLote) throws BusinessException {
+		JSONResponse response = new JSONResponse();
+		try {
+			this.service.borrar(idLote);
+			response.setStatus(JSONResponse.OK);
+		} catch (BusinessException e) {
+			ErrorResponse eresp = new ErrorResponse();
+			eresp.setStatus(JSONResponse.ERROR);
+			eresp.setError(e.getMessage());
+			response = eresp;
+		}
+		return new ResponseEntity<JSONResponse>(response, HttpStatus.OK);
+	}
 
 }

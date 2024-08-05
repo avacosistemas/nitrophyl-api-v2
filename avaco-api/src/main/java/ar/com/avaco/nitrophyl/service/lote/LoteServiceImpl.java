@@ -1,16 +1,14 @@
 package ar.com.avaco.nitrophyl.service.lote;
 
-import java.util.List;
-
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import ar.com.avaco.arc.core.component.bean.service.NJBaseService;
-import ar.com.avaco.nitrophyl.domain.entities.lote.Ensayo;
 import ar.com.avaco.nitrophyl.domain.entities.lote.EstadoLote;
 import ar.com.avaco.nitrophyl.domain.entities.lote.Lote;
+import ar.com.avaco.nitrophyl.repository.lote.EnsayoRepository;
 import ar.com.avaco.nitrophyl.repository.lote.LoteRepository;
 import ar.com.avaco.utils.DateUtils;
 
@@ -18,12 +16,7 @@ import ar.com.avaco.utils.DateUtils;
 @Service("loteService")
 public class LoteServiceImpl extends NJBaseService<Long, Lote, LoteRepository> implements LoteService {
 
-	@Resource(name = "loteRepository")
-	public void setLoteRepository(LoteRepository loteRepository) {
-		this.repository = loteRepository;
-	}
-	
-	private EnsayoService ensayoService;
+	private EnsayoRepository ensayoRepository;
 
 	@Override
 	public Lote save(Lote entity) {
@@ -44,14 +37,30 @@ public class LoteServiceImpl extends NJBaseService<Long, Lote, LoteRepository> i
 	}
 
 	@Override
+	public void borrar(Long idLote) {
+		this.repository.delete(idLote);
+
+	}
+
+	@Override
+	public boolean hasEnsayos(Long idLote) {
+		return this.ensayoRepository.countByLoteId(idLote) > 0;
+	}
+
 	public Lote getLoteCompleto(Long idLote) {
 		Lote one = this.repository.findOne(idLote);
 		return one;
 	}
-
-	@Resource(name = "ensayoService")
-	public void setEnsayoService(EnsayoService ensayoService) {
-		this.ensayoService = ensayoService;
+	
+	@Resource(name = "ensayoRepository")
+	public void setEnsayoRepository(EnsayoRepository ensayoRepository) {
+		this.ensayoRepository = ensayoRepository;
 	}
 	
+	@Resource(name = "loteRepository")
+	public void setLoteRepository(LoteRepository loteRepository) {
+		this.repository = loteRepository;
+	}
+	
+
 }
