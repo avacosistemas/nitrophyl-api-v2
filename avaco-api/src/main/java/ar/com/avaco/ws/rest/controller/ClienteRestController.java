@@ -26,7 +26,7 @@ import ar.com.avaco.nitrophyl.ws.service.filter.ClienteFilter;
 import ar.com.avaco.ws.rest.dto.JSONResponse;
 
 @RestController
-public class ClientesRestController extends AbstractDTORestController<ClienteDTO, Long, ClienteEPService> {
+public class ClienteRestController extends AbstractDTORestController<ClienteDTO, Long, ClienteEPService> {
 
 	@Resource(name = "clienteEPService")
 	public void setService(ClienteEPService clienteEPService) {
@@ -43,7 +43,20 @@ public class ClientesRestController extends AbstractDTORestController<ClienteDTO
 		response.setStatus(JSONResponse.OK);
 		return new ResponseEntity<JSONResponse>(response, HttpStatus.OK);
 	}
-
+	
+	@RequestMapping(value = "/clientes/autocomplete", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<JSONResponse> listClientesAutocomplete(ClienteFilterDTO filterDTO) throws Exception {
+		filterDTO.setAsc(true);
+		filterDTO.setIdx("nombre");
+		List<ClienteDTO> listFilter = super.service.listFilter(new ClienteFilter(filterDTO));
+		List<ComboDTO> clientes = new ArrayList<ComboDTO>();
+		listFilter.forEach(x -> clientes.add(new ComboDTO(x.getLabelCombo(), x.getId().toString())));
+		JSONResponse response = new JSONResponse();
+		response.setData(clientes);
+		response.setStatus(JSONResponse.OK);
+		return new ResponseEntity<JSONResponse>(response, HttpStatus.OK);
+	}
+	
 	@RequestMapping(value = "/cliente", method = RequestMethod.POST)
 	public ResponseEntity<JSONResponse> addCliente(@RequestBody ClienteDTO clienteDTO) throws Exception {
 		clienteDTO.setId(null);

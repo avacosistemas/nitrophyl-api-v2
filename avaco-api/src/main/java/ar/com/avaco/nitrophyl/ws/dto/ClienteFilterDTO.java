@@ -2,6 +2,8 @@ package ar.com.avaco.nitrophyl.ws.dto;
 
 public class ClienteFilterDTO extends SortPageDTO {
 
+	private String nombreRs;
+
 	private String busquedaRapida;
 
 	private Boolean activo;
@@ -20,6 +22,14 @@ public class ClienteFilterDTO extends SortPageDTO {
 
 	public void setActivo(Boolean activo) {
 		this.activo = activo;
+	}
+
+	public String getNombreRs() {
+		return nombreRs;
+	}
+
+	public void setNombreRs(String nombreRs) {
+		this.nombreRs = nombreRs;
 	}
 
 }

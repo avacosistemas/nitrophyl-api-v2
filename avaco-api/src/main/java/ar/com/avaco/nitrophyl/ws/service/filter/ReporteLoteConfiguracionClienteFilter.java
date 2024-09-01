@@ -29,15 +29,15 @@ public class ReporteLoteConfiguracionClienteFilter extends AbstractFilter {
 		List<FilterData> list = new ArrayList<FilterData>();
 
 		if (idCliente != null) {
-			list.add(new FilterData("cliente.idCliente", idCliente, FilterDataType.EQUALS));
+			list.add(new FilterData("cliente.id", idCliente, FilterDataType.EQUALS));
 		}
 
 		if (idFormula != null) {
-			list.add(new FilterData("formula.idFormula", idFormula, FilterDataType.EQUALS));
+			list.add(new FilterData("formula.id", idFormula, FilterDataType.EQUALS));
 		}
 
 		if (idMaquina != null) {
-			list.add(new FilterData("maquina.idMaquina", idMaquina, FilterDataType.EQUALS));
+			list.add(new FilterData("maquina.id", idMaquina, FilterDataType.EQUALS));
 		}
 
 		if (mostrarParametros != null) {

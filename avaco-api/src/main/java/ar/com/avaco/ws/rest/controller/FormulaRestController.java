@@ -1,5 +1,6 @@
 package ar.com.avaco.ws.rest.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import ar.com.avaco.commons.exception.BusinessException;
+import ar.com.avaco.nitrophyl.ws.dto.ComboDTO;
 import ar.com.avaco.nitrophyl.ws.dto.FormulaDTO;
 import ar.com.avaco.nitrophyl.ws.dto.FormulaFilterDTO;
 import ar.com.avaco.nitrophyl.ws.service.FormulaEPService;
@@ -33,6 +35,19 @@ public class FormulaRestController extends AbstractDTORestController<FormulaDTO,
 		List<FormulaDTO> listFilter = super.service.listFilter(new FormulaFilter(filter));
 		JSONResponse response = new JSONResponse();
 		response.setData(listFilter);
+		response.setStatus(JSONResponse.OK);
+		return new ResponseEntity<JSONResponse>(response, HttpStatus.OK);
+	}
+	
+	@RequestMapping(value = "/formula/autocomplete", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<JSONResponse> listAutocomplete(FormulaFilterDTO filter) {
+		filter.setAsc(true);
+		filter.setIdx("nombre");
+		List<FormulaDTO> listFilter = super.service.listFilter(new FormulaFilter(filter));
+		List<ComboDTO> clientes = new ArrayList<ComboDTO>();
+		listFilter.forEach(x -> clientes.add(new ComboDTO(x.getLabelCombo(), x.getId().toString())));
+		JSONResponse response = new JSONResponse();
+		response.setData(clientes);
 		response.setStatus(JSONResponse.OK);
 		return new ResponseEntity<JSONResponse>(response, HttpStatus.OK);
 	}

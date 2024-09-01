@@ -12,6 +12,8 @@ import ar.com.avaco.nitrophyl.ws.dto.ClienteFilterDTO;
 
 public class ClienteFilter extends AbstractFilter {
 
+	private String nombreRs;
+	
 	private String busquedaRapida;
 
 	private Boolean activo;
@@ -20,6 +22,13 @@ public class ClienteFilter extends AbstractFilter {
 	public List<List<FilterData>> getOrFilterDatas() {
 		List<List<FilterData>> orList = new ArrayList<>();
 
+		if (StringUtils.isNotBlank(nombreRs)) {
+			List<FilterData> list = new ArrayList<FilterData>();
+			list.add(new FilterData("razonSocial", nombreRs, FilterDataType.LIKE));
+			list.add(new FilterData("nombre", nombreRs, FilterDataType.LIKE));
+			orList.add(list);
+		}
+		
 		if (StringUtils.isNotBlank(busquedaRapida)) {
 			List<FilterData> list = new ArrayList<FilterData>();
 			list.add(new FilterData("razonSocial", busquedaRapida, FilterDataType.LIKE));
@@ -46,6 +55,7 @@ public class ClienteFilter extends AbstractFilter {
 	public ClienteFilter(ClienteFilterDTO filter) {
 		this.busquedaRapida = filter.getBusquedaRapida();
 		this.activo = filter.getActivo();
+		this.nombreRs = filter.getNombreRs();
 	}
 
 	public String getBusquedaRapida() {

@@ -1,6 +1,9 @@
 package ar.com.avaco.ws.rest.controller;
 
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.annotation.Resource;
 
@@ -14,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import ar.com.avaco.commons.exception.BusinessException;
+import ar.com.avaco.nitrophyl.ws.dto.ComboDTO;
 import ar.com.avaco.nitrophyl.ws.dto.MaquinaDTO;
 import ar.com.avaco.nitrophyl.ws.dto.MaquinaFilterDTO;
 import ar.com.avaco.nitrophyl.ws.dto.MaquinaPruebaDTO;
@@ -32,6 +36,19 @@ public class MaquinaRestController extends AbstractDTORestController<MaquinaDTO,
 		List<MaquinaDTO> listFilter = super.service.listFilter(new MaquinaFilter(filter));
 		JSONResponse response = new JSONResponse();
 		response.setData(listFilter);
+		response.setStatus(JSONResponse.OK);
+		return new ResponseEntity<JSONResponse>(response, HttpStatus.OK);
+	}
+	
+	@RequestMapping(value = "/maquinas/autocomplete", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<JSONResponse> listAutocomplete(MaquinaFilterDTO filter) {
+		filter.setAsc(true);
+		filter.setIdx("nombre");
+		List<MaquinaDTO> listFilter = super.service.listFilter(new MaquinaFilter(filter));
+		List<ComboDTO> clientes = new ArrayList<ComboDTO>();
+		listFilter.forEach(x -> clientes.add(new ComboDTO(x.getNombre(), x.getId().toString())));
+		JSONResponse response = new JSONResponse();
+		response.setData(clientes);
 		response.setStatus(JSONResponse.OK);
 		return new ResponseEntity<JSONResponse>(response, HttpStatus.OK);
 	}

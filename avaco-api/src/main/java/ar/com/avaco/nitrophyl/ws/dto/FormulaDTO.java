@@ -76,5 +76,9 @@ public class FormulaDTO extends DTOEntity<Long> {
 	public void setObservaciones(String observaciones) {
 		this.observaciones = observaciones;
 	}
+	
+	public String getLabelCombo() {
+		return this.nombre + " V" + this.version +  " (" + this.norma + ")"; 
+	}
 
 }

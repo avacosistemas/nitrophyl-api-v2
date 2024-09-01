@@ -23,6 +23,10 @@ public class ClienteDTO extends DTOEntity<Long> {
 	public ClienteDTO() {
 	}
 
+	public String getLabelCombo() {
+		return this.nombre + " (" + this.razonSocial + ")";
+	}
+	
 	public Boolean getActivo() {
 		return activo;
 	}
