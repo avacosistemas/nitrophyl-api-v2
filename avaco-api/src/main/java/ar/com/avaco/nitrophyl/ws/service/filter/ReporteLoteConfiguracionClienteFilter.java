@@ -22,7 +22,7 @@ public class ReporteLoteConfiguracionClienteFilter extends AbstractFilter {
 
 	private Boolean mostrarCondiciones;
 
-	private Boolean mostraObervacionesMaquina;
+	private Boolean mostrarObservacionesParametro;
 
 	@Override
 	public List<FilterData> getFilterDatas() {
@@ -52,8 +52,9 @@ public class ReporteLoteConfiguracionClienteFilter extends AbstractFilter {
 			list.add(new FilterData("mostrarCondiciones", mostrarCondiciones, FilterDataType.EQUALS));
 		}
 
-		if (mostraObervacionesMaquina != null) {
-			list.add(new FilterData("mostraObervacionesMaquina", mostraObervacionesMaquina, FilterDataType.EQUALS));
+		if (mostrarObservacionesParametro != null) {
+			list.add(new FilterData("mostrarObservacionesParametro", mostrarObservacionesParametro,
+					FilterDataType.EQUALS));
 		}
 
 		return list;
@@ -67,7 +68,7 @@ public class ReporteLoteConfiguracionClienteFilter extends AbstractFilter {
 		this.idCliente = dto.getIdCliente();
 		this.idFormula = dto.getIdFormula();
 		this.idMaquina = dto.getIdMaquina();
-		this.mostraObervacionesMaquina = dto.getMostraObervacionesMaquina();
+		this.mostrarObservacionesParametro = dto.getMostrarObservacionesParametro();
 		this.mostrarCondiciones = dto.getMostrarCondiciones();
 		this.mostrarParametros = dto.getMostrarParametros();
 		this.mostrarResultados = dto.getMostrarResultados();
@@ -121,12 +122,12 @@ public class ReporteLoteConfiguracionClienteFilter extends AbstractFilter {
 		this.mostrarCondiciones = mostrarCondiciones;
 	}
 
-	public Boolean getMostraObervacionesMaquina() {
-		return mostraObervacionesMaquina;
+	public Boolean getMostrarObservacionesParametro() {
+		return mostrarObservacionesParametro;
 	}
 
-	public void setMostraObervacionesMaquina(Boolean mostraObervacionesMaquina) {
-		this.mostraObervacionesMaquina = mostraObervacionesMaquina;
+	public void setMostrarObservacionesParametro(Boolean mostrarObservacionesParametro) {
+		this.mostrarObservacionesParametro = mostrarObservacionesParametro;
 	}
 
 }

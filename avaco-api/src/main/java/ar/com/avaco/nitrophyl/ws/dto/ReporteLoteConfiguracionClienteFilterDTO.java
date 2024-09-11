@@ -14,7 +14,7 @@ public class ReporteLoteConfiguracionClienteFilterDTO extends SortPageDTO {
 
 	private Boolean mostrarCondiciones;
 
-	private Boolean mostraObervacionesMaquina;
+	private Boolean mostrarObservacionesParametro;
 
 	public Long getIdCliente() {
 		return idCliente;
@@ -64,12 +64,12 @@ public class ReporteLoteConfiguracionClienteFilterDTO extends SortPageDTO {
 		this.mostrarCondiciones = mostrarCondiciones;
 	}
 
-	public Boolean getMostraObervacionesMaquina() {
-		return mostraObervacionesMaquina;
+	public Boolean getMostrarObservacionesParametro() {
+		return mostrarObservacionesParametro;
 	}
 
-	public void setMostraObervacionesMaquina(Boolean mostraObervacionesMaquina) {
-		this.mostraObervacionesMaquina = mostraObervacionesMaquina;
+	public void setMostrarObservacionesParametro(Boolean mostrarObservacionesParametro) {
+		this.mostrarObservacionesParametro = mostrarObservacionesParametro;
 	}
 
 }

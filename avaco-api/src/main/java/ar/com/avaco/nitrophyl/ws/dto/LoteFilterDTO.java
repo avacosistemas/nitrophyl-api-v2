@@ -1,5 +1,8 @@
 package ar.com.avaco.nitrophyl.ws.dto;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class LoteFilterDTO extends SortPageDTO {
 
 	private String nroLote;
@@ -13,6 +16,8 @@ public class LoteFilterDTO extends SortPageDTO {
 	private boolean excluirPendientes = false;
 
 	private String estado;
+
+	private List<String> estados = new ArrayList<>();
 
 	public String getEstado() {
 		return estado;
@@ -60,6 +65,14 @@ public class LoteFilterDTO extends SortPageDTO {
 
 	public void setExcluirPendientes(boolean excluirPendientes) {
 		this.excluirPendientes = excluirPendientes;
+	}
+
+	public List<String> getEstados() {
+		return estados;
+	}
+
+	public void setEstados(List<String> estados) {
+		this.estados = estados;
 	}
 
 }

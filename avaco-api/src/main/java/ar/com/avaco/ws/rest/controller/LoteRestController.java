@@ -1,5 +1,6 @@
 package ar.com.avaco.ws.rest.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -14,11 +15,16 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import ar.com.avaco.commons.exception.BusinessException;
+import ar.com.avaco.nitrophyl.domain.entities.lote.EstadoLote;
+import ar.com.avaco.nitrophyl.ws.dto.ClienteDTO;
+import ar.com.avaco.nitrophyl.ws.dto.ClienteFilterDTO;
+import ar.com.avaco.nitrophyl.ws.dto.ComboDTO;
 import ar.com.avaco.nitrophyl.ws.dto.LoteAprobarDTO;
 import ar.com.avaco.nitrophyl.ws.dto.LoteDTO;
 import ar.com.avaco.nitrophyl.ws.dto.LoteFilterDTO;
 import ar.com.avaco.nitrophyl.ws.dto.LoteRechazarDTO;
 import ar.com.avaco.nitrophyl.ws.service.LoteEPService;
+import ar.com.avaco.nitrophyl.ws.service.filter.ClienteFilter;
 import ar.com.avaco.nitrophyl.ws.service.filter.LoteFilter;
 import ar.com.avaco.ws.rest.dto.ErrorResponse;
 import ar.com.avaco.ws.rest.dto.JSONResponse;
@@ -49,6 +55,19 @@ public class LoteRestController extends AbstractDTORestController<LoteDTO, Long,
 		return new ResponseEntity<JSONResponse>(response, HttpStatus.OK);
 	}
 
+	@RequestMapping(value = "/lotes/autocomplete", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<JSONResponse> listLotesAutocomplete(LoteFilterDTO filterDTO) throws Exception {
+		filterDTO.setAsc(true);
+		filterDTO.setIdx("nroLote");
+		List<LoteDTO> listFilter = super.service.listFilter(new LoteFilter(filterDTO));
+		List<ComboDTO> lotes = new ArrayList<ComboDTO>();
+		listFilter.forEach(x -> lotes.add(new ComboDTO(x.getNroLote(), x.getId().toString())));
+		JSONResponse response = new JSONResponse();
+		response.setData(lotes);
+		response.setStatus(JSONResponse.OK);
+		return new ResponseEntity<JSONResponse>(response, HttpStatus.OK);
+	}
+	
 	@RequestMapping(value = "/lote/count", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<JSONResponse> listCount(LoteFilterDTO filter) {
 		int listCount = super.service.listCount(new LoteFilter(filter));

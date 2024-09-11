@@ -23,7 +23,7 @@ public class ReporteLoteRestController extends AbstractDTORestController<LoteDTO
 	}
 
 	@RequestMapping(value = "/loteReporte", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<JSONResponse> list(ReporteLoteClienteDTO dto) {
+	public ResponseEntity<JSONResponse> generarReporte(ReporteLoteClienteDTO dto) {
 		this.service.generarReporteLoteCliente(dto.getIdLote(), dto.getIdCliente());
 		JSONResponse response = new JSONResponse();
 		response.setData(true);

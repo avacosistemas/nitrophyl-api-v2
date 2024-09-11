@@ -22,10 +22,14 @@ public class LoteFilter extends AbstractFilter {
 	private Date fechaDesde;
 
 	private Date fechaHasta;
-	
+
 	private boolean excluirPendientes = false;
 
-	private String estado;	public LoteFilter() {
+	private String estado;
+
+	private List<String> estados = new ArrayList<>();
+
+	public LoteFilter() {
 	}
 
 	public LoteFilter(LoteFilterDTO filter) {
@@ -40,6 +44,7 @@ public class LoteFilter extends AbstractFilter {
 		}
 		this.excluirPendientes = filter.isExcluirPendientes();
 		this.estado = filter.getEstado();
+		this.estados = filter.getEstados();
 	}
 
 	@Override
@@ -51,23 +56,37 @@ public class LoteFilter extends AbstractFilter {
 		if (idFormula != null && idFormula > 0) {
 			list.add(new FilterData("formula.id", idFormula, FilterDataType.EQUALS));
 		}
-		if (fechaDesde!=null) {
-				list.add(new FilterData("fecha", fechaDesde, FilterDataType.EQUALS_MORE_THAN));
+		if (fechaDesde != null) {
+			list.add(new FilterData("fecha", fechaDesde, FilterDataType.EQUALS_MORE_THAN));
 
 		}
-		if (fechaHasta!=null) {
-				list.add(new FilterData("fecha", fechaHasta, FilterDataType.EQUALS_LESS_THAN));
+		if (fechaHasta != null) {
+			list.add(new FilterData("fecha", fechaHasta, FilterDataType.EQUALS_LESS_THAN));
 		}
-		
+
 		if (StringUtils.isNotBlank(estado)) {
 			list.add(new FilterData("estado", EstadoLote.valueOf(estado), FilterDataType.EQUALS));
 		}
-		
+
 		if (excluirPendientes) {
 			list.add(new FilterData("fechaEstado", null, FilterDataType.IS_NOT_NULL));
 		}
-		
+
 		return list;
+	}
+	
+	@Override
+	public List<List<FilterData>> getOrFilterDatas() {
+		List<List<FilterData>> orList = new ArrayList<>();
+
+		if (!estados.isEmpty()) {
+			List<FilterData> list = new ArrayList<FilterData>();
+			estados.forEach(x->{
+				list.add(new FilterData("estado", EstadoLote.valueOf(x), FilterDataType.EQUALS));	
+			});
+			orList.add(list);
+		}
+		return orList;
 	}
 
 	public String getNroLote() {
@@ -124,6 +143,14 @@ public class LoteFilter extends AbstractFilter {
 
 	public void setIncluirPendientes(boolean incluirPendientes) {
 		this.excluirPendientes = incluirPendientes;
+	}
+
+	public List<String> getEstados() {
+		return estados;
+	}
+
+	public void setEstados(List<String> estados) {
+		this.estados = estados;
 	}
 
 }
