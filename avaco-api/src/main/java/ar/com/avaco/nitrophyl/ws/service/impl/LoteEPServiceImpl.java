@@ -7,20 +7,25 @@ import java.util.List;
 import javax.annotation.Resource;
 
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.itextpdf.text.DocumentException;
 
 import ar.com.avaco.commons.exception.BusinessException;
+import ar.com.avaco.nitrophyl.domain.entities.cliente.Cliente;
 import ar.com.avaco.nitrophyl.domain.entities.formula.Formula;
 import ar.com.avaco.nitrophyl.domain.entities.lote.EstadoLote;
 import ar.com.avaco.nitrophyl.domain.entities.lote.Lote;
 import ar.com.avaco.nitrophyl.domain.entities.reporte.ReporteLoteConfiguracionCliente;
+import ar.com.avaco.nitrophyl.service.cliente.ClienteService;
 import ar.com.avaco.nitrophyl.service.lote.LoteService;
 import ar.com.avaco.nitrophyl.service.reporte.ReporteLoteConfiguracionClienteService;
+import ar.com.avaco.nitrophyl.ws.dto.ArchivoDTO;
 import ar.com.avaco.nitrophyl.ws.dto.LoteDTO;
 import ar.com.avaco.nitrophyl.ws.service.LoteEPService;
 import ar.com.avaco.utils.DateUtils;
+import ar.com.avaco.ws.rest.dto.JSONResponse;
 import ar.com.avaco.ws.rest.informe.InformeBuilder;
 import ar.com.avaco.ws.rest.service.CRUDEPBaseService;
 
@@ -29,13 +34,10 @@ public class LoteEPServiceImpl extends CRUDEPBaseService<Long, LoteDTO, Lote, Lo
 
 	private ReporteLoteConfiguracionClienteService reporteLoteConfigClienteService;
 
-	@Override
-	@Resource(name = "loteService")
-	protected void setService(LoteService service) {
-		this.service = service;
-	}
+	private ClienteService clienteService;
 
 	@Resource(name = "reporteLoteConfiguracionClienteService")
+
 	public void setReporteLoteConfigClienteService(
 			ReporteLoteConfiguracionClienteService reporteLoteConfigClienteService) {
 		this.reporteLoteConfigClienteService = reporteLoteConfigClienteService;
@@ -119,16 +121,19 @@ public class LoteEPServiceImpl extends CRUDEPBaseService<Long, LoteDTO, Lote, Lo
 	}
 
 	@Override
-	public void generarReporteLoteCliente(Long idLote, Long idCliente) {
+	public ArchivoDTO generarReporteLoteCliente(Long idLote, Long idCliente) throws BusinessException {
 		Lote lote = this.service.getLoteCompleto(idLote);
 		List<ReporteLoteConfiguracionCliente> configuraciones = reporteLoteConfigClienteService
 				.listEqField("cliente.id", idCliente);
+		Cliente cliente = clienteService.getCliente(idCliente);
 		InformeBuilder ib = new InformeBuilder();
+		ArchivoDTO adto = new ArchivoDTO();
 		try {
-			ib.generarReporte(lote, configuraciones);
+			adto = ib.generarReporte(lote, configuraciones, cliente.getNombre(), cliente.getEmpresa().name());
 		} catch (DocumentException | IOException | URISyntaxException e) {
-			e.printStackTrace();
+			throw new BusinessException("No se pudo generar el informe", e);
 		}
+		return adto;
 
 	}
 
@@ -137,6 +142,17 @@ public class LoteEPServiceImpl extends CRUDEPBaseService<Long, LoteDTO, Lote, Lo
 			throw new BusinessException("No se puede borrar el lote porque tiene ensayos asociados");
 		this.service.borrar(idLote);
 
+	}
+
+	@Override
+	@Resource(name = "loteService")
+	protected void setService(LoteService service) {
+		this.service = service;
+	}
+
+	@Resource(name = "clienteService")
+	public void setClienteService(ClienteService clienteService) {
+		this.clienteService = clienteService;
 	}
 
 }

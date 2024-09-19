@@ -53,6 +53,7 @@ public class ClienteFilter extends AbstractFilter {
 	}
 
 	public ClienteFilter(ClienteFilterDTO filter) {
+		super(filter.getRows(), filter.getFirst(), filter.getAsc(), filter.getIdx());
 		this.busquedaRapida = filter.getBusquedaRapida();
 		this.activo = filter.getActivo();
 		this.nombreRs = filter.getNombreRs();

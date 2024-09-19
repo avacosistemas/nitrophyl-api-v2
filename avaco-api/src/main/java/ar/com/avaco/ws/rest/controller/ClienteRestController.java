@@ -37,6 +37,8 @@ public class ClienteRestController extends AbstractDTORestController<ClienteDTO,
 
 	@RequestMapping(value = "/clientes", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<JSONResponse> listClientes(ClienteFilterDTO filterDTO) throws Exception {
+		filterDTO.setAsc(true);
+		filterDTO.setIdx("razonSocial");
 		List<ClienteDTO> listFilter = super.service.listFilter(new ClienteFilter(filterDTO));
 		JSONResponse response = new JSONResponse();
 		response.setData(listFilter);

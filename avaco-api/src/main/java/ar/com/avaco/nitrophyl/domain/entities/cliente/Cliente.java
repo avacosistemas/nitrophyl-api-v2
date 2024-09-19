@@ -6,6 +6,7 @@ import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -110,6 +111,10 @@ public class Cliente extends ar.com.avaco.arc.core.domain.Entity<Long> {
 
 	@Column(name = "ACTIVO")
 	private Boolean activo;
+	
+	@Column(name = "EMPRESA")
+	@Enumerated(EnumType.STRING)
+	private EmpresaCliente empresa;
 
 	public Cliente() {
 	}
@@ -248,6 +253,14 @@ public class Cliente extends ar.com.avaco.arc.core.domain.Entity<Long> {
 
 	public void setActivo(Boolean activo) {
 		this.activo = activo;
+	}
+
+	public EmpresaCliente getEmpresa() {
+		return empresa;
+	}
+
+	public void setEmpresa(EmpresaCliente empresa) {
+		this.empresa = empresa;
 	}
 
 }

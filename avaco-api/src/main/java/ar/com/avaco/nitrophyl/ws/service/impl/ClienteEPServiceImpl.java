@@ -12,6 +12,7 @@ import ar.com.avaco.commons.exception.BusinessException;
 import ar.com.avaco.commons.exception.ErrorValidationException;
 import ar.com.avaco.nitrophyl.domain.entities.cliente.Cliente;
 import ar.com.avaco.nitrophyl.domain.entities.cliente.Contacto;
+import ar.com.avaco.nitrophyl.domain.entities.cliente.EmpresaCliente;
 import ar.com.avaco.nitrophyl.domain.entities.cliente.Provincia;
 import ar.com.avaco.nitrophyl.service.cliente.ClienteService;
 import ar.com.avaco.nitrophyl.ws.dto.ClienteDTO;
@@ -117,6 +118,7 @@ public class ClienteEPServiceImpl extends CRUDEPBaseService<Long, ClienteDTO, Cl
 			clienteDTO.setObservacionesFacturacion(entity.getObservacionesFacturacion());
 			clienteDTO.setTelefono(entity.getTelefono());
 			clienteDTO.setActivo(entity.getActivo());
+			clienteDTO.setEmpresa(entity.getEmpresa().name());
 		}
 
 		return clienteDTO;
@@ -157,6 +159,7 @@ public class ClienteEPServiceImpl extends CRUDEPBaseService<Long, ClienteDTO, Cl
 		cliente.setObservacionesFacturacion(dto.getObservacionesFacturacion());
 		cliente.setTelefono(dto.getTelefono());
 		cliente.setActivo(dto.getActivo());
+		cliente.setEmpresa(EmpresaCliente.valueOf(dto.getEmpresa()));
 		return cliente;
 	}
 

@@ -19,6 +19,7 @@ public class ClienteDTO extends DTOEntity<Long> {
 	private String observacionesFacturacion;
 	private String telefono;
 	private Boolean activo;
+	private String empresa;
 
 	public ClienteDTO() {
 	}
@@ -26,7 +27,7 @@ public class ClienteDTO extends DTOEntity<Long> {
 	public String getLabelCombo() {
 		return this.nombre + " (" + this.razonSocial + ")";
 	}
-	
+
 	public Boolean getActivo() {
 		return activo;
 	}
@@ -145,6 +146,14 @@ public class ClienteDTO extends DTOEntity<Long> {
 
 	public void setNombre(String nombre) {
 		this.nombre = nombre;
+	}
+
+	public String getEmpresa() {
+		return empresa;
+	}
+
+	public void setEmpresa(String empresa) {
+		this.empresa = empresa;
 	}
 
 }
