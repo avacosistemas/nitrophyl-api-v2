@@ -7,7 +7,7 @@ import ar.com.avaco.nitrophyl.domain.entities.maquina.MaquinaPrueba;
 
 public interface MaquinaPruebaRepository extends NJRepository<Long, MaquinaPrueba>, MaquinaPruebaRepositoryCustom {
 
-	List<MaquinaPrueba> findByIdMaquina(Long idMaquina);
+	List<MaquinaPrueba> findByIdMaquinaOrderByPosicion(Long idMaquina);
 
 	void removeByIdMaquina(Long idMaquina);
 

@@ -7,7 +7,7 @@ import ar.com.avaco.ws.rest.service.CRUDEPService;
 
 public interface MaquinaPruebaEPService extends CRUDEPService<Long, MaquinaPruebaDTO> {
 
-	List<MaquinaPruebaDTO> updateMaquinaPrueba(Long idMaquina, List<String> pruebas);
+	List<MaquinaPruebaDTO> updateMaquinaPrueba(Long idMaquina, List<MaquinaPruebaDTO> pruebas);
 
 	List<MaquinaPruebaDTO> listPruebasByMaquina(Long idMaquina);
 

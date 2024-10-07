@@ -1,6 +1,5 @@
 package ar.com.avaco.nitrophyl.service.maquina;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -23,16 +22,14 @@ public class MaquinaPruebaServiceImpl extends NJBaseService<Long, MaquinaPrueba,
 
 	@Override
 	public List<MaquinaPrueba> listByMaquina(Long idMaquina) {
-		return this.repository.findByIdMaquina(idMaquina);
+		return this.repository.findByIdMaquinaOrderByPosicion(idMaquina);
 	}
 
 	@Override
-	public void updatePruebasByMaquina(Long idMaquina, List<String> pruebas) {
-		List<MaquinaPrueba> list = new ArrayList<MaquinaPrueba>();
-		pruebas.forEach(x -> list.add(new MaquinaPrueba(x, idMaquina)));
+	public void updatePruebasByMaquina(Long idMaquina, List<MaquinaPrueba> pruebas) {
 		Maquina maquina = this.maquinaRepository.getOne(idMaquina);
 		maquina.getPruebas().clear();
-		maquina.getPruebas().addAll(list);
+		maquina.getPruebas().addAll(pruebas);
 		this.maquinaRepository.save(maquina);
 	}
 

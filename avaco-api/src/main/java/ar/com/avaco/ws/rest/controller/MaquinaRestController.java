@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 
 import javax.annotation.Resource;
 
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -24,6 +25,7 @@ import ar.com.avaco.nitrophyl.ws.dto.MaquinaPruebaDTO;
 import ar.com.avaco.nitrophyl.ws.service.MaquinaEPService;
 import ar.com.avaco.nitrophyl.ws.service.MaquinaPruebaEPService;
 import ar.com.avaco.nitrophyl.ws.service.filter.MaquinaFilter;
+import ar.com.avaco.ws.rest.dto.ErrorResponse;
 import ar.com.avaco.ws.rest.dto.JSONResponse;
 
 @RestController
@@ -85,11 +87,16 @@ public class MaquinaRestController extends AbstractDTORestController<MaquinaDTO,
 
 	@RequestMapping(value = "/maquina/prueba/{idMaquina}", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<JSONResponse> updatePruebas(@PathVariable("idMaquina") Long idMaquina,
-			@RequestBody List<String> pruebas) throws Exception {
-		List<MaquinaPruebaDTO> result = this.maquinaPruebaEPService.updateMaquinaPrueba(idMaquina, pruebas);
+			@RequestBody List<MaquinaPruebaDTO> pruebas) throws Exception {
 		JSONResponse response = new JSONResponse();
-		response.setData(result);
 		response.setStatus(JSONResponse.OK);
+		try {
+			List<MaquinaPruebaDTO> result = this.maquinaPruebaEPService.updateMaquinaPrueba(idMaquina, pruebas);
+			response.setData(result);
+		} catch (DataIntegrityViolationException e) {
+			String message = "Error al actualizar listado de pruebas. Es probable que haya intentado borrar una prueba asociada a un ensayo.";
+			response = new ErrorResponse(JSONResponse.ERROR, null, message, e.getCause().getCause().getLocalizedMessage());
+		}
 		return new ResponseEntity<JSONResponse>(response, HttpStatus.OK);
 	}
 

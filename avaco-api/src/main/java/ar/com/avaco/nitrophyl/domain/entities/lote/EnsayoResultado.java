@@ -81,5 +81,9 @@ public class EnsayoResultado extends ar.com.avaco.arc.core.domain.Entity<Long> {
 	public void setConfiguracionPruebaParametro(ConfiguracionPruebaParametro configuracionPruebaParametro) {
 		this.configuracionPruebaParametro = configuracionPruebaParametro;
 	}
+	
+	public int getPosicion() {
+		return this.configuracionPruebaParametro.getMaquinaPrueba().getPosicion();
+	}
 
 }

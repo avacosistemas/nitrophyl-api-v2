@@ -8,10 +8,13 @@ import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.Calendar;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
+import org.hibernate.validator.resourceloading.AggregateResourceBundleLocator;
 
 import com.itextpdf.text.BadElementException;
 import com.itextpdf.text.BaseColor;
@@ -67,11 +70,16 @@ public class InformeBuilder {
 
 			Element encabezado = generarEncabezado(empresa);
 			document.add(encabezado);
-
+			
+			Paragraph element = new Paragraph(" ");
+			document.add(element);
+			
 			Element datosLote = addDatosLotes(lote);
 			generarSeccion(document, datosLote, null, null);
 
-			for (Ensayo ensayo : lote.getEnsayos()) {
+			List<Ensayo> ensayos = lote.getEnsayos().stream().sorted(Comparator.comparing(Ensayo::getOrden)).collect(Collectors.toList());
+			
+			for (Ensayo ensayo : ensayos) {
 
 				long idMaquina = ensayo.getConfiguracionPrueba().getMaquina().getId();
 				long idFormula = ensayo.getConfiguracionPrueba().getFormula().getId();
@@ -126,7 +134,7 @@ public class InformeBuilder {
 
 	private Element generarEncabezado(String empresa)
 			throws BadElementException, MalformedURLException, IOException, URISyntaxException, DocumentException {
-		PdfPTable table = generateTable(2);
+		PdfPTable table = generateTable(3);
 		PdfPCell cell = getPDFPCell();
 		cell.setBorder(0);
 		cell.setHorizontalAlignment(Element.ALIGN_CENTER);
@@ -143,6 +151,45 @@ public class InformeBuilder {
 				new Phrase("INFORME DE CALIDAD", FontFactory.getFont(FontFactory.HELVETICA_BOLD, 16, BaseColor.BLACK)));
 		table.addCell(cell);
 
+		PdfPTable tabladerecha = generateTable(2);
+		tabladerecha.setWidths(new float[] {35, 65});
+		
+		PdfPCell fila = getPDFPCell();
+		fila.setPhrase(new Phrase("Fecha: ", fontHeaderTable));
+		fila.setBorder(0);
+		tabladerecha.addCell(fila);
+		
+		fila = getPDFPCell();
+		fila.setPhrase(new Phrase("[01/01/2020]", fontText));
+		fila.setBorder(0);
+		tabladerecha.addCell(fila);
+
+		fila = getPDFPCell();
+		fila.setPhrase(new Phrase("Código:", fontHeaderTable));
+		fila.setBorder(0);
+		tabladerecha.addCell(fila);
+
+		fila = getPDFPCell();
+		fila.setPhrase(new Phrase("R-LAB-006", fontText));
+		fila.setBorder(0);
+		tabladerecha.addCell(fila);
+		
+		fila = getPDFPCell();
+		fila.setPhrase(new Phrase("Rev.: ", fontHeaderTable));
+		fila.setBorder(0);
+		tabladerecha.addCell(fila);
+
+		fila = getPDFPCell();
+		fila.setPhrase(new Phrase("[00] - [12/12/2012]", fontText));
+		fila.setBorder(0);
+		tabladerecha.addCell(fila);
+
+		PdfPCell celdatabladerecha = generarCeldaBordeRedondeado(null, null);
+		celdatabladerecha.addElement(tabladerecha);
+		celdatabladerecha.setBorder(0);
+		
+		table.addCell(celdatabladerecha);
+		
 		Paragraph p = new Paragraph();
 		p.add(table);
 
@@ -241,46 +288,18 @@ public class InformeBuilder {
 
 			// Armo la tabla de resultados
 			// Contiene prueba, min, max, resultado y norma
-			float[] colsConResultado = new float[] { 10, 16, 20, 12, 12, 12, 18 };
-			float[] colsSinResultado = new float[] { 10, 16, 18, 18, 18, 20 };
+			float[] colsConResultado = new float[] { 25, 30, 10, 10, 10, 20 };
+			//float[] colsSinResultado = new float[] { 20, 24, 18, 18, 20 };
 
-			float[] cols = mostrarResultados ? colsConResultado : colsSinResultado;
+			float[] cols = colsConResultado;
+//			float[] cols = mostrarResultados ? colsConResultado : colsSinResultado;
 
 			PdfPTable tableResultados = new PdfPTable(cols);
 			tableResultados.setWidthPercentage(100);
 			tableResultados.setSpacingAfter(20);
 
 			// Cabecera
-			PdfPCell cell = getPDFPCell();
-			cell.setPhrase(new Phrase("", fontHeaderTable));
-			cell.setColspan(2);
-			tableResultados.addCell(cell);
-
-			cell = getPDFPCell();
-			cell.setPhrase(new Phrase("Nombre", fontHeaderTable));
-			tableResultados.addCell(cell);
-
-			cell = getPDFPCell();
-			cell.setPhrase(new Phrase("Min", fontHeaderTable));
-			cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
-			tableResultados.addCell(cell);
-
-			cell = getPDFPCell();
-			cell.setPhrase(new Phrase("Max", fontHeaderTable));
-			cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
-			tableResultados.addCell(cell);
-
-			if (mostrarResultados) {
-				cell = getPDFPCell();
-				cell.setPhrase(new Phrase("Valor", fontHeaderTable));
-				cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
-				tableResultados.addCell(cell);
-			}
-
-			cell = getPDFPCell();
-			cell.setPhrase(new Phrase("Norma", fontHeaderTable));
-			cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-			tableResultados.addCell(cell);
+			
 
 			String observacionesMaquina = "";
 			if (StringUtils.isNotBlank(ensayo.getConfiguracionPrueba().getMaquina().getObservacionesReporte())) {
@@ -299,7 +318,11 @@ public class InformeBuilder {
 			int cantidadPruebas = ensayo.getResultados().size();
 			int posPrueba = 1;
 			
-			for (EnsayoResultado resultado : ensayo.getResultados()) {
+			PdfPCell cell;
+			
+			List<EnsayoResultado> resultados = ensayo.getResultados().stream().sorted(Comparator.comparing(EnsayoResultado::getPosicion)).collect(Collectors.toList());
+			
+			for (EnsayoResultado resultado : resultados) {
 
 				boolean ultimo = posPrueba == cantidadPruebas;
 				posPrueba++;
@@ -310,17 +333,58 @@ public class InformeBuilder {
 				String norma = resultado.getConfiguracionPruebaParametro().getNorma();
 
 				if (first) {
+					
+					
 					cell = getPDFPCell();
-					cell.setRowspan(rowspancondiciones + rowspanpruebas + 1);
-					cell.setPhrase(new Phrase(
-							resultado.getConfiguracionPruebaParametro().getMaquinaPrueba().getMaquina().getNombre().replace(" ", System.lineSeparator()),
-							fontHeaderTable));
-					cell.setRotation(90);
-					cell.setBorder(0);
-					cell.setBorderWidthRight(1);
-					cell.setBorderColorRight(COLOR_GRIS_BORDES);
+					
+					cell.setPhrase(new Phrase(resultado.getConfiguracionPruebaParametro().getMaquinaPrueba().getMaquina().getNombre().toUpperCase(), fontHeaderTable));
+					tableResultados.addCell(cell);
+
+					cell = getPDFPCell();
+					cell.setPhrase(new Phrase("Nombre", fontHeaderTable));
+					tableResultados.addCell(cell);
+
+					cell = getPDFPCell();
+					cell.setPhrase(new Phrase("Min", fontHeaderTable));
+					cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
+					tableResultados.addCell(cell);
+
+					cell = getPDFPCell();
+					cell.setPhrase(new Phrase("Max", fontHeaderTable));
+					cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
+					tableResultados.addCell(cell);
+
+					if (mostrarResultados) {
+						cell = getPDFPCell();
+						cell.setPhrase(new Phrase("Valor", fontHeaderTable));
+						cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
+						tableResultados.addCell(cell);
+					} else {
+						cell = getPDFPCell();
+						cell.setPhrase(new Phrase("", fontHeaderTable));
+						cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
+						tableResultados.addCell(cell);
+					}
+
+					cell = getPDFPCell();
+					cell.setPhrase(new Phrase("Norma", fontHeaderTable));
 					cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 					tableResultados.addCell(cell);
+					
+					
+					
+					
+//					cell = getPDFPCell();
+//					cell.setRowspan(rowspancondiciones + rowspanpruebas + 1);
+//					cell.setPhrase(new Phrase(
+//							,
+//							fontHeaderTable));
+//					cell.setRotation(90);
+//					cell.setBorder(0);
+//					cell.setBorderWidthRight(1);
+//					cell.setBorderColorRight(COLOR_GRIS_BORDES);
+//					cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+//					tableResultados.addCell(cell);
 
 					cell = getPDFPCell();
 					cell.setRowspan(rowspanpruebas);
@@ -347,14 +411,14 @@ public class InformeBuilder {
 				tableResultados.addCell(cell);
 
 				cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
-				cell.setPhrase(new Phrase(String.format("%.2f", minimo), fontText));
+				cell.setPhrase(new Phrase(minimo != null ? String.format("%.2f", minimo) : "", fontText) );
 				if (!hayObservaciones && !hayCondiciones && ultimo) {
 					cell.setBorderWidthBottom(0);
 				}
 				tableResultados.addCell(cell);
 
 				cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
-				cell.setPhrase(new Phrase(String.format("%.2f", maximo), fontText));
+				cell.setPhrase(new Phrase(maximo != null ? String.format("%.2f", maximo) : "", fontText));
 				if (!hayObservaciones && !hayCondiciones && ultimo) {
 					cell.setBorderWidthBottom(0);
 				}
@@ -366,6 +430,11 @@ public class InformeBuilder {
 					if (!hayObservaciones && !hayCondiciones && ultimo) {
 						cell.setBorderWidthBottom(0);
 					}
+					tableResultados.addCell(cell);
+				} else {
+					cell = getPDFPCell();
+					cell.setPhrase(new Phrase("", fontHeaderTable));
+					cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
 					tableResultados.addCell(cell);
 				}
 
@@ -515,7 +584,8 @@ public class InformeBuilder {
 			PdfContentByte cb2 = canvas[PdfPTable.LINECANVAS];
 			cb2.roundRectangle(rect.getLeft() + 1.5f, rect.getBottom() + 1.5f, rect.getWidth() - 3,
 					rect.getHeight() - 3, 4);
-			cb2.setColorStroke(COLOR_GRIS_BORDES);
+			cb2.setColorStroke(new BaseColor(200, 200, 200));
+			cb2.setLineWidth(1);
 			cb2.stroke();
 		}
 	}

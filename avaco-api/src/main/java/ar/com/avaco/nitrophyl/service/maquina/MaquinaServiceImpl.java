@@ -1,8 +1,5 @@
 package ar.com.avaco.nitrophyl.service.maquina;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
@@ -10,8 +7,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import ar.com.avaco.arc.core.component.bean.service.NJBaseService;
 import ar.com.avaco.nitrophyl.domain.entities.maquina.Maquina;
-import ar.com.avaco.nitrophyl.domain.entities.maquina.MaquinaPrueba;
-import ar.com.avaco.nitrophyl.repository.maquina.MaquinaPruebaRepository;
 import ar.com.avaco.nitrophyl.repository.maquina.MaquinaRepository;
 
 @Transactional

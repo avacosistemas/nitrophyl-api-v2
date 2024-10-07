@@ -29,6 +29,7 @@ public class MaquinaPruebaEPServiceImpl
 		maquina.setId(dto.getId());
 		maquina.setNombre(dto.getNombre());
 		maquina.setIdMaquina(dto.getIdMaquina());
+		maquina.setPosicion(dto.getPosicion());
 		return maquina;
 	}
 
@@ -38,12 +39,14 @@ public class MaquinaPruebaEPServiceImpl
 		dto.setId(entity.getId());
 		dto.setNombre(entity.getNombre());
 		dto.setIdMaquina(entity.getIdMaquina());
+		dto.setPosicion(entity.getPosicion());
 		return dto;
 	}
 
 	@Override
-	public List<MaquinaPruebaDTO> updateMaquinaPrueba(Long idMaquina, List<String> pruebas) {
-		this.service.updatePruebasByMaquina(idMaquina, pruebas);
+	public List<MaquinaPruebaDTO> updateMaquinaPrueba(Long idMaquina, List<MaquinaPruebaDTO> pruebas) {
+		List<MaquinaPrueba> entities = convertToEntities(pruebas);
+		this.service.updatePruebasByMaquina(idMaquina, entities);
 		return listPruebasByMaquina(idMaquina);
 	}
 

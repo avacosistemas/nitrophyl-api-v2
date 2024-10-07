@@ -8,6 +8,15 @@ public class MaquinaDTO extends DTOEntity<Long> {
 	private String nombre;
 	private String estado;
 	private String observacionesReporte;
+	private int posicion;
+
+	public int getPosicion() {
+		return posicion;
+	}
+
+	public void setPosicion(int posicion) {
+		this.posicion = posicion;
+	}
 
 	public Long getId() {
 		return id;

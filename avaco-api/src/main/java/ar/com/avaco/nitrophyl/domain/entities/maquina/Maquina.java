@@ -43,6 +43,9 @@ public class Maquina extends ar.com.avaco.arc.core.domain.Entity<Long> {
 	@Enumerated(EnumType.STRING)
 	private EstadoMaquina estado;
 
+	@Column(name = "POSICION")
+	private int posicion;
+
 	@OneToMany(targetEntity = MaquinaPrueba.class, mappedBy = "maquina", cascade = CascadeType.ALL, orphanRemoval = true)
 	private Set<MaquinaPrueba> pruebas = new HashSet<>();
 
@@ -84,6 +87,14 @@ public class Maquina extends ar.com.avaco.arc.core.domain.Entity<Long> {
 
 	public void setObservacionesReporte(String observacionesReporte) {
 		this.observacionesReporte = observacionesReporte;
+	}
+
+	public int getPosicion() {
+		return posicion;
+	}
+
+	public void setPosicion(int posicion) {
+		this.posicion = posicion;
 	}
 
 }
