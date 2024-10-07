@@ -31,8 +31,6 @@ import ar.com.avaco.ws.rest.dto.JSONResponse;
 @RestController
 public class MaquinaRestController extends AbstractDTORestController<MaquinaDTO, Long, MaquinaEPService> {
 
-	private MaquinaPruebaEPService maquinaPruebaEPService;
-
 	@RequestMapping(value = "/maquinas", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<JSONResponse> list(MaquinaFilterDTO filter) {
 		List<MaquinaDTO> listFilter = super.service.listFilter(new MaquinaFilter(filter));
@@ -41,7 +39,7 @@ public class MaquinaRestController extends AbstractDTORestController<MaquinaDTO,
 		response.setStatus(JSONResponse.OK);
 		return new ResponseEntity<JSONResponse>(response, HttpStatus.OK);
 	}
-	
+
 	@RequestMapping(value = "/maquinas/autocomplete", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<JSONResponse> listAutocomplete(MaquinaFilterDTO filter) {
 		filter.setAsc(true);
@@ -85,38 +83,9 @@ public class MaquinaRestController extends AbstractDTORestController<MaquinaDTO,
 		return new ResponseEntity<JSONResponse>(response, HttpStatus.OK);
 	}
 
-	@RequestMapping(value = "/maquina/prueba/{idMaquina}", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<JSONResponse> updatePruebas(@PathVariable("idMaquina") Long idMaquina,
-			@RequestBody List<MaquinaPruebaDTO> pruebas) throws Exception {
-		JSONResponse response = new JSONResponse();
-		response.setStatus(JSONResponse.OK);
-		try {
-			List<MaquinaPruebaDTO> result = this.maquinaPruebaEPService.updateMaquinaPrueba(idMaquina, pruebas);
-			response.setData(result);
-		} catch (DataIntegrityViolationException e) {
-			String message = "Error al actualizar listado de pruebas. Es probable que haya intentado borrar una prueba asociada a un ensayo.";
-			response = new ErrorResponse(JSONResponse.ERROR, null, message, e.getCause().getCause().getLocalizedMessage());
-		}
-		return new ResponseEntity<JSONResponse>(response, HttpStatus.OK);
-	}
-
-	@RequestMapping(value = "/maquina/prueba/{idMaquina}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<JSONResponse> getPruebas(@PathVariable("idMaquina") Long idMaquina) throws Exception {
-		List<MaquinaPruebaDTO> result = this.maquinaPruebaEPService.listPruebasByMaquina(idMaquina);
-		JSONResponse response = new JSONResponse();
-		response.setData(result);
-		response.setStatus(JSONResponse.OK);
-		return new ResponseEntity<JSONResponse>(response, HttpStatus.OK);
-	}
-
 	@Resource(name = "maquinaEPService")
 	public void setService(MaquinaEPService maquinaEPService) {
 		super.service = maquinaEPService;
-	}
-
-	@Resource(name = "maquinaPruebaEPService")
-	public void setMaquinaPruebaEPService(MaquinaPruebaEPService maquinaPruebaEPService) {
-		this.maquinaPruebaEPService = maquinaPruebaEPService;
 	}
 
 }

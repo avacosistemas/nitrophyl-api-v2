@@ -44,13 +44,6 @@ public class MaquinaPruebaEPServiceImpl
 	}
 
 	@Override
-	public List<MaquinaPruebaDTO> updateMaquinaPrueba(Long idMaquina, List<MaquinaPruebaDTO> pruebas) {
-		List<MaquinaPrueba> entities = convertToEntities(pruebas);
-		this.service.updatePruebasByMaquina(idMaquina, entities);
-		return listPruebasByMaquina(idMaquina);
-	}
-
-	@Override
 	public List<MaquinaPruebaDTO> listPruebasByMaquina(Long idMaquina) {
 		List<MaquinaPrueba> listByMaquina = this.service.listByMaquina(idMaquina);
 		return convertToDtos(listByMaquina);

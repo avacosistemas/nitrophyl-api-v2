@@ -13,6 +13,13 @@ import ar.com.avaco.nitrophyl.repository.maquina.MaquinaRepository;
 @Service("maquinaService")
 public class MaquinaServiceImpl extends NJBaseService<Long, Maquina, MaquinaRepository> implements MaquinaService {
 
+	
+	@Override
+	public Maquina save(Maquina entity) {
+		entity.setPosicion(this.list().size() + 1);
+		return super.save(entity);
+	}
+	
 	@Resource(name = "maquinaRepository")
 	public void setMaquinaRepository(MaquinaRepository maquinaRepository) {
 		this.repository = maquinaRepository;

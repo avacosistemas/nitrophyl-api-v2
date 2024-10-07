@@ -9,6 +9,4 @@ public interface MaquinaPruebaService extends NJService<Long, MaquinaPrueba> {
 
 	List<MaquinaPrueba> listByMaquina(Long idMaquina);
 
-	void updatePruebasByMaquina(Long idMaquina, List<MaquinaPrueba> pruebas);
-
 }
