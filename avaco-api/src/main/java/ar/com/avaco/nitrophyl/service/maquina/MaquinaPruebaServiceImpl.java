@@ -23,7 +23,7 @@ public class MaquinaPruebaServiceImpl extends NJBaseService<Long, MaquinaPrueba,
 
 	@Override
 	public MaquinaPrueba save(MaquinaPrueba entity) {
-		List<MaquinaPrueba> list = this.repository.findByIdMaquinaOrderByPosicion(entity.getMaquina().getId());
+		List<MaquinaPrueba> list = this.repository.findByIdMaquinaOrderByPosicion(entity.getIdMaquina());
 		int pos = (list != null && list.size() > 0) ? list.size() + 1 : 1;
 		entity.setPosicion(pos);
 		return super.save(entity);
