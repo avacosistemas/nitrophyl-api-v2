@@ -1,5 +1,6 @@
 package ar.com.avaco.nitrophyl.ws.service.impl;
 
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -18,7 +19,6 @@ import ar.com.avaco.nitrophyl.service.maquina.ConfiguracionPruebaService;
 import ar.com.avaco.nitrophyl.ws.dto.ConfiguracionPruebaCondicionDTO;
 import ar.com.avaco.nitrophyl.ws.dto.ConfiguracionPruebaDTO;
 import ar.com.avaco.nitrophyl.ws.dto.ConfiguracionPruebaParametroDTO;
-import ar.com.avaco.nitrophyl.ws.dto.MaquinaDTO;
 import ar.com.avaco.nitrophyl.ws.dto.MaquinaPruebaDTO;
 import ar.com.avaco.nitrophyl.ws.service.ConfiguracionPruebaEPService;
 import ar.com.avaco.utils.DateUtils;
@@ -89,6 +89,7 @@ public class ConfiguracionPruebaEPServiceImpl
 		MaquinaPruebaDTO maquinaPruebaDTO = new MaquinaPruebaDTO();
 		maquinaPruebaDTO.setId(cfp.getMaquinaPrueba().getId());
 		maquinaPruebaDTO.setNombre(cfp.getMaquinaPrueba().getNombre());
+		maquinaPruebaDTO.setPosicion(cfp.getMaquinaPrueba().getPosicion());
 		dto.setMaquinaPrueba(maquinaPruebaDTO);
 		dto.setNorma(cfp.getNorma());
 		return dto;
@@ -108,4 +109,13 @@ public class ConfiguracionPruebaEPServiceImpl
 		return listByIdFormula.stream().map(x -> convertToDtoSinCondicionParametro(x)).collect(Collectors.toList());
 	}
 
+	@Override
+	public ConfiguracionPruebaDTO get(Long id) {
+		ConfiguracionPruebaDTO configuracionPruebaDTO = super.get(id);
+		List<ConfiguracionPruebaParametroDTO> sorted = configuracionPruebaDTO.getParametros().stream().sorted(Comparator.comparing(ConfiguracionPruebaParametroDTO::getOrden)).collect(Collectors.toList());
+		configuracionPruebaDTO.getParametros().clear();
+		configuracionPruebaDTO.getParametros().addAll(sorted);
+		return configuracionPruebaDTO;
+	}
+	
 }

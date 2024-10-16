@@ -34,11 +34,13 @@ import com.itextpdf.text.pdf.PdfPCellEvent;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 
+import ar.com.avaco.nitrophyl.domain.entities.cliente.Cliente;
 import ar.com.avaco.nitrophyl.domain.entities.formula.ConfiguracionPruebaCondicion;
 import ar.com.avaco.nitrophyl.domain.entities.lote.Ensayo;
 import ar.com.avaco.nitrophyl.domain.entities.lote.EnsayoResultado;
 import ar.com.avaco.nitrophyl.domain.entities.lote.Lote;
 import ar.com.avaco.nitrophyl.domain.entities.reporte.ReporteLoteConfiguracionCliente;
+import ar.com.avaco.nitrophyl.service.reporte.ReporteLoteConfiguracionClienteService;
 import ar.com.avaco.nitrophyl.ws.dto.ArchivoDTO;
 import ar.com.avaco.utils.DateUtils;
 
@@ -49,8 +51,10 @@ public class InformeBuilder {
 	private final static Font fontHeaderTable = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 10, BaseColor.BLACK);
 	private final static Font fontText = FontFactory.getFont(FontFactory.HELVETICA, 10, BaseColor.BLACK);
 
-	public ArchivoDTO generarReporte(Lote lote, List<ReporteLoteConfiguracionCliente> configuracion, String cliente,
-			String empresa) throws DocumentException, IOException, URISyntaxException {
+	public ArchivoDTO generarReporte(Lote lote, ReporteLoteConfiguracionClienteService serviceConfiguracion,
+			Cliente cliente) throws DocumentException, IOException, URISyntaxException {
+
+		String empresa = cliente.getEmpresa().name();
 
 		Document document = new Document(PageSize.A4);
 		ArchivoDTO adto = new ArchivoDTO();
@@ -70,29 +74,54 @@ public class InformeBuilder {
 
 			Element encabezado = generarEncabezado(empresa);
 			document.add(encabezado);
-			
+
 			Paragraph element = new Paragraph(" ");
 			document.add(element);
-			
+
 			Element datosLote = addDatosLotes(lote);
 			generarSeccion(document, datosLote, null, null);
 
-			List<Ensayo> ensayos = lote.getEnsayos().stream().sorted(Comparator.comparing(Ensayo::getOrden)).collect(Collectors.toList());
-			
+			List<Ensayo> ensayos = lote.getEnsayos().stream().sorted(Comparator.comparing(Ensayo::getOrden))
+					.collect(Collectors.toList());
+
+			long idFormula = lote.getFormula().getId();
+			;
+			List<ReporteLoteConfiguracionCliente> configuracion = serviceConfiguracion
+					.findConfiguracionesByClienteFormula(lote.getFormula(), cliente);
+
 			for (Ensayo ensayo : ensayos) {
 
 				long idMaquina = ensayo.getConfiguracionPrueba().getMaquina().getId();
-				long idFormula = ensayo.getConfiguracionPrueba().getFormula().getId();
 
+				ReporteLoteConfiguracionCliente reporteLoteConfiguracionCliente = null;
+
+				// Busco coincidencia maquina-cliente
 				Optional<ReporteLoteConfiguracionCliente> findFirst = configuracion.stream()
-						.filter(x -> x.getFormula().getId() == idFormula && x.getMaquina().getId() == idMaquina)
+						.filter(x -> x.getMaquina() != null && x.getMaquina().getId() == idMaquina
+								&& x.getCliente() != null && x.getCliente().getId() == cliente.getId())
 						.findFirst();
-				ReporteLoteConfiguracionCliente reporteLoteConfiguracionCliente = findFirst.isPresent()
-						? findFirst.get()
-						: null;
 
-				Element addEnsayo = addEnsayo(ensayo, reporteLoteConfiguracionCliente);
-				generarSeccion(document, addEnsayo, null, null);
+				if (findFirst.isPresent()) {
+					reporteLoteConfiguracionCliente = findFirst.get();
+				} else {
+					// Busco coincidencia solo de maquina para todos los clientes
+					findFirst = configuracion.stream().filter(x -> x.getMaquina() != null
+							&& x.getMaquina().getId() == idMaquina && x.getCliente() == null).findFirst();
+					if (findFirst.isPresent()) {
+						reporteLoteConfiguracionCliente = findFirst.get();
+					} else {
+						// Busco coincidencia solo en cliente para todas las maquinas
+						findFirst = configuracion.stream().filter(x -> x.getMaquina() == null &&
+								x.getCliente() != null && x.getCliente().getId() == cliente.getId()).findFirst();
+						if (findFirst.isPresent()) 
+							reporteLoteConfiguracionCliente = findFirst.get();
+					}
+				}
+
+				if (reporteLoteConfiguracionCliente != null) {
+					Element addEnsayo = addEnsayo(ensayo, reporteLoteConfiguracionCliente);
+					generarSeccion(document, addEnsayo, null, null);
+				}
 
 			}
 
@@ -116,7 +145,7 @@ public class InformeBuilder {
 			generarFirma(document);
 			document.close();
 			adto.setArchivo(baos.toByteArray());
-			adto.setNombre("Informe Calidad - " + cliente.replace(".", " - " + lote.getNroLote()) + ".pdf");
+			adto.setNombre("Informe Calidad - " + cliente.getNombre().replace(".", " - " + lote.getNroLote()) + ".pdf");
 
 		} catch (DocumentException e) {
 			document.close();
@@ -127,7 +156,7 @@ public class InformeBuilder {
 			e.printStackTrace();
 			throw e;
 		} finally {
-			
+
 		}
 		return adto;
 	}
@@ -152,13 +181,13 @@ public class InformeBuilder {
 		table.addCell(cell);
 
 		PdfPTable tabladerecha = generateTable(2);
-		tabladerecha.setWidths(new float[] {35, 65});
-		
+		tabladerecha.setWidths(new float[] { 35, 65 });
+
 		PdfPCell fila = getPDFPCell();
 		fila.setPhrase(new Phrase("Fecha: ", fontHeaderTable));
 		fila.setBorder(0);
 		tabladerecha.addCell(fila);
-		
+
 		fila = getPDFPCell();
 		fila.setPhrase(new Phrase("[01/01/2020]", fontText));
 		fila.setBorder(0);
@@ -173,7 +202,7 @@ public class InformeBuilder {
 		fila.setPhrase(new Phrase("R-LAB-006", fontText));
 		fila.setBorder(0);
 		tabladerecha.addCell(fila);
-		
+
 		fila = getPDFPCell();
 		fila.setPhrase(new Phrase("Rev.: ", fontHeaderTable));
 		fila.setBorder(0);
@@ -187,9 +216,9 @@ public class InformeBuilder {
 		PdfPCell celdatabladerecha = generarCeldaBordeRedondeado(null, null);
 		celdatabladerecha.addElement(tabladerecha);
 		celdatabladerecha.setBorder(0);
-		
+
 		table.addCell(celdatabladerecha);
-		
+
 		Paragraph p = new Paragraph();
 		p.add(table);
 
@@ -289,7 +318,7 @@ public class InformeBuilder {
 			// Armo la tabla de resultados
 			// Contiene prueba, min, max, resultado y norma
 			float[] colsConResultado = new float[] { 25, 30, 10, 10, 10, 20 };
-			//float[] colsSinResultado = new float[] { 20, 24, 18, 18, 20 };
+			// float[] colsSinResultado = new float[] { 20, 24, 18, 18, 20 };
 
 			float[] cols = colsConResultado;
 //			float[] cols = mostrarResultados ? colsConResultado : colsSinResultado;
@@ -299,7 +328,6 @@ public class InformeBuilder {
 			tableResultados.setSpacingAfter(20);
 
 			// Cabecera
-			
 
 			String observacionesMaquina = "";
 			if (StringUtils.isNotBlank(ensayo.getConfiguracionPrueba().getMaquina().getObservacionesReporte())) {
@@ -310,34 +338,35 @@ public class InformeBuilder {
 					: "";
 			boolean hayObservaciones = StringUtils.isNotEmpty(observacionesParametrizacion)
 					|| StringUtils.isNotEmpty(observacionesMaquina);
-			
+
 			boolean hayCondiciones = mostrarCondiciones && !ensayo.getConfiguracionPrueba().getCondiciones().isEmpty();
-			
+
 			boolean first = true;
 
 			int cantidadPruebas = ensayo.getResultados().size();
 			int posPrueba = 1;
-			
+
 			PdfPCell cell;
-			
-			List<EnsayoResultado> resultados = ensayo.getResultados().stream().sorted(Comparator.comparing(EnsayoResultado::getPosicion)).collect(Collectors.toList());
-			
+
+			List<EnsayoResultado> resultados = ensayo.getResultados().stream()
+					.sorted(Comparator.comparing(EnsayoResultado::getPosicion)).collect(Collectors.toList());
+
 			for (EnsayoResultado resultado : resultados) {
 
 				boolean ultimo = posPrueba == cantidadPruebas;
 				posPrueba++;
-				
+
 				Double minimo = resultado.getConfiguracionPruebaParametro().getMinimo();
 				Double maximo = resultado.getConfiguracionPruebaParametro().getMaximo();
 				String nombre = resultado.getConfiguracionPruebaParametro().getMaquinaPrueba().getNombre();
 				String norma = resultado.getConfiguracionPruebaParametro().getNorma();
 
 				if (first) {
-					
-					
+
 					cell = getPDFPCell();
-					
-					cell.setPhrase(new Phrase(resultado.getConfiguracionPruebaParametro().getMaquinaPrueba().getMaquina().getNombre().toUpperCase(), fontHeaderTable));
+
+					cell.setPhrase(new Phrase(resultado.getConfiguracionPruebaParametro().getMaquinaPrueba()
+							.getMaquina().getNombre().toUpperCase(), fontHeaderTable));
 					tableResultados.addCell(cell);
 
 					cell = getPDFPCell();
@@ -370,10 +399,7 @@ public class InformeBuilder {
 					cell.setPhrase(new Phrase("Norma", fontHeaderTable));
 					cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 					tableResultados.addCell(cell);
-					
-					
-					
-					
+
 //					cell = getPDFPCell();
 //					cell.setRowspan(rowspancondiciones + rowspanpruebas + 1);
 //					cell.setPhrase(new Phrase(
@@ -411,7 +437,7 @@ public class InformeBuilder {
 				tableResultados.addCell(cell);
 
 				cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
-				cell.setPhrase(new Phrase(minimo != null ? String.format("%.2f", minimo) : "", fontText) );
+				cell.setPhrase(new Phrase(minimo != null ? String.format("%.2f", minimo) : "", fontText));
 				if (!hayObservaciones && !hayCondiciones && ultimo) {
 					cell.setBorderWidthBottom(0);
 				}
@@ -440,21 +466,19 @@ public class InformeBuilder {
 
 				cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 				cell.setPhrase(new Phrase(norma, fontText));
-				
+
 				if (!hayObservaciones && !hayCondiciones && ultimo) {
 					cell.setBorderWidthBottom(0);
 				}
-				
+
 				tableResultados.addCell(cell);
 
 			}
 
-			
-			
 			first = true;
 
 			// Condiciones
-			
+
 			if (hayCondiciones) {
 
 				cell = getPDFPCell();
@@ -483,17 +507,17 @@ public class InformeBuilder {
 					first = false;
 
 					condiciones += condicion.getNombre() + ": " + String.format("%.2f", condicion.getValor());
-					
+
 				}
 
 				cell = getPDFPCell();
 				cell.setColspan(cols.length - 1);
 				cell.setPhrase(new Phrase(condiciones, fontText));
-				
+
 				if (!hayObservaciones) {
 					cell.setBorderWidthBottom(0);
 				}
-				
+
 				tableResultados.addCell(cell);
 
 			}

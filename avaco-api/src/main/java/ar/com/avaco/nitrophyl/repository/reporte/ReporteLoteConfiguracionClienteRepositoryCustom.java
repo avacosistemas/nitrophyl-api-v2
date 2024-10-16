@@ -1,5 +1,13 @@
 package ar.com.avaco.nitrophyl.repository.reporte;
 
+import java.util.List;
+
+import ar.com.avaco.nitrophyl.domain.entities.cliente.Cliente;
+import ar.com.avaco.nitrophyl.domain.entities.formula.Formula;
+import ar.com.avaco.nitrophyl.domain.entities.reporte.ReporteLoteConfiguracionCliente;
+
 public interface ReporteLoteConfiguracionClienteRepositoryCustom {
 
+	List<ReporteLoteConfiguracionCliente> findConfiguracionesByClienteFormula(Formula formula, Cliente cliente);
+	
 }

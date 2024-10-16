@@ -28,11 +28,11 @@ public class ConfiguracionPruebaParametro extends ar.com.avaco.arc.core.domain.E
 	@Column(name = "ID_CONF_PRUEBA_PARAM", unique = true, nullable = false)
 	private Long id;
 
-	@ManyToOne(fetch = FetchType.LAZY, optional = false)
+	@ManyToOne(fetch = FetchType.EAGER, optional = false)
 	@JoinColumn(name = "ID_CONF_PRUEBA")
 	private ConfiguracionPrueba configuracionPrueba;
 
-	@ManyToOne(fetch = FetchType.LAZY, optional = false)
+	@ManyToOne(fetch = FetchType.EAGER, optional = false)
 	@JoinColumn(name = "ID_MAQUINA_PRUEBA")
 	private MaquinaPrueba maquinaPrueba;
 

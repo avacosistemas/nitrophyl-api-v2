@@ -1,6 +1,8 @@
 package ar.com.avaco.nitrophyl.service.maquina;
 
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.annotation.Resource;
 
@@ -10,6 +12,8 @@ import org.springframework.transaction.annotation.Transactional;
 import ar.com.avaco.arc.core.component.bean.service.NJBaseService;
 import ar.com.avaco.nitrophyl.domain.entities.formula.ConfiguracionPrueba;
 import ar.com.avaco.nitrophyl.repository.material.ConfiguracionPruebaRepository;
+import ar.com.avaco.nitrophyl.ws.dto.ConfiguracionPruebaDTO;
+import ar.com.avaco.nitrophyl.ws.dto.ConfiguracionPruebaParametroDTO;
 
 @Transactional
 @Service("configuracionPruebaService")

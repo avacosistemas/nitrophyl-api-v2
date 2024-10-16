@@ -27,7 +27,7 @@ public class ReporteLoteConfiguracionCliente extends ar.com.avaco.arc.core.domai
 	@Column(name = "ID_REPORTE_LOTE_CONF_CLIENTE")
 	private Long id;
 
-	@JoinColumn(name = "ID_CLIENTE", nullable = false)
+	@JoinColumn(name = "ID_CLIENTE", nullable = true)
 	@ManyToOne(fetch = FetchType.LAZY)
 	private Cliente cliente;
 
@@ -35,7 +35,7 @@ public class ReporteLoteConfiguracionCliente extends ar.com.avaco.arc.core.domai
 	@ManyToOne(fetch = FetchType.LAZY)
 	private Formula formula;
 
-	@JoinColumn(name = "ID_MAQUINA", nullable = false)
+	@JoinColumn(name = "ID_MAQUINA", nullable = true)
 	@ManyToOne(fetch = FetchType.LAZY)
 	private Maquina maquina;
 

@@ -123,13 +123,11 @@ public class LoteEPServiceImpl extends CRUDEPBaseService<Long, LoteDTO, Lote, Lo
 	@Override
 	public ArchivoDTO generarReporteLoteCliente(Long idLote, Long idCliente) throws BusinessException {
 		Lote lote = this.service.getLoteCompleto(idLote);
-		List<ReporteLoteConfiguracionCliente> configuraciones = reporteLoteConfigClienteService
-				.listEqField("cliente.id", idCliente);
 		Cliente cliente = clienteService.getCliente(idCliente);
 		InformeBuilder ib = new InformeBuilder();
 		ArchivoDTO adto = new ArchivoDTO();
 		try {
-			adto = ib.generarReporte(lote, configuraciones, cliente.getNombre(), cliente.getEmpresa().name());
+			adto = ib.generarReporte(lote, reporteLoteConfigClienteService, cliente);
 		} catch (DocumentException | IOException | URISyntaxException e) {
 			throw new BusinessException("No se pudo generar el informe", e);
 		}
