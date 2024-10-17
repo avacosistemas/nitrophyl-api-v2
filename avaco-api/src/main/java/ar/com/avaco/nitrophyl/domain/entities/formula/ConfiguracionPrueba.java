@@ -39,6 +39,9 @@ public class ConfiguracionPrueba extends ar.com.avaco.arc.core.domain.Entity<Lon
 	@JoinColumn(name = "ID_MAQUINA")
 	private Maquina maquina;
 
+	@Column(name = "REVISION", nullable = false)
+	private Long revision;
+
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
 	@JoinColumn(name = "ID_FORMULA")
 	private Formula formula;
@@ -114,6 +117,14 @@ public class ConfiguracionPrueba extends ar.com.avaco.arc.core.domain.Entity<Lon
 
 	public void setObservacionesReporte(String observacionesReporte) {
 		this.observacionesReporte = observacionesReporte;
+	}
+
+	public Long getRevision() {
+		return revision;
+	}
+
+	public void setRevision(Long revision) {
+		this.revision = revision;
 	}
 
 }
