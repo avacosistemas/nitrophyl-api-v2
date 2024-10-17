@@ -38,6 +38,7 @@ import ar.com.avaco.nitrophyl.domain.entities.cliente.Cliente;
 import ar.com.avaco.nitrophyl.domain.entities.formula.ConfiguracionPruebaCondicion;
 import ar.com.avaco.nitrophyl.domain.entities.lote.Ensayo;
 import ar.com.avaco.nitrophyl.domain.entities.lote.EnsayoResultado;
+import ar.com.avaco.nitrophyl.domain.entities.lote.EstadoEnsayo;
 import ar.com.avaco.nitrophyl.domain.entities.lote.Lote;
 import ar.com.avaco.nitrophyl.domain.entities.reporte.ReporteLoteConfiguracionCliente;
 import ar.com.avaco.nitrophyl.service.reporte.ReporteLoteConfiguracionClienteService;
@@ -297,14 +298,15 @@ public class InformeBuilder {
 
 		Paragraph p = new Paragraph();
 
-		boolean mostrarParametros = true;
-		boolean mostrarResultados = true;
-		boolean mostrarCondiciones = true;
-		boolean mostraObervacionesParametros = true;
+		boolean mostrarParametros = false;
+		boolean mostrarResultados = false;
+		boolean mostrarCondiciones = false;
+		boolean mostraObervacionesParametros = false;
 
 		if (config != null) {
 			mostrarParametros = config.isMostrarParametros();
-			mostrarResultados = config.isMostrarResultados();
+			// Si el estado del ensayo es "Sin resultados" entonces no se muestran resultados por más que la configuracion diga que sí
+			mostrarResultados = config.isMostrarResultados() && !ensayo.getEstado().equals(EstadoEnsayo.SIN_RESULTADOS);
 			mostrarCondiciones = config.isMostrarCondiciones();
 			mostraObervacionesParametros = config.isMostrarObservacionesParametro();
 		}
