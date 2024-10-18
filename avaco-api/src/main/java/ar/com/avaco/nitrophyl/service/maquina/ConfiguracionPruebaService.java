@@ -7,6 +7,8 @@ import ar.com.avaco.nitrophyl.domain.entities.formula.ConfiguracionPrueba;
 
 public interface ConfiguracionPruebaService extends NJService<Long, ConfiguracionPrueba> {
 
-	List<ConfiguracionPrueba> listByIdFormula(Long idFormula);
+	List<ConfiguracionPrueba> listByFormulaId(Long idFormula);
+
+	List<ConfiguracionPrueba> listByFormulaIdAndVigente(Long idFormula);
 
 }

@@ -38,8 +38,6 @@ public class ConfiguracionPruebaEPServiceImpl
 	@Override
 	protected ConfiguracionPrueba convertToEntity(ConfiguracionPruebaDTO dto) {
 		ConfiguracionPrueba cf = new ConfiguracionPrueba();
-		// FIXME cambiar por fecha y hora recibida por parametro
-		cf.setFecha(DateUtils.getFechaYHoraActual());
 
 		Formula formula = new Formula();
 		formula.setId(dto.getIdFormula());
@@ -59,7 +57,7 @@ public class ConfiguracionPruebaEPServiceImpl
 		cf.setCondiciones(new HashSet<>(dto.getCondiciones().stream()
 				.map(x -> new ConfiguracionPruebaCondicion(cf, x.getNombre(), x.getValor()))
 				.collect(Collectors.toList())));
-
+		
 		return cf;
 	}
 
@@ -73,11 +71,14 @@ public class ConfiguracionPruebaEPServiceImpl
 
 	protected ConfiguracionPruebaDTO convertToDtoSinCondicionParametro(ConfiguracionPrueba entity) {
 		ConfiguracionPruebaDTO dto = new ConfiguracionPruebaDTO();
-		dto.setFecha(DateUtils.toStringFecha(entity.getFecha()));
 		dto.setId(entity.getId());
 		dto.setIdFormula(entity.getFormula().getId());
 		dto.setMaquina(entity.getMaquina().getNombre());
 		dto.setObservacionesReporte(entity.getObservacionesReporte());
+		dto.setRevision(entity.getRevision());
+		dto.setFecha(DateUtils.toStringFecha(entity.getFecha()));
+		dto.setFechaHasta(DateUtils.toStringFecha(entity.getFechaHasta()));
+		dto.setVigente(entity.isVigente());
 		return dto;
 	}
 
@@ -105,7 +106,7 @@ public class ConfiguracionPruebaEPServiceImpl
 
 	@Override
 	public List<ConfiguracionPruebaDTO> list(Long idFormula) {
-		List<ConfiguracionPrueba> listByIdFormula = this.service.listByIdFormula(idFormula);
+		List<ConfiguracionPrueba> listByIdFormula = this.service.listByFormulaId(idFormula);
 		return listByIdFormula.stream().map(x -> convertToDtoSinCondicionParametro(x)).collect(Collectors.toList());
 	}
 
@@ -116,6 +117,12 @@ public class ConfiguracionPruebaEPServiceImpl
 		configuracionPruebaDTO.getParametros().clear();
 		configuracionPruebaDTO.getParametros().addAll(sorted);
 		return configuracionPruebaDTO;
+	}
+
+	@Override
+	public List<ConfiguracionPruebaDTO> listVigentes(Long idFormula) {
+		List<ConfiguracionPrueba> listByIdFormula = this.service.listByFormulaIdAndVigente(idFormula);
+		return listByIdFormula.stream().map(x -> convertToDtoSinCondicionParametro(x)).collect(Collectors.toList());
 	}
 	
 }

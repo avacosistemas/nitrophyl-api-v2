@@ -50,9 +50,9 @@ public class Formula extends ar.com.avaco.arc.core.domain.Entity<Long> {
 	@Column(name = "OBSERVACIONES")
 	private String observaciones;
 
-	@ManyToOne(fetch = FetchType.EAGER, optional = true)
-	@JoinColumn(name = "ID_FORMULA")
-	private RevisionParametros revision;
+//	@ManyToOne(fetch = FetchType.EAGER, optional = true)
+//	@JoinColumn(name = "ID_REV_PARAM")
+//	private RevisionParametros revision;
 
 	@Override
 	public String toString() {
@@ -115,12 +115,12 @@ public class Formula extends ar.com.avaco.arc.core.domain.Entity<Long> {
 		this.observaciones = observaciones;
 	}
 
-	public RevisionParametros getRevision() {
-		return revision;
-	}
-
-	public void setRevision(RevisionParametros revision) {
-		this.revision = revision;
-	}
+//	public RevisionParametros getRevision() {
+//		return revision;
+//	}
+//
+//	public void setRevision(RevisionParametros revision) {
+//		this.revision = revision;
+//	}
 
 }

@@ -14,7 +14,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.OrderBy;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
@@ -32,15 +31,21 @@ public class ConfiguracionPrueba extends ar.com.avaco.arc.core.domain.Entity<Lon
 	@Column(name = "ID_CONF_PRUEBA", unique = true, nullable = false)
 	private Long id;
 
-	@Column(name = "FECHA")
-	private Date fecha;
-
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
 	@JoinColumn(name = "ID_MAQUINA")
 	private Maquina maquina;
 
 	@Column(name = "REVISION", nullable = false)
 	private Long revision;
+
+	@Column(name = "FECHA", nullable = false)
+	private Date fecha;
+
+	@Column(name = "FECHA_HASTA", nullable = true)
+	private Date fechaHasta;
+
+	@Column(name = "VIGENTE", nullable = false)
+	private boolean vigente;
 
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
 	@JoinColumn(name = "ID_FORMULA")
@@ -54,14 +59,6 @@ public class ConfiguracionPrueba extends ar.com.avaco.arc.core.domain.Entity<Lon
 
 	@OneToMany(fetch = FetchType.LAZY, orphanRemoval = true, cascade = CascadeType.ALL, mappedBy = "configuracionPrueba")
 	private Set<ConfiguracionPruebaCondicion> condiciones = new HashSet<>();
-
-	public ConfiguracionPrueba() {
-		// TODO Auto-generated constructor stub
-	}
-
-	public ConfiguracionPrueba(Long idConfiguracionPrueba) {
-		this.id = idConfiguracionPrueba;
-	}
 
 	public Long getId() {
 		return id;
@@ -125,6 +122,22 @@ public class ConfiguracionPrueba extends ar.com.avaco.arc.core.domain.Entity<Lon
 
 	public void setRevision(Long revision) {
 		this.revision = revision;
+	}
+
+	public Date getFechaHasta() {
+		return fechaHasta;
+	}
+
+	public void setFechaHasta(Date fechaHasta) {
+		this.fechaHasta = fechaHasta;
+	}
+
+	public boolean isVigente() {
+		return vigente;
+	}
+
+	public void setVigente(boolean vigente) {
+		this.vigente = vigente;
 	}
 
 }

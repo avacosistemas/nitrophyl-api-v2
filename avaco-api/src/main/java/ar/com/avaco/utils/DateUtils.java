@@ -85,9 +85,12 @@ public class DateUtils {
 	}
 
 	public static String toString(Date fecha, String pattern) {
-		SimpleDateFormat dateFormat = (SimpleDateFormat) DateFormat.getInstance();
-		dateFormat.applyPattern(pattern);
-		return dateFormat.format(fecha);
+		if (fecha != null) {
+			SimpleDateFormat dateFormat = (SimpleDateFormat) DateFormat.getInstance();
+			dateFormat.applyPattern(pattern);
+			return dateFormat.format(fecha);
+		}
+		return "";
 	}
 
 	public static String toString(LocalDate fecha) {

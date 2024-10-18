@@ -46,7 +46,7 @@ public class RevisionParametros {
 	private Date fechaHasta;
 
 	@ManyToMany(fetch = FetchType.EAGER)
-	@JoinTable(name = "FORMULA_REV_PARAM_CONF_PRUEBA", joinColumns = @JoinColumn(name = "ID_REV_PARAM", referencedColumnName = "ID_REV_PARAM"), inverseJoinColumns = @JoinColumn(name = "ID_CONF_PRUEBA", referencedColumnName = "ID_CONF_PRUEBA"))
+	@JoinTable(name = "FORMULA_REV_PARAM_CONF_PRUEBA", joinColumns = @JoinColumn(name = "ID_FORMULA_REV_PARAM", referencedColumnName = "ID_REV_PARAM"), inverseJoinColumns = @JoinColumn(name = "ID_CONF_PRUEBA", referencedColumnName = "ID_CONF_PRUEBA"))
 	@Fetch(FetchMode.SELECT)
 	private Set<ConfiguracionPrueba> configuraciones = new HashSet<>();
 

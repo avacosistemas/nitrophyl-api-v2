@@ -13,8 +13,6 @@ public class ConfiguracionPruebaDTO extends DTOEntity<Long> {
 
 	private Long idFormula;
 
-	private String fecha;
-
 	private String maquina;
 
 	private List<ConfiguracionPruebaCondicionDTO> condiciones = new ArrayList<ConfiguracionPruebaCondicionDTO>();
@@ -22,6 +20,22 @@ public class ConfiguracionPruebaDTO extends DTOEntity<Long> {
 	private List<ConfiguracionPruebaParametroDTO> parametros = new ArrayList<ConfiguracionPruebaParametroDTO>();
 
 	private String observacionesReporte;
+
+	private Long revision;
+
+	private String fecha;
+
+	private String fechaHasta;
+
+	private boolean vigente;
+
+	public Long getRevision() {
+		return revision;
+	}
+
+	public void setRevision(Long revision) {
+		this.revision = revision;
+	}
 
 	public Long getIdMaquina() {
 		return idMaquina;
@@ -85,6 +99,22 @@ public class ConfiguracionPruebaDTO extends DTOEntity<Long> {
 
 	public void setObservacionesReporte(String observacionesReporte) {
 		this.observacionesReporte = observacionesReporte;
+	}
+
+	public String getFechaHasta() {
+		return fechaHasta;
+	}
+
+	public void setFechaHasta(String fechaHasta) {
+		this.fechaHasta = fechaHasta;
+	}
+
+	public boolean isVigente() {
+		return vigente;
+	}
+
+	public void setVigente(boolean vigente) {
+		this.vigente = vigente;
 	}
 
 }
