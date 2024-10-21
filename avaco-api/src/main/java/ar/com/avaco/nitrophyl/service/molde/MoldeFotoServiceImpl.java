@@ -22,7 +22,7 @@ import ar.com.avaco.nitrophyl.repository.molde.MoldeFotoRepository;
 public class MoldeFotoServiceImpl extends NJBaseService<Long, MoldeFoto, MoldeFotoRepository>
 		implements MoldeFotoService {
 
-	private Logger logger = Logger.getLogger(getClass());		
+	private Logger logger = Logger.getLogger(getClass());
 
 	@Resource(name = "moldeFotoRepository")
 	void setMoldeFotoRepository(MoldeFotoRepository moldeFotoRepository) {
@@ -38,41 +38,42 @@ public class MoldeFotoServiceImpl extends NJBaseService<Long, MoldeFoto, MoldeFo
 	public MoldeFoto getUltimoRegistro(Long idMolde) {
 		return this.repository.findFirstByIdMoldeOrderByFechaDesc(idMolde);
 	}
-	
+
 	@Override
 	public MoldeFoto addMoldeFoto(MoldeFoto moldeFoto) throws ErrorValidationException, BusinessException {
 		validarMoldeFoto(moldeFoto);
-		MoldeFoto lastMoldeFoto = this.repository.findFirstByNombreArchivoOrderByVersionDesc(moldeFoto.getNombreArchivo());
-		
+		MoldeFoto lastMoldeFoto = this.repository
+				.findFirstByNombreArchivoOrderByVersionDesc(moldeFoto.getNombreArchivo());
+
 		if (lastMoldeFoto != null) {
 			moldeFoto.setVersion(lastMoldeFoto.getVersion() + 1);
 		}
-		
+
 		return this.repository.save(moldeFoto);
 	}
-	
-	//Valida los campos para el molde foto
+
+	// Valida los campos para el molde foto
 	private void validarMoldeFoto(MoldeFoto moldeFoto) throws ErrorValidationException, BusinessException {
 		Map<String, String> errores = new HashMap<>();
-		
+
 		if (moldeFoto == null) {
 			throw new BusinessException("Molde Foto vacío.");
 		}
-		
+
 		if (StringUtils.isBlank(moldeFoto.getNombreArchivo())) {
 			errores.put("nombreArchivo", "El campo Nombre Archivo es requerido.");
 		}
-		
+
 		if (moldeFoto.getArchivo() == null) {
 			errores.put("archivo", "El campo Archivo es requerido.");
 		}
-		
+
 		if (!errores.isEmpty()) {
 			logger.error("Se encontraron los siguientes errores");
-			errores.values().forEach((x->logger.error(x)));
+			errores.values().forEach((x -> logger.error(x)));
 			throw new ErrorValidationException("Se encontraron los siguientes errores", errores);
 		}
-		
+
 	}
 
 }

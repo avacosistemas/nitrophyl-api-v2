@@ -9,8 +9,10 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.Calendar;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
@@ -36,6 +38,7 @@ import com.itextpdf.text.pdf.PdfWriter;
 
 import ar.com.avaco.nitrophyl.domain.entities.cliente.Cliente;
 import ar.com.avaco.nitrophyl.domain.entities.formula.ConfiguracionPruebaCondicion;
+import ar.com.avaco.nitrophyl.domain.entities.formula.ConfiguracionPruebaParametro;
 import ar.com.avaco.nitrophyl.domain.entities.lote.Ensayo;
 import ar.com.avaco.nitrophyl.domain.entities.lote.EnsayoResultado;
 import ar.com.avaco.nitrophyl.domain.entities.lote.EstadoEnsayo;
@@ -85,8 +88,6 @@ public class InformeBuilder {
 			List<Ensayo> ensayos = lote.getEnsayos().stream().sorted(Comparator.comparing(Ensayo::getOrden))
 					.collect(Collectors.toList());
 
-			long idFormula = lote.getFormula().getId();
-			;
 			List<ReporteLoteConfiguracionCliente> configuracion = serviceConfiguracion
 					.findConfiguracionesByClienteFormula(lote.getFormula(), cliente);
 
@@ -114,8 +115,14 @@ public class InformeBuilder {
 						// Busco coincidencia solo en cliente para todas las maquinas
 						findFirst = configuracion.stream().filter(x -> x.getMaquina() == null &&
 								x.getCliente() != null && x.getCliente().getId() == cliente.getId()).findFirst();
-						if (findFirst.isPresent()) 
+						if (findFirst.isPresent()) {
 							reporteLoteConfiguracionCliente = findFirst.get();
+						} else {
+							findFirst = configuracion.stream().filter(x -> x.getMaquina() == null &&
+									x.getCliente() == null).findFirst();
+							if (findFirst.isPresent()) 
+								reporteLoteConfiguracionCliente = findFirst.get();
+						}
 					}
 				}
 
@@ -350,7 +357,16 @@ public class InformeBuilder {
 
 			PdfPCell cell;
 
-			List<EnsayoResultado> resultados = ensayo.getResultados().stream()
+			Set<EnsayoResultado> resultadossinorden = ensayo.getResultados();
+
+			if (ensayo.getEstado().equals(EstadoEnsayo.SIN_RESULTADOS)) {
+				resultadossinorden = new HashSet<>();
+				for (ConfiguracionPruebaParametro cpp : ensayo.getConfiguracionPrueba().getParametros()) {
+					resultadossinorden.add(new EnsayoResultado(cpp));
+				}
+			}
+			
+			List<EnsayoResultado> resultados = resultadossinorden.stream()
 					.sorted(Comparator.comparing(EnsayoResultado::getPosicion)).collect(Collectors.toList());
 
 			for (EnsayoResultado resultado : resultados) {

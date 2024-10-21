@@ -13,6 +13,7 @@ import javax.persistence.Table;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
+import ar.com.avaco.nitrophyl.domain.entities.formula.ConfiguracionPrueba;
 import ar.com.avaco.nitrophyl.domain.entities.formula.ConfiguracionPruebaParametro;
 
 @Entity
@@ -41,6 +42,14 @@ public class EnsayoResultado extends ar.com.avaco.arc.core.domain.Entity<Long> {
 	@ManyToOne(optional = false)
 	@JoinColumn(name = "ID_CONF_PRUEBA_PARAM")
 	private ConfiguracionPruebaParametro configuracionPruebaParametro;
+
+	public EnsayoResultado() {
+		// TODO Auto-generated constructor stub
+	}
+
+	public EnsayoResultado(ConfiguracionPruebaParametro configuracionPruebaParametro) {
+		 this.configuracionPruebaParametro = configuracionPruebaParametro;
+	}
 
 	public Long getId() {
 		return id;
