@@ -14,4 +14,6 @@ public interface ConfiguracionPruebaRepository
 	Optional<ConfiguracionPrueba> findTopByFormulaIdAndMaquinaIdOrderByRevisionDesc(Long formulaId, Long maquinaId);
 
 	List<ConfiguracionPrueba> findByFormulaIdAndVigenteOrderByMaquinaNombre(Long idFormula, boolean b);
+
+	
 }

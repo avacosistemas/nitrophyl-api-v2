@@ -12,6 +12,7 @@ public class FormulaDTO extends DTOEntity<Long> {
 	private String fecha;
 	private String norma;
 	private String observaciones;
+	private RevisionParametrosDTO rpdto;
 
 	public String getNorma() {
 		return norma;
@@ -76,9 +77,17 @@ public class FormulaDTO extends DTOEntity<Long> {
 	public void setObservaciones(String observaciones) {
 		this.observaciones = observaciones;
 	}
-	
+
 	public String getLabelCombo() {
-		return this.nombre + " V" + this.version +  " (" + this.norma + ")"; 
+		return this.nombre + " V" + this.version + " (" + this.norma + ")";
+	}
+
+	public RevisionParametrosDTO getRpdto() {
+		return rpdto;
+	}
+
+	public void setRpdto(RevisionParametrosDTO rpdto) {
+		this.rpdto = rpdto;
 	}
 
 }

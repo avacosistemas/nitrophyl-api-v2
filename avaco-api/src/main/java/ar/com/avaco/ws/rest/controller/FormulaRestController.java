@@ -18,6 +18,7 @@ import ar.com.avaco.commons.exception.BusinessException;
 import ar.com.avaco.nitrophyl.ws.dto.ComboDTO;
 import ar.com.avaco.nitrophyl.ws.dto.FormulaDTO;
 import ar.com.avaco.nitrophyl.ws.dto.FormulaFilterDTO;
+import ar.com.avaco.nitrophyl.ws.dto.RevisionParametrosDTO;
 import ar.com.avaco.nitrophyl.ws.service.FormulaEPService;
 import ar.com.avaco.nitrophyl.ws.service.filter.FormulaFilter;
 import ar.com.avaco.ws.rest.dto.JSONResponse;
@@ -78,6 +79,15 @@ public class FormulaRestController extends AbstractDTORestController<FormulaDTO,
 		FormulaDTO cloned = this.service.clone(formulaDTO);
 		JSONResponse response = new JSONResponse();
 		response.setData(cloned);
+		response.setStatus(JSONResponse.OK);
+		return new ResponseEntity<JSONResponse>(response, HttpStatus.OK);
+	}
+	
+	@RequestMapping(value = "/formula/marcarrevision/{idFormula}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<JSONResponse> marcarrevision(@PathVariable("idFormula") Long idFormula) throws BusinessException {
+		RevisionParametrosDTO dto = this.service.marcarrevision(idFormula);
+		JSONResponse response = new JSONResponse();
+		response.setData(dto);
 		response.setStatus(JSONResponse.OK);
 		return new ResponseEntity<JSONResponse>(response, HttpStatus.OK);
 	}

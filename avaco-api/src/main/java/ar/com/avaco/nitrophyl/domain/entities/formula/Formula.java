@@ -1,6 +1,6 @@
 package ar.com.avaco.nitrophyl.domain.entities.formula;
 
-import java.util.Calendar;
+import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -41,7 +41,7 @@ public class Formula extends ar.com.avaco.arc.core.domain.Entity<Long> {
 	private Integer version;
 
 	@Column(name = "FECHA")
-	private Calendar fecha;
+	private Date fecha;
 
 	@ManyToOne(fetch = FetchType.EAGER, optional = false)
 	@JoinColumn(name = "ID_MATERIAL")
@@ -50,9 +50,9 @@ public class Formula extends ar.com.avaco.arc.core.domain.Entity<Long> {
 	@Column(name = "OBSERVACIONES")
 	private String observaciones;
 
-//	@ManyToOne(fetch = FetchType.EAGER, optional = true)
-//	@JoinColumn(name = "ID_REV_PARAM")
-//	private RevisionParametros revision;
+	@ManyToOne(fetch = FetchType.EAGER, optional = true)
+	@JoinColumn(name = "ID_REV_PARAM")
+	private RevisionParametros revision;
 
 	@Override
 	public String toString() {
@@ -91,11 +91,11 @@ public class Formula extends ar.com.avaco.arc.core.domain.Entity<Long> {
 		this.version = version;
 	}
 
-	public Calendar getFecha() {
+	public Date getFecha() {
 		return fecha;
 	}
 
-	public void setFecha(Calendar fecha) {
+	public void setFecha(Date fecha) {
 		this.fecha = fecha;
 	}
 
@@ -115,12 +115,12 @@ public class Formula extends ar.com.avaco.arc.core.domain.Entity<Long> {
 		this.observaciones = observaciones;
 	}
 
-//	public RevisionParametros getRevision() {
-//		return revision;
-//	}
-//
-//	public void setRevision(RevisionParametros revision) {
-//		this.revision = revision;
-//	}
+	public RevisionParametros getRevision() {
+		return revision;
+	}
+
+	public void setRevision(RevisionParametros revision) {
+		this.revision = revision;
+	}
 
 }

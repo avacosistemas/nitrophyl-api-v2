@@ -1,5 +1,7 @@
 package ar.com.avaco.nitrophyl.repository.material;
 
+import java.util.List;
+
 import javax.persistence.EntityManager;
 
 import org.springframework.stereotype.Repository;
@@ -13,6 +15,18 @@ public class ConfiguracionPruebaRepositoryImpl extends NJBaseRepository<Long, Co
 
 	public ConfiguracionPruebaRepositoryImpl(EntityManager entityManager) {
 		super(ConfiguracionPrueba.class, entityManager);
+	}
+
+	@Override
+	public List<ConfiguracionPrueba> obtenerConfiguracionesMaximaRevisionIndividual(Long idFormula) {
+
+		String query = "select * from conf_prueba cp inner join ( " + 
+				"   select id_maquina, max(revision) max_value " + 
+				"   from conf_prueba group by id_maquina " + 
+				")  t on t.id_maquina = cp.id_maquina and t.max_value = cp.revision " + 
+				"and cp.id_formula = " + idFormula;
+		
+		return this.getCurrentSession().createSQLQuery(query).addEntity(ConfiguracionPrueba.class).list();
 	}
 
 }

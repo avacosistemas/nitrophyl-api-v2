@@ -9,6 +9,7 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.Calendar;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -39,6 +40,7 @@ import com.itextpdf.text.pdf.PdfWriter;
 import ar.com.avaco.nitrophyl.domain.entities.cliente.Cliente;
 import ar.com.avaco.nitrophyl.domain.entities.formula.ConfiguracionPruebaCondicion;
 import ar.com.avaco.nitrophyl.domain.entities.formula.ConfiguracionPruebaParametro;
+import ar.com.avaco.nitrophyl.domain.entities.formula.RevisionParametros;
 import ar.com.avaco.nitrophyl.domain.entities.lote.Ensayo;
 import ar.com.avaco.nitrophyl.domain.entities.lote.EnsayoResultado;
 import ar.com.avaco.nitrophyl.domain.entities.lote.EstadoEnsayo;
@@ -76,7 +78,11 @@ public class InformeBuilder {
 			document.open();
 			document.setMargins(20, 20, 10, 10);
 
-			Element encabezado = generarEncabezado(empresa);
+			RevisionParametros revision = lote.getFormula().getRevision();
+			Long revisionNro = revision != null ? revision.getRevision() : -1;
+			String fecha = revision != null ? DateUtils.toStringFecha(revision.getFecha()): "SINFECHA";
+			
+			Element encabezado = generarEncabezado(empresa, revisionNro, fecha);
 			document.add(encabezado);
 
 			Paragraph element = new Paragraph(" ");
@@ -169,7 +175,7 @@ public class InformeBuilder {
 		return adto;
 	}
 
-	private Element generarEncabezado(String empresa)
+	private Element generarEncabezado(String empresa, Long revision, String fecha)
 			throws BadElementException, MalformedURLException, IOException, URISyntaxException, DocumentException {
 		PdfPTable table = generateTable(3);
 		PdfPCell cell = getPDFPCell();
@@ -217,7 +223,7 @@ public class InformeBuilder {
 		tabladerecha.addCell(fila);
 
 		fila = getPDFPCell();
-		fila.setPhrase(new Phrase("[00] - [12/12/2012]", fontText));
+		fila.setPhrase(new Phrase(revision + " - " + fecha, fontText));
 		fila.setBorder(0);
 		tabladerecha.addCell(fila);
 

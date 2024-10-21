@@ -23,7 +23,9 @@ import org.hibernate.annotations.FetchMode;
 @Entity
 @Table(name = "FORMULA_REV_PARAM")
 @SequenceGenerator(name = "FORMULA_REV_PARAM_SEQ", sequenceName = "FORMULA_REV_PARAM_SEQ", allocationSize = 1)
-public class RevisionParametros {
+public class RevisionParametros extends ar.com.avaco.arc.core.domain.Entity<Long> {
+
+	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "FORMULA_REV_PARAM_SEQ")

@@ -9,7 +9,7 @@ import ar.com.avaco.nitrophyl.domain.entities.formula.ConfiguracionPruebaParamet
 
 @Repository("configuracionPruebaParametroRepository")
 public class ConfiguracionPruebaParametroRepositoryImpl extends NJBaseRepository<Long, ConfiguracionPruebaParametro>
-		implements ConfiguracionPruebaRepositoryCustom {
+		implements ConfiguracionPruebaParametroRepositoryCustom {
 
 	public ConfiguracionPruebaParametroRepositoryImpl(EntityManager entityManager) {
 		super(ConfiguracionPruebaParametro.class, entityManager);
