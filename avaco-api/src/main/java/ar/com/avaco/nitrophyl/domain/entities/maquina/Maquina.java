@@ -46,6 +46,9 @@ public class Maquina extends ar.com.avaco.arc.core.domain.Entity<Long> {
 	@Column(name = "POSICION")
 	private int posicion;
 
+	@Column(name = "VERSIONABLE")
+	private boolean versionable;
+
 	@OneToMany(targetEntity = MaquinaPrueba.class, mappedBy = "maquina", cascade = CascadeType.ALL, orphanRemoval = true)
 	private Set<MaquinaPrueba> pruebas = new HashSet<>();
 
@@ -95,6 +98,14 @@ public class Maquina extends ar.com.avaco.arc.core.domain.Entity<Long> {
 
 	public void setPosicion(int posicion) {
 		this.posicion = posicion;
+	}
+
+	public boolean isVersionable() {
+		return versionable;
+	}
+
+	public void setVersionable(boolean versionable) {
+		this.versionable = versionable;
 	}
 
 }

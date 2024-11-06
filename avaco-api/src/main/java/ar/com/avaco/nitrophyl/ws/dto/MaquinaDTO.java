@@ -9,6 +9,15 @@ public class MaquinaDTO extends DTOEntity<Long> {
 	private String estado;
 	private String observacionesReporte;
 	private int posicion;
+	private boolean versionable;
+
+	public boolean isVersionable() {
+		return versionable;
+	}
+
+	public void setVersionable(boolean versionable) {
+		this.versionable = versionable;
+	}
 
 	public int getPosicion() {
 		return posicion;

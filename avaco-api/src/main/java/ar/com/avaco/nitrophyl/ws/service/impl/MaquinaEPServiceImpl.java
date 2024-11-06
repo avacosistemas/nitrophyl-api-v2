@@ -30,6 +30,7 @@ public class MaquinaEPServiceImpl extends CRUDEPBaseService<Long, MaquinaDTO, Ma
 		maquina.setNombre(dto.getNombre());
 		maquina.setObservacionesReporte(dto.getObservacionesReporte());
 		maquina.setPosicion(dto.getPosicion());
+		maquina.setVersionable(dto.isVersionable());
 		return maquina;
 	}
 
@@ -41,6 +42,7 @@ public class MaquinaEPServiceImpl extends CRUDEPBaseService<Long, MaquinaDTO, Ma
 		dto.setNombre(entity.getNombre());
 		dto.setObservacionesReporte(entity.getObservacionesReporte());
 		dto.setPosicion(entity.getPosicion());
+		dto.setVersionable(entity.isVersionable());
 		return dto;
 	}
 
