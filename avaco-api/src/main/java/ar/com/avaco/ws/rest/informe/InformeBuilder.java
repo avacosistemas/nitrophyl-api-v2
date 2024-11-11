@@ -9,15 +9,14 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.Calendar;
 import java.util.Comparator;
-import java.util.Date;
-import java.util.HashSet;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
-import org.hibernate.validator.resourceloading.AggregateResourceBundleLocator;
 
 import com.itextpdf.text.BadElementException;
 import com.itextpdf.text.BaseColor;
@@ -38,12 +37,11 @@ import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 
 import ar.com.avaco.nitrophyl.domain.entities.cliente.Cliente;
+import ar.com.avaco.nitrophyl.domain.entities.formula.ConfiguracionPrueba;
 import ar.com.avaco.nitrophyl.domain.entities.formula.ConfiguracionPruebaCondicion;
-import ar.com.avaco.nitrophyl.domain.entities.formula.ConfiguracionPruebaParametro;
 import ar.com.avaco.nitrophyl.domain.entities.formula.RevisionParametros;
 import ar.com.avaco.nitrophyl.domain.entities.lote.Ensayo;
 import ar.com.avaco.nitrophyl.domain.entities.lote.EnsayoResultado;
-import ar.com.avaco.nitrophyl.domain.entities.lote.EstadoEnsayo;
 import ar.com.avaco.nitrophyl.domain.entities.lote.Lote;
 import ar.com.avaco.nitrophyl.domain.entities.reporte.ReporteLoteConfiguracionCliente;
 import ar.com.avaco.nitrophyl.service.reporte.ReporteLoteConfiguracionClienteService;
@@ -60,11 +58,13 @@ public class InformeBuilder {
 	public ArchivoDTO generarReporte(Lote lote, ReporteLoteConfiguracionClienteService serviceConfiguracion,
 			Cliente cliente) throws DocumentException, IOException, URISyntaxException {
 
+		// Obtengo la empresa para el logo
 		String empresa = cliente.getEmpresa().name();
 
 		Document document = new Document(PageSize.A4);
-		ArchivoDTO adto = new ArchivoDTO();
+
 		try {
+			ArchivoDTO adto = new ArchivoDTO();
 
 			ByteArrayOutputStream baos = new ByteArrayOutputStream();
 
@@ -78,28 +78,43 @@ public class InformeBuilder {
 			document.open();
 			document.setMargins(20, 20, 10, 10);
 
-			RevisionParametros revision = lote.getFormula().getRevision();
+			// Obtengo la revisión de parametros para esa formula y obtengo el nro de
+			// revision y la fecha
+			RevisionParametros revision = lote.getRevisionParametros();
 			Long revisionNro = revision != null ? revision.getRevision() : -1;
-			String fecha = revision != null ? DateUtils.toStringFecha(revision.getFecha()): "SINFECHA";
-			
+			String fecha = revision != null ? DateUtils.toStringFecha(revision.getFecha()) : "SINFECHA";
+
+			// Armo el encabezado con el logo, revision y fecha
 			Element encabezado = generarEncabezado(empresa, revisionNro, fecha);
 			document.add(encabezado);
 
+			// Dejo un espacio
 			Paragraph element = new Paragraph(" ");
 			document.add(element);
 
+			// Armo la seccion de datos del lote
 			Element datosLote = addDatosLotes(lote);
 			generarSeccion(document, datosLote, null, null);
 
-			List<Ensayo> ensayos = lote.getEnsayos().stream().sorted(Comparator.comparing(Ensayo::getOrden))
+			// Obtengo todas las maquinas configuradas para la revision de ese lote
+			List<ConfiguracionPrueba> configuracionesRevision = lote.getRevisionParametros().getConfiguraciones()
+					.stream().sorted(Comparator.comparing(ConfiguracionPrueba::getPosicion))
 					.collect(Collectors.toList());
 
+			// Obtengo las configuraciones de reporte para la formula seleccionada y
+			// cliente. Tambien obtengo las generales de esa formula.
 			List<ReporteLoteConfiguracionCliente> configuracion = serviceConfiguracion
 					.findConfiguracionesByClienteFormula(lote.getFormula(), cliente);
 
-			for (Ensayo ensayo : ensayos) {
+			Map<Long, Ensayo> ensayosPorMaquina = generarMapaEnsayos(lote.getEnsayos());
 
-				long idMaquina = ensayo.getConfiguracionPrueba().getMaquina().getId();
+			for (ConfiguracionPrueba parametro : configuracionesRevision) {
+				Long idMaquina = parametro.getMaquina().getId();
+
+				Ensayo ensayo = ensayosPorMaquina.get(idMaquina);
+
+				if (ensayo == null)
+					ensayo = generarEnsayoVacio(parametro);
 
 				ReporteLoteConfiguracionCliente reporteLoteConfiguracionCliente = null;
 
@@ -119,14 +134,14 @@ public class InformeBuilder {
 						reporteLoteConfiguracionCliente = findFirst.get();
 					} else {
 						// Busco coincidencia solo en cliente para todas las maquinas
-						findFirst = configuracion.stream().filter(x -> x.getMaquina() == null &&
-								x.getCliente() != null && x.getCliente().getId() == cliente.getId()).findFirst();
+						findFirst = configuracion.stream().filter(x -> x.getMaquina() == null && x.getCliente() != null
+								&& x.getCliente().getId() == cliente.getId()).findFirst();
 						if (findFirst.isPresent()) {
 							reporteLoteConfiguracionCliente = findFirst.get();
 						} else {
-							findFirst = configuracion.stream().filter(x -> x.getMaquina() == null &&
-									x.getCliente() == null).findFirst();
-							if (findFirst.isPresent()) 
+							findFirst = configuracion.stream()
+									.filter(x -> x.getMaquina() == null && x.getCliente() == null).findFirst();
+							if (findFirst.isPresent())
 								reporteLoteConfiguracionCliente = findFirst.get();
 						}
 					}
@@ -161,6 +176,7 @@ public class InformeBuilder {
 			adto.setArchivo(baos.toByteArray());
 			adto.setNombre("Informe Calidad - " + cliente.getNombre().replace(".", " - " + lote.getNroLote()) + ".pdf");
 
+			return adto;
 		} catch (DocumentException e) {
 			document.close();
 			e.printStackTrace();
@@ -169,10 +185,27 @@ public class InformeBuilder {
 			document.close();
 			e.printStackTrace();
 			throw e;
-		} finally {
-
 		}
-		return adto;
+
+	}
+
+	private Ensayo generarEnsayoVacio(ConfiguracionPrueba parametro) {
+		Ensayo ensayo = new Ensayo();
+		ensayo.setConfiguracionPrueba(parametro);
+		parametro.getParametros().forEach(x -> {
+			EnsayoResultado er = new EnsayoResultado();
+			er.setConfiguracionPruebaParametro(x);
+			ensayo.getResultados().add(er);
+		});
+		return ensayo;
+	}
+
+	private Map<Long, Ensayo> generarMapaEnsayos(Set<Ensayo> ensayos) {
+		Map<Long, Ensayo> mapa = new HashMap<Long, Ensayo>();
+		ensayos.forEach(x -> {
+			mapa.put(x.getConfiguracionPrueba().getMaquina().getId(), x);
+		});
+		return mapa;
 	}
 
 	private Element generarEncabezado(String empresa, Long revision, String fecha)
@@ -318,13 +351,13 @@ public class InformeBuilder {
 
 		if (config != null) {
 			mostrarParametros = config.isMostrarParametros();
-			// Si el estado del ensayo es "Sin resultados" entonces no se muestran resultados por más que la configuracion diga que sí
-			mostrarResultados = config.isMostrarResultados() && !ensayo.getEstado().equals(EstadoEnsayo.SIN_RESULTADOS);
+			// Si el id del ensayo es nulo, es un ensayo sin resultados.
+			mostrarResultados = config.isMostrarResultados() && ensayo.getId() != null;
 			mostrarCondiciones = config.isMostrarCondiciones();
 			mostraObervacionesParametros = config.isMostrarObservacionesParametro();
 		}
 
-		// Principal: si no muestra paramtros el resto no importa
+		// Principal: si no muestra parametros el resto no importa
 		if (mostrarParametros) {
 
 			int rowspanpruebas = ensayo.getResultados().size();
@@ -333,10 +366,8 @@ public class InformeBuilder {
 			// Armo la tabla de resultados
 			// Contiene prueba, min, max, resultado y norma
 			float[] colsConResultado = new float[] { 25, 30, 10, 10, 10, 20 };
-			// float[] colsSinResultado = new float[] { 20, 24, 18, 18, 20 };
 
 			float[] cols = colsConResultado;
-//			float[] cols = mostrarResultados ? colsConResultado : colsSinResultado;
 
 			PdfPTable tableResultados = new PdfPTable(cols);
 			tableResultados.setWidthPercentage(100);
@@ -365,13 +396,6 @@ public class InformeBuilder {
 
 			Set<EnsayoResultado> resultadossinorden = ensayo.getResultados();
 
-			if (ensayo.getEstado().equals(EstadoEnsayo.SIN_RESULTADOS)) {
-				resultadossinorden = new HashSet<>();
-				for (ConfiguracionPruebaParametro cpp : ensayo.getConfiguracionPrueba().getParametros()) {
-					resultadossinorden.add(new EnsayoResultado(cpp));
-				}
-			}
-			
 			List<EnsayoResultado> resultados = resultadossinorden.stream()
 					.sorted(Comparator.comparing(EnsayoResultado::getPosicion)).collect(Collectors.toList());
 
@@ -423,18 +447,6 @@ public class InformeBuilder {
 					cell.setPhrase(new Phrase("Norma", fontHeaderTable));
 					cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 					tableResultados.addCell(cell);
-
-//					cell = getPDFPCell();
-//					cell.setRowspan(rowspancondiciones + rowspanpruebas + 1);
-//					cell.setPhrase(new Phrase(
-//							,
-//							fontHeaderTable));
-//					cell.setRotation(90);
-//					cell.setBorder(0);
-//					cell.setBorderWidthRight(1);
-//					cell.setBorderColorRight(COLOR_GRIS_BORDES);
-//					cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-//					tableResultados.addCell(cell);
 
 					cell = getPDFPCell();
 					cell.setRowspan(rowspanpruebas);

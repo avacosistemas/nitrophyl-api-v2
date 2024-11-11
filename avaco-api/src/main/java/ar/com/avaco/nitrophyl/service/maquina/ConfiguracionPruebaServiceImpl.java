@@ -28,21 +28,21 @@ public class ConfiguracionPruebaServiceImpl extends
 
 	@Override
 	public ConfiguracionPrueba save(ConfiguracionPrueba entity) {
-		Optional<ConfiguracionPrueba> confprevia = this.repository.findTopByFormulaIdAndMaquinaIdOrderByRevisionDesc(
+		Optional<ConfiguracionPrueba> confprevia = this.repository.findTopByFormulaIdAndMaquinaIdOrderByVersionDesc(
 				entity.getFormula().getId(), entity.getMaquina().getId());
-		Long revision = 0L;
+		Long version = 0L;
 		if (confprevia.isPresent()) {
 			ConfiguracionPrueba configuracionPrueba = confprevia.get();
 			configuracionPrueba.setFechaHasta(DateUtils.getFechaYHoraActual());
-			configuracionPrueba.setVigente(false);
-			revision = configuracionPrueba.getRevision() + 1;
+			// configuracionPrueba.setVigente(false);
+			version = configuracionPrueba.getVersion() + 1;
 			this.repository.saveAndFlush(configuracionPrueba);
 		}
 
 		entity.setFecha(DateUtils.getFechaYHoraActual());
 		entity.setFechaHasta(null);
-		entity.setRevision(revision);
-		entity.setVigente(true);
+		entity.setVersion(version);
+		entity.setVigente(false);
 		ConfiguracionPrueba saveAndFlush = this.repository.saveAndFlush(entity);
 		return saveAndFlush;
 	}

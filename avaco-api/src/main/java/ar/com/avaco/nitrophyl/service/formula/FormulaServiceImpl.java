@@ -1,7 +1,7 @@
 package ar.com.avaco.nitrophyl.service.formula;
 
-import java.util.Calendar;
-import java.util.Set;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.annotation.Resource;
 
@@ -62,7 +62,7 @@ public class FormulaServiceImpl extends NJBaseService<Long, Formula, FormulaRepo
 		}
 		RevisionParametros rp = new RevisionParametros();
 		rp.setFecha(DateUtils.getFechaYHoraActual());
-		rp.getConfiguraciones().addAll(this.configuracionPruebaRepository.obtenerConfiguracionesMaximaRevisionIndividual(idFormula));
+		rp.getConfiguraciones().addAll(this.configuracionPruebaRepository.obtenerConfiguracionesMaximaVersionIndividual(idFormula));
 		rp.setFormula(formula);
 		rp.setRevision(rev);
 		
@@ -70,6 +70,9 @@ public class FormulaServiceImpl extends NJBaseService<Long, Formula, FormulaRepo
 		
 		formula.setRevision(rp);
 		this.update(formula);
+
+		List<Long> ids = rp.getConfiguraciones().stream().map(ConfiguracionPrueba::getId).collect(Collectors.toList());
+		this.configuracionPruebaRepository.actualizarConfiguracionesVigentes(ids, idFormula);
 		
 		return rp;
 	}

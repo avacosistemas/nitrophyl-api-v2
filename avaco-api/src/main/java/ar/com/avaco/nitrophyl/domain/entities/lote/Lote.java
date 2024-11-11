@@ -21,10 +21,9 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 
 import ar.com.avaco.nitrophyl.domain.entities.formula.Formula;
+import ar.com.avaco.nitrophyl.domain.entities.formula.RevisionParametros;
 
 @Entity
 @Table(name = "LOTE")
@@ -64,6 +63,12 @@ public class Lote extends ar.com.avaco.arc.core.domain.Entity<Long> {
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "lote")
 	private Set<Ensayo> ensayos = new HashSet<Ensayo>();
+
+	// FIXME CAMBIAR optional a false luego de setear todos los valores
+	@Fetch(FetchMode.JOIN)
+	@ManyToOne(fetch = FetchType.EAGER, optional = true)
+	@JoinColumn(name = "ID_REVISION_PARAMETROS")
+	private RevisionParametros revisionParametros;
 
 	public Long getId() {
 		return id;
@@ -135,6 +140,14 @@ public class Lote extends ar.com.avaco.arc.core.domain.Entity<Long> {
 
 	public void setEstado(EstadoLote estado) {
 		this.estado = estado;
+	}
+
+	public RevisionParametros getRevisionParametros() {
+		return revisionParametros;
+	}
+
+	public void setRevisionParametros(RevisionParametros revisionParametros) {
+		this.revisionParametros = revisionParametros;
 	}
 
 }

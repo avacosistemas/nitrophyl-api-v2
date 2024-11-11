@@ -9,6 +9,6 @@ public interface FormulaEPService extends CRUDEPService<Long, FormulaDTO> {
 
 	FormulaDTO clone(FormulaDTO dto) throws BusinessException;
 
-	RevisionParametrosDTO marcarrevision(Long idFormula);
+	RevisionParametrosDTO marcarRevision(Long idFormula);
 
 }

@@ -6,10 +6,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import ar.com.avaco.arc.core.component.bean.service.NJBaseService;
+import ar.com.avaco.nitrophyl.domain.entities.formula.Formula;
 import ar.com.avaco.nitrophyl.domain.entities.lote.EstadoLote;
 import ar.com.avaco.nitrophyl.domain.entities.lote.Lote;
 import ar.com.avaco.nitrophyl.repository.lote.EnsayoRepository;
 import ar.com.avaco.nitrophyl.repository.lote.LoteRepository;
+import ar.com.avaco.nitrophyl.repository.material.FormulaRepository;
 import ar.com.avaco.utils.DateUtils;
 
 @Transactional
@@ -17,11 +19,13 @@ import ar.com.avaco.utils.DateUtils;
 public class LoteServiceImpl extends NJBaseService<Long, Lote, LoteRepository> implements LoteService {
 
 	private EnsayoRepository ensayoRepository;
-
+	private FormulaRepository formulaRepository;
+	
 	@Override
 	public Lote save(Lote entity) {
+		Formula formula = formulaRepository.getOne(entity.getFormula().getId());
 		entity.setId(null);
-		entity.setEstado(EstadoLote.PENDIENTE_APROBACION);
+		entity.setRevisionParametros(formula.getRevision());
 		return super.save(entity);
 	}
 
@@ -60,6 +64,11 @@ public class LoteServiceImpl extends NJBaseService<Long, Lote, LoteRepository> i
 	@Resource(name = "loteRepository")
 	public void setLoteRepository(LoteRepository loteRepository) {
 		this.repository = loteRepository;
+	}
+	
+	@Resource(name = "formulaRepository")
+	public void setFormulaRepository(FormulaRepository formulaRepository) {
+		this.formulaRepository = formulaRepository;
 	}
 	
 

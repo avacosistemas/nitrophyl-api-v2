@@ -7,7 +7,6 @@ import java.util.List;
 import javax.annotation.Resource;
 
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.itextpdf.text.DocumentException;
@@ -17,15 +16,14 @@ import ar.com.avaco.nitrophyl.domain.entities.cliente.Cliente;
 import ar.com.avaco.nitrophyl.domain.entities.formula.Formula;
 import ar.com.avaco.nitrophyl.domain.entities.lote.EstadoLote;
 import ar.com.avaco.nitrophyl.domain.entities.lote.Lote;
-import ar.com.avaco.nitrophyl.domain.entities.reporte.ReporteLoteConfiguracionCliente;
 import ar.com.avaco.nitrophyl.service.cliente.ClienteService;
+import ar.com.avaco.nitrophyl.service.formula.FormulaService;
 import ar.com.avaco.nitrophyl.service.lote.LoteService;
 import ar.com.avaco.nitrophyl.service.reporte.ReporteLoteConfiguracionClienteService;
 import ar.com.avaco.nitrophyl.ws.dto.ArchivoDTO;
 import ar.com.avaco.nitrophyl.ws.dto.LoteDTO;
 import ar.com.avaco.nitrophyl.ws.service.LoteEPService;
 import ar.com.avaco.utils.DateUtils;
-import ar.com.avaco.ws.rest.dto.JSONResponse;
 import ar.com.avaco.ws.rest.informe.InformeBuilder;
 import ar.com.avaco.ws.rest.service.CRUDEPBaseService;
 
@@ -36,6 +34,8 @@ public class LoteEPServiceImpl extends CRUDEPBaseService<Long, LoteDTO, Lote, Lo
 
 	private ClienteService clienteService;
 
+	private FormulaService formulaService;
+	
 	@Resource(name = "reporteLoteConfiguracionClienteService")
 
 	public void setReporteLoteConfigClienteService(
@@ -50,28 +50,31 @@ public class LoteEPServiceImpl extends CRUDEPBaseService<Long, LoteDTO, Lote, Lo
 		if (!listPattern.isEmpty()) {
 			throw new BusinessException("El número de lote ya existe");
 		}
-
-		dto.setEstado(EstadoLote.PENDIENTE_APROBACION.name());
+		dto.setEstado("PENDIENTE_APROBACION");
 		return super.save(dto);
 	}
 
 	@Override
 	public LoteDTO update(LoteDTO dto) throws BusinessException {
-		LoteDTO update = this.get(dto.getId());
-		update.setFecha(dto.getFecha());
-		if (dto.getIdFormula() != update.getIdFormula() && this.service.hasEnsayos(dto.getId())) {
-			throw new BusinessException("No puede cambiarse la fórmula del lote porque tiene ensayos asociados");
+		Lote update = this.service.get(dto.getId());
+		update.setFecha(DateUtils.toDate(dto.getFecha(), DateUtils.PATTERN_SOLO_FECHA));
+		if (dto.getIdFormula() != update.getFormula().getId()) {
+			if (this.service.hasEnsayos(dto.getId())) {
+				throw new BusinessException("No puede cambiarse la fórmula del lote porque tiene ensayos asociados");
+			} else {
+				Formula formula = this.formulaService.get(dto.getIdFormula());
+				update.setFormula(formula);
+				update.setRevisionParametros(formula.getRevision());
+			}
 		}
-
 		List<Lote> listPattern = this.service.listPattern("nroLote", dto.getNroLote());
 		if (!listPattern.isEmpty() && listPattern.get(0).getId() != dto.getId()) {
 			throw new BusinessException("No puede cambiarse el número de lote porque ya existe");
 		}
 
-		update.setIdFormula(dto.getIdFormula());
 		update.setNroLote(dto.getNroLote());
 		update.setObservaciones(dto.getObservaciones());
-		return super.update(update);
+		return convertToDto(this.service.save(update));
 	}
 
 	@Override
@@ -151,6 +154,11 @@ public class LoteEPServiceImpl extends CRUDEPBaseService<Long, LoteDTO, Lote, Lo
 	@Resource(name = "clienteService")
 	public void setClienteService(ClienteService clienteService) {
 		this.clienteService = clienteService;
+	}
+
+	@Resource(name = "formulaService")
+	public void setFormulaService(FormulaService formulaService) {
+		this.formulaService = formulaService;
 	}
 
 }

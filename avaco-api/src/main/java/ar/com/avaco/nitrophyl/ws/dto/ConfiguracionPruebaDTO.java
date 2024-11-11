@@ -21,7 +21,7 @@ public class ConfiguracionPruebaDTO extends DTOEntity<Long> {
 
 	private String observacionesReporte;
 
-	private Long revision;
+	private Long version;
 
 	private String fecha;
 
@@ -29,12 +29,12 @@ public class ConfiguracionPruebaDTO extends DTOEntity<Long> {
 
 	private boolean vigente;
 
-	public Long getRevision() {
-		return revision;
+	public Long getVersion() {
+		return version;
 	}
 
-	public void setRevision(Long revision) {
-		this.revision = revision;
+	public void setVersion(Long version) {
+		this.version = version;
 	}
 
 	public Long getIdMaquina() {

@@ -35,8 +35,8 @@ public class ConfiguracionPrueba extends ar.com.avaco.arc.core.domain.Entity<Lon
 	@JoinColumn(name = "ID_MAQUINA")
 	private Maquina maquina;
 
-	@Column(name = "REVISION", nullable = false)
-	private Long revision;
+	@Column(name = "VERSION", nullable = false)
+	private Long version;
 
 	@Column(name = "FECHA", nullable = false)
 	private Date fecha;
@@ -116,12 +116,12 @@ public class ConfiguracionPrueba extends ar.com.avaco.arc.core.domain.Entity<Lon
 		this.observacionesReporte = observacionesReporte;
 	}
 
-	public Long getRevision() {
-		return revision;
+	public Long getVersion() {
+		return version;
 	}
 
-	public void setRevision(Long revision) {
-		this.revision = revision;
+	public void setVersion(Long version) {
+		this.version = version;
 	}
 
 	public Date getFechaHasta() {
@@ -140,4 +140,8 @@ public class ConfiguracionPrueba extends ar.com.avaco.arc.core.domain.Entity<Lon
 		this.vigente = vigente;
 	}
 
+	public int getPosicion() {
+		return this.maquina.getPosicion();
+	}
+	
 }

@@ -75,7 +75,7 @@ public class ConfiguracionPruebaEPServiceImpl
 		dto.setIdFormula(entity.getFormula().getId());
 		dto.setMaquina(entity.getMaquina().getNombre());
 		dto.setObservacionesReporte(entity.getObservacionesReporte());
-		dto.setRevision(entity.getRevision());
+		dto.setVersion(entity.getVersion());
 		dto.setFecha(DateUtils.toStringFecha(entity.getFecha()));
 		dto.setFechaHasta(DateUtils.toStringFecha(entity.getFechaHasta()));
 		dto.setVigente(entity.isVigente());

@@ -85,7 +85,7 @@ public class FormulaRestController extends AbstractDTORestController<FormulaDTO,
 	
 	@RequestMapping(value = "/formula/marcarrevision/{idFormula}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<JSONResponse> marcarrevision(@PathVariable("idFormula") Long idFormula) throws BusinessException {
-		RevisionParametrosDTO dto = this.service.marcarrevision(idFormula);
+		RevisionParametrosDTO dto = this.service.marcarRevision(idFormula);
 		JSONResponse response = new JSONResponse();
 		response.setData(dto);
 		response.setStatus(JSONResponse.OK);

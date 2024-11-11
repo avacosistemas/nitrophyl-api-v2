@@ -75,7 +75,7 @@ public class FormulaEPServiceImpl extends CRUDEPBaseService<Long, FormulaDTO, Fo
 	}
 
 	@Override
-	public RevisionParametrosDTO marcarrevision(Long idFormula) {
+	public RevisionParametrosDTO marcarRevision(Long idFormula) {
 		RevisionParametros rp = this.service.marcarRevision(idFormula);
 		RevisionParametrosDTO rpdto = new RevisionParametrosDTO();
 		rpdto.setFecha(DateUtils.toStringFecha(rp.getFecha()));
