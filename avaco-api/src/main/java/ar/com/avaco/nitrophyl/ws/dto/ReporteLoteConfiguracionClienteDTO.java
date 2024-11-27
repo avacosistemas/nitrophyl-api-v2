@@ -1,5 +1,8 @@
 package ar.com.avaco.nitrophyl.ws.dto;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import ar.com.avaco.ws.rest.dto.DTOEntity;
 
 public class ReporteLoteConfiguracionClienteDTO extends DTOEntity<Long> {
@@ -25,6 +28,8 @@ public class ReporteLoteConfiguracionClienteDTO extends DTOEntity<Long> {
 	private boolean mostrarCondiciones;
 
 	private boolean mostrarObservacionesParametro;
+
+	private List<Long> idsPruebas = new ArrayList<Long>();
 
 	public Long getId() {
 		return id;
@@ -112,6 +117,14 @@ public class ReporteLoteConfiguracionClienteDTO extends DTOEntity<Long> {
 
 	public void setMostrarObservacionesParametro(boolean mostrarObservacionesParametro) {
 		this.mostrarObservacionesParametro = mostrarObservacionesParametro;
+	}
+
+	public List<Long> getIdsPruebas() {
+		return idsPruebas;
+	}
+
+	public void setIdsPruebas(List<Long> idsPruebas) {
+		this.idsPruebas = idsPruebas;
 	}
 
 }

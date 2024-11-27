@@ -28,6 +28,12 @@ public class ReporteLoteConfiguracionClienteRestController extends
 		super.service = reporteLoteConfiguracionClienteEPService;
 	}
 
+	@Override
+	@RequestMapping(value = "/configuracion/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<JSONResponse> get(@PathVariable Long id) throws BusinessException {
+		return super.get(id);
+	}
+	
 	@RequestMapping(value = "/configuracion", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<JSONResponse> list(ReporteLoteConfiguracionClienteFilterDTO dto) {
 		PageDTO<ReporteLoteConfiguracionClienteDTO> ret = this.service

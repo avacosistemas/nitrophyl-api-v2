@@ -15,4 +15,6 @@ public interface LoteService extends NJService<Long, Lote> {
 
 	Lote getLoteCompleto(Long idLote);
 
+	void revisiones();
+
 }

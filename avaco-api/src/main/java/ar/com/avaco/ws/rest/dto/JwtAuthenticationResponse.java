@@ -3,6 +3,7 @@ package ar.com.avaco.ws.rest.dto;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import ar.com.avaco.ws.rest.security.dto.Permission;
 import ar.com.avaco.ws.rest.security.dto.Profile;
@@ -21,7 +22,7 @@ public class JwtAuthenticationResponse implements Serializable {
 
 	private String lastname;
 
-	private Set<Permission> permissions;
+	private Set<String> permissions;
 
 	private String email;
 
@@ -35,10 +36,10 @@ public class JwtAuthenticationResponse implements Serializable {
 		this.lastname = usuario.getLastname();
 		this.email = usuario.getEmail();
 		
-		this.permissions=new HashSet<Permission>();
+		this.permissions=new HashSet<String>();
 		Set<Profile> profiles=usuario.getProfiles();
 		for (Profile profile : profiles) {
-			this.permissions.addAll(profile.getPermissions());
+			this.permissions.addAll(profile.getPermissions().stream().map(Permission::getCode).collect(Collectors.toList()));
 		}		
 	}
 
@@ -62,12 +63,12 @@ public class JwtAuthenticationResponse implements Serializable {
 		this.lastname = lastname;
 	}
 
-	public Set<Permission> getPermissions() {
+	public Set<String> getPermissions() {
 		return permissions;
 	}
 
-	public void setPermissions(Set<Permission> permissions) {
-		permissions = permissions;
+	public void setPermissions(Set<String> permissions) {
+		this.permissions = permissions;
 	}
 
 	public String getEmail() {

@@ -169,4 +169,19 @@ public class LoteRestController extends AbstractDTORestController<LoteDTO, Long,
 		return new ResponseEntity<JSONResponse>(response, HttpStatus.OK);
 	}
 
+	@RequestMapping(value = "/lote/revisiones", method = RequestMethod.GET)
+	public ResponseEntity<JSONResponse> revisiones() throws BusinessException {
+		JSONResponse response = new JSONResponse();
+		try {
+			this.service.revisiones();
+			response.setStatus(JSONResponse.OK);
+		} catch (Exception e) {
+			ErrorResponse eresp = new ErrorResponse();
+			eresp.setStatus(JSONResponse.ERROR);
+			eresp.setError(e.getMessage());
+			response = eresp;
+		}
+		return new ResponseEntity<JSONResponse>(response, HttpStatus.OK);
+	}
+	
 }

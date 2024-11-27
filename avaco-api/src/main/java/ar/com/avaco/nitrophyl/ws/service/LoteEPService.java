@@ -14,4 +14,6 @@ public interface LoteEPService extends CRUDEPService<Long, LoteDTO> {
 	void borrar(Long idLote) throws BusinessException;
 	
 	ArchivoDTO generarReporteLoteCliente(Long idLote, Long idCliente) throws BusinessException;
+
+	void revisiones();
 }

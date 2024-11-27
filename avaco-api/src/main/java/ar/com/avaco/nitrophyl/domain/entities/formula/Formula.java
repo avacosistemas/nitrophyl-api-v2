@@ -15,6 +15,9 @@ import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+
 @Entity
 @Table(name = "FORMULA")
 @Inheritance(strategy = InheritanceType.JOINED)
@@ -45,19 +48,19 @@ public class Formula extends ar.com.avaco.arc.core.domain.Entity<Long> {
 
 	@ManyToOne(fetch = FetchType.EAGER, optional = false)
 	@JoinColumn(name = "ID_MATERIAL")
+	@Fetch(FetchMode.JOIN)
 	private Material material;
 
 	@Column(name = "OBSERVACIONES")
 	private String observaciones;
 
+	/**
+	 * Ultima revision vigente de parametros
+	 */
 	@ManyToOne(fetch = FetchType.EAGER, optional = true)
 	@JoinColumn(name = "ID_REV_PARAM")
+	@Fetch(FetchMode.JOIN)
 	private RevisionParametros revision;
-
-	@Override
-	public String toString() {
-		return nombre + " V" + version + " (" + norma + ")";
-	}
 
 	public Long getId() {
 		return id;

@@ -47,7 +47,7 @@ public class RevisionParametros extends ar.com.avaco.arc.core.domain.Entity<Long
 	@Column(name = "FECHA_HASTA")
 	private Date fechaHasta;
 
-	@ManyToMany(fetch = FetchType.EAGER)
+	@ManyToMany(fetch = FetchType.LAZY)
 	@JoinTable(name = "FORMULA_REV_PARAM_CONF_PRUEBA", joinColumns = @JoinColumn(name = "ID_FORMULA_REV_PARAM", referencedColumnName = "ID_REV_PARAM"), inverseJoinColumns = @JoinColumn(name = "ID_CONF_PRUEBA", referencedColumnName = "ID_CONF_PRUEBA"))
 	@Fetch(FetchMode.SELECT)
 	private Set<ConfiguracionPrueba> configuraciones = new HashSet<>();

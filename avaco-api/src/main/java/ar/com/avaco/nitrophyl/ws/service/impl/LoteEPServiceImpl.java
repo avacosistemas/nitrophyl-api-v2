@@ -99,7 +99,7 @@ public class LoteEPServiceImpl extends CRUDEPBaseService<Long, LoteDTO, Lote, Lo
 	protected LoteDTO convertToDto(Lote entity) {
 		LoteDTO dto = new LoteDTO();
 		dto.setFecha(DateUtils.toStringFecha(entity.getFecha()));
-		dto.setFormula(entity.getFormula().toString());
+		dto.setFormula(entity.getFormula().getNombre());
 		dto.setId(entity.getId());
 		dto.setIdFormula(entity.getFormula().getId());
 		dto.setObservaciones(entity.getObservaciones());
@@ -110,6 +110,9 @@ public class LoteEPServiceImpl extends CRUDEPBaseService<Long, LoteDTO, Lote, Lo
 			dto.setFechaEstado(DateUtils.toStringFecha(entity.getFechaEstado()));
 		}
 		dto.setObservacionesEstado(entity.getObservacionesEstado());
+		if (entity.getRevisionParametros() != null) {
+			dto.setRevision(entity.getRevisionParametros().getRevision());
+		}
 		return dto;
 	}
 
@@ -161,4 +164,9 @@ public class LoteEPServiceImpl extends CRUDEPBaseService<Long, LoteDTO, Lote, Lo
 		this.formulaService = formulaService;
 	}
 
+	@Override
+	public void revisiones() {
+		this.service.revisiones();
+	}
+	
 }

@@ -45,10 +45,10 @@ public class FormulaRestController extends AbstractDTORestController<FormulaDTO,
 		filter.setAsc(true);
 		filter.setIdx("nombre");
 		List<FormulaDTO> listFilter = super.service.listFilter(new FormulaFilter(filter));
-		List<ComboDTO> clientes = new ArrayList<ComboDTO>();
-		listFilter.forEach(x -> clientes.add(new ComboDTO(x.getLabelCombo(), x.getId().toString())));
+		List<ComboDTO> formulas = new ArrayList<ComboDTO>();
+		listFilter.forEach(x -> formulas.add(new ComboDTO(x.getLabelCombo(), x.getId().toString())));
 		JSONResponse response = new JSONResponse();
-		response.setData(clientes);
+		response.setData(formulas);
 		response.setStatus(JSONResponse.OK);
 		return new ResponseEntity<JSONResponse>(response, HttpStatus.OK);
 	}

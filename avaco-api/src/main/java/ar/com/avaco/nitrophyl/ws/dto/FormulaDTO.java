@@ -79,7 +79,7 @@ public class FormulaDTO extends DTOEntity<Long> {
 	}
 
 	public String getLabelCombo() {
-		return this.nombre + " V" + this.version + " (" + this.norma + ")";
+		return this.nombre;
 	}
 
 	public RevisionParametrosDTO getRpdto() {

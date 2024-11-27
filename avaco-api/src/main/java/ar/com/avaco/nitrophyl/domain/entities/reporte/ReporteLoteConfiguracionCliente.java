@@ -1,5 +1,8 @@
 package ar.com.avaco.nitrophyl.domain.entities.reporte;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -7,13 +10,19 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+
 import ar.com.avaco.nitrophyl.domain.entities.cliente.Cliente;
 import ar.com.avaco.nitrophyl.domain.entities.formula.Formula;
 import ar.com.avaco.nitrophyl.domain.entities.maquina.Maquina;
+import ar.com.avaco.nitrophyl.domain.entities.maquina.MaquinaPrueba;
 
 @Entity
 @Table(name = "REPORTE_LOTE_CONF_CLIENTE")
@@ -50,6 +59,11 @@ public class ReporteLoteConfiguracionCliente extends ar.com.avaco.arc.core.domai
 
 	@Column(name = "MOSTRAR_OBS_PARAM")
 	private boolean mostrarObservacionesParametro;
+
+	@ManyToMany(fetch = FetchType.EAGER)
+	@JoinTable(name = "REPORTE_LOTE_CONF_PRUEBA", joinColumns = @JoinColumn(name = "ID_REPORTE_LOTE_CONF_CLIENTE", referencedColumnName = "ID_REPORTE_LOTE_CONF_CLIENTE"), inverseJoinColumns = @JoinColumn(name = "ID_MAQUINA_PRUEBA", referencedColumnName = "ID_MAQUINA_PRUEBA"))
+	@Fetch(FetchMode.SELECT)
+	private Set<MaquinaPrueba> pruebas = new HashSet<>();
 
 	public Long getId() {
 		return id;
@@ -113,6 +127,14 @@ public class ReporteLoteConfiguracionCliente extends ar.com.avaco.arc.core.domai
 
 	public void setMostrarObservacionesParametro(boolean mostrarObservacionesParametro) {
 		this.mostrarObservacionesParametro = mostrarObservacionesParametro;
+	}
+
+	public Set<MaquinaPrueba> getPruebas() {
+		return pruebas;
+	}
+
+	public void setPruebas(Set<MaquinaPrueba> pruebas) {
+		this.pruebas = pruebas;
 	}
 
 }

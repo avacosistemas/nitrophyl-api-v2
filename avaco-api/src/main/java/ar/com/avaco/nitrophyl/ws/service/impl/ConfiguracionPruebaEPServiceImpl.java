@@ -73,6 +73,7 @@ public class ConfiguracionPruebaEPServiceImpl
 		ConfiguracionPruebaDTO dto = new ConfiguracionPruebaDTO();
 		dto.setId(entity.getId());
 		dto.setIdFormula(entity.getFormula().getId());
+		dto.setIdMaquina(entity.getMaquina().getId());
 		dto.setMaquina(entity.getMaquina().getNombre());
 		dto.setObservacionesReporte(entity.getObservacionesReporte());
 		dto.setVersion(entity.getVersion());

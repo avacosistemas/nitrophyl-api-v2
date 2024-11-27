@@ -24,6 +24,8 @@ public class LoteDTO extends DTOEntity<Long> {
 
 	private String estado;
 
+	private Long revision;
+
 	public String getNroLote() {
 		return nroLote;
 	}
@@ -102,6 +104,14 @@ public class LoteDTO extends DTOEntity<Long> {
 
 	public void setFormulaSimple(String formulaSimple) {
 		this.formulaSimple = formulaSimple;
+	}
+
+	public Long getRevision() {
+		return revision;
+	}
+
+	public void setRevision(Long revision) {
+		this.revision = revision;
 	}
 
 }
