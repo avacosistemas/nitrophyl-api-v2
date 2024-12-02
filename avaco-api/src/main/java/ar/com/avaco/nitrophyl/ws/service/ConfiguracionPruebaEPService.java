@@ -9,6 +9,6 @@ public interface ConfiguracionPruebaEPService extends CRUDEPService<Long, Config
 
 	List<ConfiguracionPruebaDTO> list(Long idFormula);
 
-	List<ConfiguracionPruebaDTO> listVigentes(Long idFormula);
+	List<ConfiguracionPruebaDTO> listVigentesByLote(Long idLote);
 
 }

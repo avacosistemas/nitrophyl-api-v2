@@ -121,9 +121,9 @@ public class ConfiguracionPruebaEPServiceImpl
 	}
 
 	@Override
-	public List<ConfiguracionPruebaDTO> listVigentes(Long idFormula) {
-		List<ConfiguracionPrueba> listByIdFormula = this.service.listByFormulaIdAndVigente(idFormula);
-		return listByIdFormula.stream().map(x -> convertToDtoSinCondicionParametro(x)).collect(Collectors.toList());
+	public List<ConfiguracionPruebaDTO> listVigentesByLote(Long idLote) {
+		List<ConfiguracionPrueba> listByLote = this.service.listByLote(idLote);
+		return listByLote.stream().map(x -> convertToDtoSinCondicionParametro(x)).collect(Collectors.toList());
 	}
 	
 }

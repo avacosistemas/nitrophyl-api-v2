@@ -9,6 +9,6 @@ public interface ConfiguracionPruebaService extends NJService<Long, Configuracio
 
 	List<ConfiguracionPrueba> listByFormulaId(Long idFormula);
 
-	List<ConfiguracionPrueba> listByFormulaIdAndVigente(Long idFormula);
+	List<ConfiguracionPrueba> listByLote(Long idLote);
 
 }

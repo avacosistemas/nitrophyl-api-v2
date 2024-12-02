@@ -1,5 +1,6 @@
 package ar.com.avaco.nitrophyl.service.maquina;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
@@ -13,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import ar.com.avaco.arc.core.component.bean.service.NJBaseService;
 import ar.com.avaco.nitrophyl.domain.entities.formula.ConfiguracionPrueba;
 import ar.com.avaco.nitrophyl.domain.entities.formula.ConfiguracionPruebaParametro;
+import ar.com.avaco.nitrophyl.repository.lote.LoteRepository;
 import ar.com.avaco.nitrophyl.repository.material.ConfiguracionPruebaRepository;
 import ar.com.avaco.utils.DateUtils;
 
@@ -21,6 +23,8 @@ import ar.com.avaco.utils.DateUtils;
 public class ConfiguracionPruebaServiceImpl extends
 		NJBaseService<Long, ConfiguracionPrueba, ConfiguracionPruebaRepository> implements ConfiguracionPruebaService {
 
+	private LoteRepository loteRepository;
+	
 	@Override
 	public List<ConfiguracionPrueba> listByFormulaId(Long idFormula) {
 		return this.repository.findAllByFormulaIdOrderByMaquinaNombre(idFormula);
@@ -81,8 +85,8 @@ public class ConfiguracionPruebaServiceImpl extends
 	}
 
 	@Override
-	public List<ConfiguracionPrueba> listByFormulaIdAndVigente(Long idFormula) {
-		return this.repository.findByFormulaIdAndVigenteOrderByMaquinaNombre(idFormula, true);
+	public List<ConfiguracionPrueba> listByLote(Long idLote) {
+		return new ArrayList<ConfiguracionPrueba>(this.loteRepository.findOne(idLote).getRevisionParametros().getConfiguraciones());
 	}
 
 	@Resource(name = "configuracionPruebaRepository")
@@ -90,4 +94,9 @@ public class ConfiguracionPruebaServiceImpl extends
 		this.repository = configuracionPruebaRepository;
 	}
 
+	@Resource(name = "loteRepository")
+	public void setLoteRepository(LoteRepository loteRepository) {
+		this.loteRepository = loteRepository;
+	}
+	
 }

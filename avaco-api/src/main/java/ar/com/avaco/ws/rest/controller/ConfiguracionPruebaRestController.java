@@ -36,9 +36,9 @@ public class ConfiguracionPruebaRestController
 		return new ResponseEntity<JSONResponse>(response, HttpStatus.OK);
 	}
 
-	@RequestMapping(value = "/configuracionPrueba/formula/{idFormula}/vigentes", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<JSONResponse> listVigentes(@PathVariable("idFormula") Long idFormula) {
-		List<ConfiguracionPruebaDTO> listFilter = super.service.listVigentes(idFormula);
+	@RequestMapping(value = "/configuracionPrueba/lote/{idLote}/vigentes", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<JSONResponse> listVigentes(@PathVariable("idLote") Long idLote) {
+		List<ConfiguracionPruebaDTO> listFilter = super.service.listVigentesByLote(idLote);
 		JSONResponse response = new JSONResponse();
 		response.setData(listFilter);
 		response.setStatus(JSONResponse.OK);
