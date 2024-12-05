@@ -155,9 +155,10 @@ public class InformeBuilder {
 
 			}
 
-			String string = "La parametrización entre los valores por reometría y las propiedades físicas mencionadas";
-			string += " esta realizada en base a un estudio realizdo en nuestro laboratorio sobre una cuerva patrón";
-			string += " normalizada y los ensayos físicos directos descriptos por norma y bajo condiciones reguladas";
+			String string = "La parametrizacion entre los valores de reometria y las propiedades "
+					+ "físicas establecidas por Norma, fue realizada en nuestro laboratorio, "
+					+ "en base a un estudio entre una curva patrón normalizada y la medición directa de "
+					+ "los ensayos físicos descriptos por Norma bajo condiciones reguladas (I-LAB-018).";
 
 			PdfPCell cellBorder = new PdfPCell();
 			cellBorder.setCellEvent(new RoundRectangle());
@@ -217,7 +218,7 @@ public class InformeBuilder {
 		cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 
 		URL resource = null;
-		if (empresa.equals("nitrophyl")) {
+		if (empresa.equals("NITROPHYL")) {
 			resource = getClass().getClassLoader().getResource("nitro-logo.jpg");
 		} else {
 			resource = getClass().getClassLoader().getResource("elasint-logo.jpg");
@@ -237,7 +238,7 @@ public class InformeBuilder {
 		tabladerecha.addCell(fila);
 
 		fila = getPDFPCell();
-		fila.setPhrase(new Phrase("[01/01/2020]", fontText));
+		fila.setPhrase(new Phrase("05/12/2024", fontText));
 		fila.setBorder(0);
 		tabladerecha.addCell(fila);
 
@@ -279,18 +280,18 @@ public class InformeBuilder {
 		PdfPCell cell = getPDFPCell();
 		cell.setBorder(0);
 
-		URL resource = getClass().getClassLoader().getResource("firma-romina.jpg");
+		URL resource = getClass().getClassLoader().getResource("firmas.jpg");
 		Image firmaRomina = Image.getInstance(new File(resource.toURI()).getAbsolutePath());
-		firmaRomina.setWidthPercentage(50);
+		firmaRomina.setWidthPercentage(100);
 		cell.addElement(firmaRomina);
 		table.addCell(cell);
 
 		cell = getPDFPCell();
 		cell.setBorder(0);
-		resource = getClass().getClassLoader().getResource("firma-graciela.jpg");
-		Image firmagraciela = Image.getInstance(new File(resource.toURI()).getAbsolutePath());
-		firmagraciela.setAlignment(Element.ALIGN_RIGHT);
-		firmagraciela.setWidthPercentage(50);
+//		resource = getClass().getClassLoader().getResource("firma-graciela.jpg");
+//		Image firmagraciela = Image.getInstance(new File(resource.toURI()).getAbsolutePath());
+//		firmagraciela.setAlignment(Element.ALIGN_RIGHT);
+//		firmagraciela.setWidthPercentage(50);
 		table.addCell(cell);
 
 		document.add(table);
@@ -404,42 +405,43 @@ public class InformeBuilder {
 
 			for (EnsayoResultado resultado : resultados) {
 
-				
-				boolean existePrueba = config.getPruebas().stream().filter(x->x.getId() == resultado.getConfiguracionPruebaParametro().getMaquinaPrueba().getId()).findAny().isPresent();
-				
+				boolean existePrueba = config.getPruebas().stream().filter(
+						x -> x.getId() == resultado.getConfiguracionPruebaParametro().getMaquinaPrueba().getId())
+						.findAny().isPresent();
+
 				boolean mostrarPrueba = mostrarTodasLasPruebas || existePrueba;
-				
+
 				if (mostrarPrueba) {
 					boolean ultimo = posPrueba == cantidadPruebas;
 					posPrueba++;
-	
+
 					Double minimo = resultado.getConfiguracionPruebaParametro().getMinimo();
 					Double maximo = resultado.getConfiguracionPruebaParametro().getMaximo();
 					String nombre = resultado.getConfiguracionPruebaParametro().getMaquinaPrueba().getNombre();
 					String norma = resultado.getConfiguracionPruebaParametro().getNorma();
-	
+
 					if (first) {
-	
+
 						cell = getPDFPCell();
-	
+
 						cell.setPhrase(new Phrase(resultado.getConfiguracionPruebaParametro().getMaquinaPrueba()
 								.getMaquina().getNombre().toUpperCase(), fontHeaderTable));
 						tableResultados.addCell(cell);
-	
+
 						cell = getPDFPCell();
 						cell.setPhrase(new Phrase("Nombre", fontHeaderTable));
 						tableResultados.addCell(cell);
-	
+
 						cell = getPDFPCell();
 						cell.setPhrase(new Phrase("Min", fontHeaderTable));
 						cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
 						tableResultados.addCell(cell);
-	
+
 						cell = getPDFPCell();
 						cell.setPhrase(new Phrase("Max", fontHeaderTable));
 						cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
 						tableResultados.addCell(cell);
-	
+
 						if (mostrarResultados) {
 							cell = getPDFPCell();
 							cell.setPhrase(new Phrase("Valor", fontHeaderTable));
@@ -451,12 +453,12 @@ public class InformeBuilder {
 							cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
 							tableResultados.addCell(cell);
 						}
-	
+
 						cell = getPDFPCell();
 						cell.setPhrase(new Phrase("Norma", fontHeaderTable));
 						cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 						tableResultados.addCell(cell);
-	
+
 						cell = getPDFPCell();
 						cell.setRowspan(rowspanpruebas);
 						cell.setPhrase(new Phrase("Ensayo", fontHeaderTable));
@@ -469,10 +471,10 @@ public class InformeBuilder {
 							cell.setBorderWidthBottom(0);
 						}
 						tableResultados.addCell(cell);
-	
+
 						first = false;
 					}
-	
+
 					cell = getPDFPCell();
 					cell.setHorizontalAlignment(Element.ALIGN_LEFT);
 					cell.setPhrase(new Phrase(nombre, fontText));
@@ -480,21 +482,21 @@ public class InformeBuilder {
 						cell.setBorderWidthBottom(0);
 					}
 					tableResultados.addCell(cell);
-	
+
 					cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
 					cell.setPhrase(new Phrase(minimo != null ? String.format("%.2f", minimo) : "", fontText));
 					if (!hayObservaciones && !hayCondiciones && ultimo) {
 						cell.setBorderWidthBottom(0);
 					}
 					tableResultados.addCell(cell);
-	
+
 					cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
 					cell.setPhrase(new Phrase(maximo != null ? String.format("%.2f", maximo) : "", fontText));
 					if (!hayObservaciones && !hayCondiciones && ultimo) {
 						cell.setBorderWidthBottom(0);
 					}
 					tableResultados.addCell(cell);
-	
+
 					if (mostrarResultados) {
 						cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
 						cell.setPhrase(new Phrase(String.format("%.2f", resultado.getRedondeo()), fontText));
@@ -508,14 +510,14 @@ public class InformeBuilder {
 						cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
 						tableResultados.addCell(cell);
 					}
-	
+
 					cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 					cell.setPhrase(new Phrase(norma, fontText));
-	
+
 					if (!hayObservaciones && !hayCondiciones && ultimo) {
 						cell.setBorderWidthBottom(0);
 					}
-	
+
 					tableResultados.addCell(cell);
 				}
 			}
