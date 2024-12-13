@@ -42,8 +42,9 @@ public class ConfiguracionPruebaCondicion extends ar.com.avaco.arc.core.domain.E
 	public ConfiguracionPruebaCondicion() {
 	}
 
-	public ConfiguracionPruebaCondicion(ConfiguracionPrueba configuracionPrueba, String nombre, Double valor) {
+	public ConfiguracionPruebaCondicion(ConfiguracionPrueba configuracionPrueba, String nombre, Double valor, Long id) {
 		super();
+		this.id = id;
 		this.nombre = nombre;
 		this.valor = valor;
 		this.configuracionPrueba = configuracionPrueba;

@@ -49,8 +49,9 @@ public class ConfiguracionPruebaParametro extends ar.com.avaco.arc.core.domain.E
 	}
 
 	public ConfiguracionPruebaParametro(ConfiguracionPrueba configuracionPrueba, MaquinaPrueba maquinaPrueba,
-			Double minimo, Double maximo, String norma) {
+			Double minimo, Double maximo, String norma, Long id) {
 		super();
+		this.id = id;
 		this.minimo = minimo;
 		this.maximo = maximo;
 		this.configuracionPrueba = configuracionPrueba;

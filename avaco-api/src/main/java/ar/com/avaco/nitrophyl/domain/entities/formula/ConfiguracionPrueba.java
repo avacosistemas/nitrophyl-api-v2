@@ -45,7 +45,7 @@ public class ConfiguracionPrueba extends ar.com.avaco.arc.core.domain.Entity<Lon
 	private Date fechaHasta;
 
 	@Column(name = "VIGENTE", nullable = false)
-	private boolean vigente;
+	private Boolean vigente;
 
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
 	@JoinColumn(name = "ID_FORMULA")
@@ -54,7 +54,7 @@ public class ConfiguracionPrueba extends ar.com.avaco.arc.core.domain.Entity<Lon
 	@Column(name = "OBSERVACIONES_REPORTE")
 	private String observacionesReporte;
 
-	@OneToMany(fetch = FetchType.LAZY, orphanRemoval = true, cascade = CascadeType.ALL, mappedBy = "configuracionPrueba")
+	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "configuracionPrueba")
 	private Set<ConfiguracionPruebaParametro> parametros = new HashSet<>();
 
 	@OneToMany(fetch = FetchType.LAZY, orphanRemoval = true, cascade = CascadeType.ALL, mappedBy = "configuracionPrueba")
@@ -132,16 +132,20 @@ public class ConfiguracionPrueba extends ar.com.avaco.arc.core.domain.Entity<Lon
 		this.fechaHasta = fechaHasta;
 	}
 
-	public boolean isVigente() {
+	public Boolean getVigente() {
 		return vigente;
 	}
 
-	public void setVigente(boolean vigente) {
+	public void setVigente(Boolean vigente) {
 		this.vigente = vigente;
+	}
+
+	public static long getSerialversionuid() {
+		return serialVersionUID;
 	}
 
 	public int getPosicion() {
 		return this.maquina.getPosicion();
 	}
-	
+
 }

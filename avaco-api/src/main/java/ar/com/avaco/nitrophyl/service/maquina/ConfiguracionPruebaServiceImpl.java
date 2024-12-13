@@ -55,33 +55,33 @@ public class ConfiguracionPruebaServiceImpl extends
 	public ConfiguracionPrueba update(ConfiguracionPrueba entity) {
 
 		// Obtengo la entidad de la base
-		ConfiguracionPrueba one = this.repository.getOne(entity.getId());
+//		ConfiguracionPrueba one = this.repository.getOne(entity.getId());
+//
+//		one.setObservacionesReporte(entity.getObservacionesReporte());
+//
+//		// Recorro los parametros que recibi para actualizar los existentes
+//		Iterator<ConfiguracionPruebaParametro> iterator = entity.getParametros().iterator();
+//		while (iterator.hasNext()) {
+//			ConfiguracionPruebaParametro next = iterator.next();
+//
+//			Predicate<? super ConfiguracionPruebaParametro> predicate = x -> {
+//				Long idConf1 = x.getConfiguracionPrueba().getId();
+//				Long idConf2 = next.getConfiguracionPrueba().getId();
+//				return idConf1.equals(idConf2);
+//			};
+//
+//			// Busco la prueba para actualizarla
+//			ConfiguracionPruebaParametro configuracionPruebaParametro = one.getParametros().parallelStream()
+//					.filter(predicate).findFirst().get();
+//
+//			// Seteo los valores de maximo, minimo y norma
+//			configuracionPruebaParametro.setMinimo(next.getMinimo());
+//			configuracionPruebaParametro.setMaximo(next.getMaximo());
+//			configuracionPruebaParametro.setNorma(next.getNorma());
+//
+//		}
 
-		one.setObservacionesReporte(entity.getObservacionesReporte());
-
-		// Recorro los parametros que recibi para actualizar los existentes
-		Iterator<ConfiguracionPruebaParametro> iterator = entity.getParametros().iterator();
-		while (iterator.hasNext()) {
-			ConfiguracionPruebaParametro next = iterator.next();
-
-			Predicate<? super ConfiguracionPruebaParametro> predicate = x -> {
-				Long idConf1 = x.getConfiguracionPrueba().getId();
-				Long idConf2 = next.getConfiguracionPrueba().getId();
-				return idConf1.equals(idConf2);
-			};
-
-			// Busco la prueba para actualizarla
-			ConfiguracionPruebaParametro configuracionPruebaParametro = one.getParametros().parallelStream()
-					.filter(predicate).findFirst().get();
-
-			// Seteo los valores de maximo, minimo y norma
-			configuracionPruebaParametro.setMinimo(next.getMinimo());
-			configuracionPruebaParametro.setMaximo(next.getMaximo());
-			configuracionPruebaParametro.setNorma(next.getNorma());
-
-		}
-
-		return super.update(one);
+		return super.update(entity);
 	}
 
 	@Override

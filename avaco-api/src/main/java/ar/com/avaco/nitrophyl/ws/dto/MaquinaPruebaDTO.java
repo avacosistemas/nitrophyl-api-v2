@@ -7,7 +7,7 @@ public class MaquinaPruebaDTO extends DTOEntity<Long> {
 	private Long id;
 	private Long idMaquina;
 	private String nombre;
-	private int posicion;
+	private Integer posicion;
 
 	public Long getId() {
 		return id;
@@ -33,11 +33,11 @@ public class MaquinaPruebaDTO extends DTOEntity<Long> {
 		this.nombre = nombre;
 	}
 
-	public int getPosicion() {
+	public Integer getPosicion() {
 		return posicion;
 	}
 
-	public void setPosicion(int posicion) {
+	public void setPosicion(Integer posicion) {
 		this.posicion = posicion;
 	}
 

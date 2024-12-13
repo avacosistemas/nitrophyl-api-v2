@@ -9,6 +9,7 @@ import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
 
+import ar.com.avaco.commons.exception.BusinessException;
 import ar.com.avaco.nitrophyl.domain.entities.formula.ConfiguracionPrueba;
 import ar.com.avaco.nitrophyl.domain.entities.formula.ConfiguracionPruebaCondicion;
 import ar.com.avaco.nitrophyl.domain.entities.formula.ConfiguracionPruebaParametro;
@@ -39,6 +40,8 @@ public class ConfiguracionPruebaEPServiceImpl
 	protected ConfiguracionPrueba convertToEntity(ConfiguracionPruebaDTO dto) {
 		ConfiguracionPrueba cf = new ConfiguracionPrueba();
 
+		cf.setId(dto.getId());
+		
 		Formula formula = new Formula();
 		formula.setId(dto.getIdFormula());
 		cf.setFormula(formula);
@@ -51,11 +54,11 @@ public class ConfiguracionPruebaEPServiceImpl
 
 		cf.setParametros(new HashSet<>(dto
 				.getParametros().stream().map(x -> new ConfiguracionPruebaParametro(cf,
-						new MaquinaPrueba(x.getMaquinaPrueba().getId()), x.getMinimo(), x.getMaximo(), x.getNorma()))
+						new MaquinaPrueba(x.getMaquinaPrueba().getId()), x.getMinimo(), x.getMaximo(), x.getNorma(), x.getId()))
 				.collect(Collectors.toList())));
 
 		cf.setCondiciones(new HashSet<>(dto.getCondiciones().stream()
-				.map(x -> new ConfiguracionPruebaCondicion(cf, x.getNombre(), x.getValor()))
+				.map(x -> new ConfiguracionPruebaCondicion(cf, x.getNombre(), x.getValor(), x.getId()))
 				.collect(Collectors.toList())));
 		
 		return cf;
@@ -79,7 +82,7 @@ public class ConfiguracionPruebaEPServiceImpl
 		dto.setVersion(entity.getVersion());
 		dto.setFecha(DateUtils.toStringFecha(entity.getFecha()));
 		dto.setFechaHasta(DateUtils.toStringFecha(entity.getFechaHasta()));
-		dto.setVigente(entity.isVigente());
+		dto.setVigente(entity.getVigente());
 		return dto;
 	}
 
@@ -124,6 +127,19 @@ public class ConfiguracionPruebaEPServiceImpl
 	public List<ConfiguracionPruebaDTO> listVigentesByLote(Long idLote) {
 		List<ConfiguracionPrueba> listByLote = this.service.listByLote(idLote);
 		return listByLote.stream().map(x -> convertToDtoSinCondicionParametro(x)).collect(Collectors.toList());
+	}
+	
+	@Override
+	public ConfiguracionPruebaDTO update(ConfiguracionPruebaDTO dto) throws BusinessException {
+		ConfiguracionPrueba current = this.service.get(dto.getId());
+		ConfiguracionPrueba update = convertToEntity(dto);
+		update.setVersion(current.getVersion());
+		update.setFecha(current.getFecha());
+		update.setFechaHasta(current.getFechaHasta());
+		update.setVigente(current.getVigente());
+		update.setMaquina(current.getMaquina());
+		update.setFormula(current.getFormula());
+		return convertToDto(this.service.update(update));
 	}
 	
 }

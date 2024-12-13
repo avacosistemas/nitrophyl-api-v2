@@ -63,5 +63,15 @@ public class ConfiguracionPruebaRestController
 		response.setStatus(JSONResponse.OK);
 		return new ResponseEntity<JSONResponse>(response, HttpStatus.OK);
 	}
+	
+	@RequestMapping(value = "/configuracionPrueba", method = RequestMethod.PUT)
+	public ResponseEntity<JSONResponse> update(@RequestBody ConfiguracionPruebaDTO confPruebaDTO)
+			throws BusinessException {
+		ConfiguracionPruebaDTO saved = this.service.update(confPruebaDTO);
+		JSONResponse response = new JSONResponse();
+		response.setData(saved);
+		response.setStatus(JSONResponse.OK);
+		return new ResponseEntity<JSONResponse>(response, HttpStatus.OK);
+	}
 
 }

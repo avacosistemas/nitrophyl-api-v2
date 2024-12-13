@@ -27,7 +27,7 @@ public class ConfiguracionPruebaDTO extends DTOEntity<Long> {
 
 	private String fechaHasta;
 
-	private boolean vigente;
+	private Boolean vigente;
 
 	public Long getVersion() {
 		return version;
@@ -109,11 +109,11 @@ public class ConfiguracionPruebaDTO extends DTOEntity<Long> {
 		this.fechaHasta = fechaHasta;
 	}
 
-	public boolean isVigente() {
+	public Boolean getVigente() {
 		return vigente;
 	}
 
-	public void setVigente(boolean vigente) {
+	public void setVigente(Boolean vigente) {
 		this.vigente = vigente;
 	}
 
