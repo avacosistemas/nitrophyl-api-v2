@@ -36,6 +36,9 @@ public class Maquina extends ar.com.avaco.arc.core.domain.Entity<Long> {
 	@Column(name = "NOMBRE")
 	private String nombre;
 
+	@Column(name = "NORMA")
+	private String norma;
+
 	@Column(name = "OBSERVACIONES_REPORTE")
 	private String observacionesReporte;
 
@@ -44,7 +47,7 @@ public class Maquina extends ar.com.avaco.arc.core.domain.Entity<Long> {
 	private EstadoMaquina estado;
 
 	@Column(name = "POSICION")
-	private int posicion;
+	private Integer posicion;
 
 	@Column(name = "VERSIONABLE")
 	private boolean versionable;
@@ -92,11 +95,11 @@ public class Maquina extends ar.com.avaco.arc.core.domain.Entity<Long> {
 		this.observacionesReporte = observacionesReporte;
 	}
 
-	public int getPosicion() {
+	public Integer getPosicion() {
 		return posicion;
 	}
 
-	public void setPosicion(int posicion) {
+	public void setPosicion(Integer posicion) {
 		this.posicion = posicion;
 	}
 
@@ -106,6 +109,14 @@ public class Maquina extends ar.com.avaco.arc.core.domain.Entity<Long> {
 
 	public void setVersionable(boolean versionable) {
 		this.versionable = versionable;
+	}
+
+	public String getNorma() {
+		return norma;
+	}
+
+	public void setNorma(String norma) {
+		this.norma = norma;
 	}
 
 }

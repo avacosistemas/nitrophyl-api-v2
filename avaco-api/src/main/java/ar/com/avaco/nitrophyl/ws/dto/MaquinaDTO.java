@@ -10,6 +10,7 @@ public class MaquinaDTO extends DTOEntity<Long> {
 	private String observacionesReporte;
 	private int posicion;
 	private boolean versionable;
+	private String norma;
 
 	public boolean isVersionable() {
 		return versionable;
@@ -57,6 +58,14 @@ public class MaquinaDTO extends DTOEntity<Long> {
 
 	public void setObservacionesReporte(String observacionesReporte) {
 		this.observacionesReporte = observacionesReporte;
+	}
+
+	public String getNorma() {
+		return norma;
+	}
+
+	public void setNorma(String norma) {
+		this.norma = norma;
 	}
 
 }

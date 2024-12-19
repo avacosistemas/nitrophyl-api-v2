@@ -38,7 +38,7 @@ public class MaquinaPrueba extends ar.com.avaco.arc.core.domain.Entity<Long> {
 	@Column(name = "NOMBRE")
 	private String nombre;
 
-	private int posicion;
+	private Integer posicion;
 
 	public MaquinaPrueba() {
 	}
@@ -85,11 +85,11 @@ public class MaquinaPrueba extends ar.com.avaco.arc.core.domain.Entity<Long> {
 		this.idMaquina = idMaquina;
 	}
 
-	public int getPosicion() {
+	public Integer getPosicion() {
 		return posicion;
 	}
 
-	public void setPosicion(int posicion) {
+	public void setPosicion(Integer posicion) {
 		this.posicion = posicion;
 	}
 
