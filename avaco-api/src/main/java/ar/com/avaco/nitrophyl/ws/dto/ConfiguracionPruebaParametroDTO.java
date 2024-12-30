@@ -8,7 +8,7 @@ public class ConfiguracionPruebaParametroDTO {
 	private Double maximo;
 	private String norma;
 
-	public int getOrden() {
+	public Integer getOrden() {
 		return maquinaPrueba.getPosicion();
 	}
 	

@@ -114,7 +114,7 @@ public class Ensayo extends ar.com.avaco.arc.core.domain.Entity<Long> {
 		this.configuracionPrueba = configuracionPrueba;
 	}
 
-	public int getOrden() {
+	public Integer getOrden() {
 		return this.configuracionPrueba.getMaquina().getPosicion();
 	}
 	
