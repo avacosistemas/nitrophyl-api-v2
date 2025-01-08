@@ -97,7 +97,7 @@ public class EnsayoEPServiceImpl extends CRUDEPBaseService<Long, EnsayoDTO, Ensa
 		ensayo.setConfiguracionPrueba(configuracionPrueba);
 
 		// Seteo la fecha
-		ensayo.setFecha(DateUtils.toDate(dto.getFecha(), DateUtils.PATTERN_SOLO_FECHA));
+		ensayo.setFecha(DateUtils.toDate(dto.getFecha(), DateUtils.dd_MM_yyyy));
 
 		// Seteo la fecha
 		ensayo.setEstado(EstadoEnsayo.valueOf(dto.getEstado()));

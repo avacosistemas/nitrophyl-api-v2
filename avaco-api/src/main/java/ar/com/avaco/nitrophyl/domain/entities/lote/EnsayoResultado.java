@@ -1,6 +1,12 @@
 package ar.com.avaco.nitrophyl.domain.entities.lote;
 
+import java.math.BigInteger;
+import java.sql.Timestamp;
+import java.util.Date;
+
 import javax.persistence.Column;
+import javax.persistence.ColumnResult;
+import javax.persistence.ConstructorResult;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -8,13 +14,35 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
+import javax.persistence.SqlResultSetMapping;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
-import ar.com.avaco.nitrophyl.domain.entities.formula.ConfiguracionPrueba;
 import ar.com.avaco.nitrophyl.domain.entities.formula.ConfiguracionPruebaParametro;
+import ar.com.avaco.nitrophyl.ws.dto.RegistroEnsayoLotePorMaquinaDTO;
+
+@SqlResultSetMapping(name="RegistroEnsayoLotePorMaquinaDTOMapper",
+classes = {
+    @ConstructorResult(
+            targetClass = RegistroEnsayoLotePorMaquinaDTO.class,
+            columns = {
+        		@ColumnResult(name = "row", type = Integer.class),
+        		@ColumnResult(name = "rows", type = Integer.class),
+                @ColumnResult(name = "idLote", type = Integer.class),
+                @ColumnResult(name = "nroLote", type = String.class),
+                @ColumnResult(name = "fecha", type = Date.class),
+                @ColumnResult(name = "observaciones", type = String.class),
+                @ColumnResult(name = "idFormula", type = Integer.class),
+                @ColumnResult(name = "nombreFormula", type = String.class),
+                @ColumnResult(name = "idMaquinaPrueba", type = Integer.class),
+                @ColumnResult(name = "redondeo", type = Double.class),
+                @ColumnResult(name = "resultado", type = Double.class),
+                @ColumnResult(name = "estadoEnsayo", type = String.class),
+        		@ColumnResult(name = "estadoLote", type = String.class)
+            })
+})
 
 @Entity
 @Table(name = "ENSAYO_RESULTADO")

@@ -7,6 +7,8 @@ import java.util.List;
 import ar.com.avaco.arc.core.domain.filter.AbstractFilter;
 import ar.com.avaco.commons.exception.BusinessException;
 import ar.com.avaco.nitrophyl.ws.dto.PageDTO;
+import ar.com.avaco.nitrophyl.ws.dto.ReporteEnsayoLotePorMaquinaDTO;
+import ar.com.avaco.nitrophyl.ws.dto.ReporteEnsayoLotePorMaquinaFilterDTO;
 import ar.com.avaco.ws.rest.dto.DTOEntity;
 
 public interface CRUDEPService<ID extends Serializable, DTO extends DTOEntity<ID>> {

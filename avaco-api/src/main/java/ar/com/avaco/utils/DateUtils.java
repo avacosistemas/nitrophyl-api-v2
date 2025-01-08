@@ -14,22 +14,22 @@ public class DateUtils {
 	/**
 	 * dd/MM/yyyy
 	 */
-	public final static String PATTERN_SOLO_FECHA = "dd/MM/yyyy";
+	public final static String dd_MM_yyyy = "dd/MM/yyyy";
 
 	/**
 	 * yyyyMMdd
 	 */
-	public final static String PATTERN_yyyyMMdd = "yyyyMMdd";
+	public final static String yyyyMMdd = "yyyyMMdd";
 
 	/**
 	 * dd/MM/yy HH:mm
 	 */
-	public final static String PATTERN_FULL_24_HS = "dd/MM/yy HH:mm";
+	public final static String dd_MM_yy_HH_mm = "dd/MM/yy HH:mm";
 
 	/**
 	 * dd/MM/yyyy HH:mm:ss
 	 */
-	public final static String PATTERN_FULL_24_HS_CON_SEGUNDOS = "dd/MM/yyyy HH:mm:ss";
+	public final static String dd_MM_yyyy_HH_mm_ss = "dd/MM/yyyy HH:mm:ss";
 
 	public static Date toDate(LocalDate date) {
 		return Date.from(date.atStartOfDay(ZoneId.systemDefault()).toInstant());
@@ -57,7 +57,7 @@ public class DateUtils {
 	}
 
 	public static Date toDate(String dia) throws ParseException {
-		return toDate(dia, PATTERN_yyyyMMdd);
+		return toDate(dia, yyyyMMdd);
 	}
 
 	/**
@@ -67,7 +67,7 @@ public class DateUtils {
 	 * @return
 	 */
 	public static String toStringFecha(Date fecha) {
-		return toString(fecha, PATTERN_SOLO_FECHA);
+		return toString(fecha, dd_MM_yyyy);
 	}
 
 	/**
@@ -77,11 +77,11 @@ public class DateUtils {
 	 * @return
 	 */
 	public static String toStringFechaHora(Date fecha) {
-		return toString(fecha, PATTERN_FULL_24_HS);
+		return toString(fecha, dd_MM_yy_HH_mm);
 	}
 
 	public static String toStringFechaHoraSinSegundos(Date fecha) {
-		return toString(fecha, PATTERN_FULL_24_HS);
+		return toString(fecha, dd_MM_yy_HH_mm);
 	}
 
 	public static String toString(Date fecha, String pattern) {
@@ -95,7 +95,7 @@ public class DateUtils {
 
 	public static String toString(LocalDate fecha) {
 		SimpleDateFormat dateFormat = (SimpleDateFormat) DateFormat.getInstance();
-		dateFormat.applyPattern(PATTERN_yyyyMMdd);
+		dateFormat.applyPattern(yyyyMMdd);
 		return dateFormat.format(fecha);
 	}
 

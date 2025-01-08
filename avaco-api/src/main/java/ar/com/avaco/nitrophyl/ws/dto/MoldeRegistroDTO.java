@@ -23,7 +23,7 @@ public class MoldeRegistroDTO extends DTOEntity<Long> {
 		super();
 		this.id = mr.getId();
 		this.idMolde = mr.getIdMolde();
-		this.fechaHora = DateUtils.toString(mr.getFecha(), DateUtils.PATTERN_FULL_24_HS);
+		this.fechaHora = DateUtils.toString(mr.getFecha(), DateUtils.dd_MM_yy_HH_mm);
 		this.tipo = mr.getTipoRegistro().toString();
 		this.comentarios = mr.getComentarios();
 	}

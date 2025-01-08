@@ -298,7 +298,7 @@ public class InformeBuilder {
 	}
 
 	private Element addDatosLotes(Lote lote) throws DocumentException {
-		String fecha = DateUtils.toString(lote.getFecha(), DateUtils.PATTERN_SOLO_FECHA);
+		String fecha = DateUtils.toString(lote.getFecha(), DateUtils.dd_MM_yyyy);
 		String material = lote.getFormula().getMaterial().getNombre();
 		String formula = lote.getFormula().getNombre();
 		String norma = lote.getFormula().getNorma();

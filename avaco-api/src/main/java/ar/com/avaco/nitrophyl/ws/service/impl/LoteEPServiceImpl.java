@@ -2,7 +2,10 @@ package ar.com.avaco.nitrophyl.ws.service.impl;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 
@@ -22,6 +25,11 @@ import ar.com.avaco.nitrophyl.service.lote.LoteService;
 import ar.com.avaco.nitrophyl.service.reporte.ReporteLoteConfiguracionClienteService;
 import ar.com.avaco.nitrophyl.ws.dto.ArchivoDTO;
 import ar.com.avaco.nitrophyl.ws.dto.LoteDTO;
+import ar.com.avaco.nitrophyl.ws.dto.PageDTO;
+import ar.com.avaco.nitrophyl.ws.dto.RegistroEnsayoLotePorMaquinaDTO;
+import ar.com.avaco.nitrophyl.ws.dto.ReporteEnsayoLotePorMaquinaDTO;
+import ar.com.avaco.nitrophyl.ws.dto.ReporteEnsayoLotePorMaquinaFilterDTO;
+import ar.com.avaco.nitrophyl.ws.dto.ReporteResultadoEnsayoDTO;
 import ar.com.avaco.nitrophyl.ws.service.LoteEPService;
 import ar.com.avaco.utils.DateUtils;
 import ar.com.avaco.ws.rest.informe.InformeBuilder;
@@ -35,7 +43,7 @@ public class LoteEPServiceImpl extends CRUDEPBaseService<Long, LoteDTO, Lote, Lo
 	private ClienteService clienteService;
 
 	private FormulaService formulaService;
-	
+
 	@Resource(name = "reporteLoteConfiguracionClienteService")
 
 	public void setReporteLoteConfigClienteService(
@@ -57,7 +65,7 @@ public class LoteEPServiceImpl extends CRUDEPBaseService<Long, LoteDTO, Lote, Lo
 	@Override
 	public LoteDTO update(LoteDTO dto) throws BusinessException {
 		Lote update = this.service.get(dto.getId());
-		update.setFecha(DateUtils.toDate(dto.getFecha(), DateUtils.PATTERN_SOLO_FECHA));
+		update.setFecha(DateUtils.toDate(dto.getFecha(), DateUtils.dd_MM_yyyy));
 		if (dto.getIdFormula() != update.getFormula().getId()) {
 			if (this.service.hasEnsayos(dto.getId())) {
 				throw new BusinessException("No puede cambiarse la fórmula del lote porque tiene ensayos asociados");
@@ -84,12 +92,12 @@ public class LoteEPServiceImpl extends CRUDEPBaseService<Long, LoteDTO, Lote, Lo
 		formula.setId(dto.getIdFormula());
 		lote.setId(dto.getId());
 		lote.setFormula(formula);
-		lote.setFecha(DateUtils.toDate(dto.getFecha(), DateUtils.PATTERN_SOLO_FECHA));
+		lote.setFecha(DateUtils.toDate(dto.getFecha(), DateUtils.dd_MM_yyyy));
 		lote.setObservaciones(dto.getObservaciones());
 		lote.setNroLote(dto.getNroLote());
 		lote.setEstado(EstadoLote.valueOf(dto.getEstado()));
 		if (StringUtils.isNotBlank(dto.getFechaEstado())) {
-			lote.setFechaEstado(DateUtils.toDate(dto.getFechaEstado(), DateUtils.PATTERN_SOLO_FECHA));
+			lote.setFechaEstado(DateUtils.toDate(dto.getFechaEstado(), DateUtils.dd_MM_yyyy));
 		}
 		lote.setObservacionesEstado(dto.getObservacionesEstado());
 		return lote;
@@ -141,11 +149,70 @@ public class LoteEPServiceImpl extends CRUDEPBaseService<Long, LoteDTO, Lote, Lo
 
 	}
 
+	@Override
+	public PageDTO<ReporteEnsayoLotePorMaquinaDTO> generarReporteEnsayoLotePorMaquina(
+			ReporteEnsayoLotePorMaquinaFilterDTO filtro) {
+
+		List<RegistroEnsayoLotePorMaquinaDTO> registrosEnsayosLotePorMaquina = this.service.getRegistrosEnsayosLotePorMaquina(filtro);
+
+		Map<String, ReporteEnsayoLotePorMaquinaDTO> map = new HashMap<String, ReporteEnsayoLotePorMaquinaDTO>();
+
+		for (RegistroEnsayoLotePorMaquinaDTO dto : registrosEnsayosLotePorMaquina) {
+			ReporteEnsayoLotePorMaquinaDTO reporteEnsayoLotePorMaquinaDTO = map.get(dto.getNroLote());
+			if (reporteEnsayoLotePorMaquinaDTO == null) {
+				reporteEnsayoLotePorMaquinaDTO = crearReporteEnsayoLotePorMaquinaDTO(dto);
+			} else {
+				reporteEnsayoLotePorMaquinaDTO = agregarEnsayoReporteEnsayoLotePorMaquinaDTO(dto,
+						reporteEnsayoLotePorMaquinaDTO);
+			}
+			map.put(dto.getNroLote(), reporteEnsayoLotePorMaquinaDTO);
+		}
+
+		PageDTO<ReporteEnsayoLotePorMaquinaDTO> page = new PageDTO<ReporteEnsayoLotePorMaquinaDTO>();
+		page.setPage(new ArrayList<ReporteEnsayoLotePorMaquinaDTO>(map.values()));
+		page.setTotalReg(0);
+		if (!registrosEnsayosLotePorMaquina.isEmpty())
+			page.setTotalReg(registrosEnsayosLotePorMaquina.get(0).getRows());
+		
+		return page;
+
+	}
+
+	private ReporteEnsayoLotePorMaquinaDTO crearReporteEnsayoLotePorMaquinaDTO(RegistroEnsayoLotePorMaquinaDTO dto) {
+		ReporteEnsayoLotePorMaquinaDTO ret = new ReporteEnsayoLotePorMaquinaDTO();
+		ret.setId(dto.getRow());
+		ret.setFecha(DateUtils.toString(dto.getFecha(), DateUtils.dd_MM_yyyy));
+		ret.setIdFormula(dto.getIdFormula());
+		ret.setIdLote(dto.getIdLote());
+		ret.setNombreFormula(dto.getNombreFormula());
+		ret.setNroLote(dto.getNroLote());
+		ret.setObservaciones(dto.getObservaciones());
+		ret.setEstadoLote(dto.getEstadoLote());
+		agregarEnsayoReporteEnsayoLotePorMaquinaDTO(dto, ret);
+		return ret;
+	}
+
+	private ReporteEnsayoLotePorMaquinaDTO agregarEnsayoReporteEnsayoLotePorMaquinaDTO(
+			RegistroEnsayoLotePorMaquinaDTO dto, ReporteEnsayoLotePorMaquinaDTO reporteEnsayoLotePorMaquinaDTO) {
+		ReporteResultadoEnsayoDTO resultado = new ReporteResultadoEnsayoDTO();
+		resultado.setEstadoEnsayo(dto.getEstadoEnsayo());
+		resultado.setIdMaquinaPrueba(dto.getIdMaquinaPrueba());
+		resultado.setRedondeo(dto.getRedondeo());
+		resultado.setResultado(dto.getResultado());
+		reporteEnsayoLotePorMaquinaDTO.getResultados().add(resultado);
+		return reporteEnsayoLotePorMaquinaDTO;
+	}
+
 	public void borrar(Long idLote) throws BusinessException {
 		if (this.service.hasEnsayos(idLote))
 			throw new BusinessException("No se puede borrar el lote porque tiene ensayos asociados");
 		this.service.borrar(idLote);
 
+	}
+
+	@Override
+	public void revisiones() {
+		this.service.revisiones();
 	}
 
 	@Override
@@ -164,9 +231,4 @@ public class LoteEPServiceImpl extends CRUDEPBaseService<Long, LoteDTO, Lote, Lo
 		this.formulaService = formulaService;
 	}
 
-	@Override
-	public void revisiones() {
-		this.service.revisiones();
-	}
-	
 }

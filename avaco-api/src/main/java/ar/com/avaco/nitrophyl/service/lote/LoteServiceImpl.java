@@ -17,6 +17,8 @@ import ar.com.avaco.nitrophyl.domain.entities.lote.Lote;
 import ar.com.avaco.nitrophyl.repository.lote.EnsayoRepository;
 import ar.com.avaco.nitrophyl.repository.lote.LoteRepository;
 import ar.com.avaco.nitrophyl.service.formula.FormulaService;
+import ar.com.avaco.nitrophyl.ws.dto.RegistroEnsayoLotePorMaquinaDTO;
+import ar.com.avaco.nitrophyl.ws.dto.ReporteEnsayoLotePorMaquinaFilterDTO;
 import ar.com.avaco.utils.DateUtils;
 
 @Transactional
@@ -58,8 +60,12 @@ public class LoteServiceImpl extends NJBaseService<Long, Lote, LoteRepository> i
 	}
 
 	public Lote getLoteCompleto(Long idLote) {
-		Lote one = this.repository.findOne(idLote);
-		return one;
+		return this.repository.findOne(idLote);
+	}
+	
+	@Override
+	public List<RegistroEnsayoLotePorMaquinaDTO> getRegistrosEnsayosLotePorMaquina(ReporteEnsayoLotePorMaquinaFilterDTO filtro) {
+		return this.repository.getEnsayosLotePorMaquina(filtro);
 	}
 	
 	@Resource(name = "ensayoRepository")
