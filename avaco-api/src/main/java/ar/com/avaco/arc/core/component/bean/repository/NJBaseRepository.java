@@ -125,23 +125,25 @@ public class NJBaseRepository<ID extends Serializable, E extends ar.com.avaco.ar
 
 	protected void applyFilters(Criteria criteria, AbstractFilter abstractFilter) {
 
-		for (List<FilterData> fdl : abstractFilter.getOrFilterDatas()) {
-			Disjunction or = Restrictions.disjunction();
-			for (FilterData ofd : fdl) {
-				criteria = containsAlias(criteria, ofd.getProperty());
-				or.add(createCriterion(ofd));
+		if (abstractFilter != null) {
+
+			for (List<FilterData> fdl : abstractFilter.getOrFilterDatas()) {
+				Disjunction or = Restrictions.disjunction();
+				for (FilterData ofd : fdl) {
+					criteria = containsAlias(criteria, ofd.getProperty());
+					or.add(createCriterion(ofd));
+				}
+				criteria.add(or);
 			}
-			criteria.add(or);
+
+			List<FilterData> filters = abstractFilter.getFilterDatas();
+
+			for (FilterData data : filters) {
+				criteria = containsAlias(criteria, data.getProperty());
+				Criterion criterion = createCriterion(data);
+				criteria.add(criterion);
+			}
 		}
-
-		List<FilterData> filters = abstractFilter.getFilterDatas();
-
-		for (FilterData data : filters) {
-			criteria = containsAlias(criteria, data.getProperty());
-			Criterion criterion = createCriterion(data);
-			criteria.add(criterion);
-		}
-
 	}
 
 	private Criterion createCriterion(FilterData data) {

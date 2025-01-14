@@ -1,8 +1,13 @@
 package ar.com.avaco.nitrophyl.ws.dto;
 
 import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.collections.ComparatorUtils;
+
+import ar.com.avaco.utils.DateUtils;
 import ar.com.avaco.ws.rest.dto.DTOEntity;
 
 public class ReporteEnsayoLotePorMaquinaDTO extends DTOEntity<Long> {
@@ -107,4 +112,105 @@ public class ReporteEnsayoLotePorMaquinaDTO extends DTOEntity<Long> {
 		this.estadoLote = estadoLote;
 	}
 
+	public static Comparator<ReporteEnsayoLotePorMaquinaDTO> getComparator(String campo, Boolean asc) {
+
+		Comparator<ReporteEnsayoLotePorMaquinaDTO> cp = null;
+
+		switch (campo) {
+		case "lo.fecha":
+			if (asc)
+				cp = getFechaComparatorAsc();
+			else
+				cp = getFechaComparatorDesc();
+			break;
+		case "f.nombre":
+			if (asc)
+				cp = getFormulaComparatorAsc();
+			else
+				cp = getFormulaComparatorDesc();
+			break;
+		case "lo.nro_lote":
+			if (asc)
+				cp = getNroLoteComparatorAsc();
+			else
+				cp = getNroLoteComparatorDesc();
+			break;
+		default:
+			cp = getFechaComparatorDesc();
+			break;
+		}
+		return cp;
+	}
+
+	private static Comparator<ReporteEnsayoLotePorMaquinaDTO> getFechaComparatorAsc() {
+		return new Comparator<ReporteEnsayoLotePorMaquinaDTO>() {
+			@Override
+			public int compare(ReporteEnsayoLotePorMaquinaDTO o1, ReporteEnsayoLotePorMaquinaDTO o2) {
+				Date f1 = DateUtils.toDate(o1.getFecha(), DateUtils.dd_MM_yyyy);
+				Date f2 = DateUtils.toDate(o2.getFecha(), DateUtils.dd_MM_yyyy);
+				return f1.compareTo(f2);
+			}
+		};
+	}
+
+	private static Comparator<ReporteEnsayoLotePorMaquinaDTO> getFechaComparatorDesc() {
+		return new Comparator<ReporteEnsayoLotePorMaquinaDTO>() {
+			@Override
+			public int compare(ReporteEnsayoLotePorMaquinaDTO o1, ReporteEnsayoLotePorMaquinaDTO o2) {
+				Date f1 = DateUtils.toDate(o1.getFecha(), DateUtils.dd_MM_yyyy);
+				Date f2 = DateUtils.toDate(o2.getFecha(), DateUtils.dd_MM_yyyy);
+				return f2.compareTo(f1);
+			}
+		};
+	}
+
+	private static Comparator<ReporteEnsayoLotePorMaquinaDTO> getNroLoteComparatorAsc() {
+		return new Comparator<ReporteEnsayoLotePorMaquinaDTO>() {
+			@Override
+			public int compare(ReporteEnsayoLotePorMaquinaDTO o1, ReporteEnsayoLotePorMaquinaDTO o2) {
+				int letraComparacion = Character.compare(o1.getNroLote().charAt(0), o2.getNroLote().charAt(0));
+				if (letraComparacion != 0) {
+					return letraComparacion;
+				}
+				// Comparar por los números (convertidos a enteros)
+				int num1 = Integer.parseInt(o1.getNroLote().substring(1));
+				int num2 = Integer.parseInt(o2.getNroLote().substring(1));
+				return Integer.compare(num1, num2);
+			}
+		};
+	}
+
+	private static Comparator<ReporteEnsayoLotePorMaquinaDTO> getNroLoteComparatorDesc() {
+		return new Comparator<ReporteEnsayoLotePorMaquinaDTO>() {
+			@Override
+			public int compare(ReporteEnsayoLotePorMaquinaDTO o1, ReporteEnsayoLotePorMaquinaDTO o2) {
+				int letraComparacion = Character.compare(o2.getNroLote().charAt(0), o1.getNroLote().charAt(0));
+				if (letraComparacion != 0) {
+					return letraComparacion;
+				}
+				// Comparar por los números (convertidos a enteros)
+				int num1 = Integer.parseInt(o1.getNroLote().substring(1));
+				int num2 = Integer.parseInt(o2.getNroLote().substring(1));
+				return Integer.compare(num2, num1);
+			}
+		};
+	}
+
+	private static Comparator<ReporteEnsayoLotePorMaquinaDTO> getFormulaComparatorAsc() {
+		return new Comparator<ReporteEnsayoLotePorMaquinaDTO>() {
+			@Override
+			public int compare(ReporteEnsayoLotePorMaquinaDTO o1, ReporteEnsayoLotePorMaquinaDTO o2) {
+				return o1.getNombreFormula().compareTo(o2.getNombreFormula());
+			}
+		};
+	}
+
+	private static Comparator<ReporteEnsayoLotePorMaquinaDTO> getFormulaComparatorDesc() {
+		return new Comparator<ReporteEnsayoLotePorMaquinaDTO>() {
+			@Override
+			public int compare(ReporteEnsayoLotePorMaquinaDTO o1, ReporteEnsayoLotePorMaquinaDTO o2) {
+				return o2.getNombreFormula().compareTo(o1.getNombreFormula());
+			}
+		};
+	}
 }

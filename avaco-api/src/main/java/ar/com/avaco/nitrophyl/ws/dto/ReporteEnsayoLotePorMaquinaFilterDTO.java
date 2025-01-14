@@ -1,12 +1,14 @@
 package ar.com.avaco.nitrophyl.ws.dto;
 
+import java.util.Date;
+
 public class ReporteEnsayoLotePorMaquinaFilterDTO extends SortPageDTO {
 
 	public Long idMaquina;
 
-	public String fechaDesde;
+	public Date fechaDesde;
 
-	public String fechaHasta;
+	public Date fechaHasta;
 
 	public Long idFormula;
 
@@ -22,19 +24,19 @@ public class ReporteEnsayoLotePorMaquinaFilterDTO extends SortPageDTO {
 		this.estadoLote = estadoLote;
 	}
 
-	public String getFechaDesde() {
+	public Date getFechaDesde() {
 		return fechaDesde;
 	}
 
-	public void setFechaDesde(String fechaDesde) {
+	public void setFechaDesde(Date fechaDesde) {
 		this.fechaDesde = fechaDesde;
 	}
 
-	public String getFechaHasta() {
+	public Date getFechaHasta() {
 		return fechaHasta;
 	}
 
-	public void setFechaHasta(String fechaHasta) {
+	public void setFechaHasta(Date fechaHasta) {
 		this.fechaHasta = fechaHasta;
 	}
 

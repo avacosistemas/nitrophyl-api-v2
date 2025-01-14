@@ -3,6 +3,8 @@ package ar.com.avaco.nitrophyl.ws.service.impl;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -24,6 +26,7 @@ import ar.com.avaco.nitrophyl.service.formula.FormulaService;
 import ar.com.avaco.nitrophyl.service.lote.LoteService;
 import ar.com.avaco.nitrophyl.service.reporte.ReporteLoteConfiguracionClienteService;
 import ar.com.avaco.nitrophyl.ws.dto.ArchivoDTO;
+import ar.com.avaco.nitrophyl.ws.dto.ConfiguracionPruebaParametroDTO;
 import ar.com.avaco.nitrophyl.ws.dto.LoteDTO;
 import ar.com.avaco.nitrophyl.ws.dto.PageDTO;
 import ar.com.avaco.nitrophyl.ws.dto.RegistroEnsayoLotePorMaquinaDTO;
@@ -169,7 +172,11 @@ public class LoteEPServiceImpl extends CRUDEPBaseService<Long, LoteDTO, Lote, Lo
 		}
 
 		PageDTO<ReporteEnsayoLotePorMaquinaDTO> page = new PageDTO<ReporteEnsayoLotePorMaquinaDTO>();
-		page.setPage(new ArrayList<ReporteEnsayoLotePorMaquinaDTO>(map.values()));
+		List<ReporteEnsayoLotePorMaquinaDTO> values = new ArrayList(map.values());
+
+		values.sort(ReporteEnsayoLotePorMaquinaDTO.getComparator(filtro.getIdx(), filtro.getAsc()));
+		
+		page.setPage(new ArrayList<ReporteEnsayoLotePorMaquinaDTO>(values));
 		page.setTotalReg(0);
 		if (!registrosEnsayosLotePorMaquina.isEmpty())
 			page.setTotalReg(registrosEnsayosLotePorMaquina.get(0).getRows());
