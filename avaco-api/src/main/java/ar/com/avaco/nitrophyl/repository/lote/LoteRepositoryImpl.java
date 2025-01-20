@@ -1,5 +1,6 @@
 package ar.com.avaco.nitrophyl.repository.lote;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -107,42 +108,37 @@ public class LoteRepositoryImpl extends NJBaseRepository<Long, Lote> implements 
 
 		Integer listCount = this.listCount(lf);
 
-		String query = "select 	CAST(row_number() over() as integer) as row, CAST(:rows as integer) AS rows, CAST(lo.id_lote as Integer) as idLote "
-				+ " , lo.nro_lote as nroLote " + " , lo.fecha as fecha " + " , lo.observaciones as observaciones "
-				+ " , f.id_formula as idFormula " + " , f.nombre as nombreFormula "
-				+ " , cpp.id_maquina_prueba as idMaquinaPrueba " + " , er.redondeo" + " , er.resultado " + " , case "
-				+ "		when er.redondeo <> er.resultado then 'APROBADO_OBSERVADO'"
-				+ "		when cpp.valor_minimo is null and cpp.valor_maximo is null	then 'APROBADO'"
-				+ "		when cpp.valor_minimo is not null and cpp.valor_maximo is not null and cpp.valor_minimo <= er.redondeo and valor_maximo >= er.redondeo then 'APROBADO'"
-				+ "		when cpp.valor_minimo is null and cpp.valor_maximo is not null and cpp.valor_maximo >= er.redondeo then 'APROBADO'"
-				+ "		when cpp.valor_minimo is not null and cpp.valor_maximo is null and cpp.valor_minimo <= er.redondeo then 'APROBADO' else 'RECHAZADO'"
-				+ "	end estadoEnsayo, lo.estado as estadoLote from ensayo_resultado er "
-				+ " left join ensayo e on e.id_ensayo = er.id_ensayo "
-				+ " left join conf_prueba cp on cp.id_conf_prueba = e.id_conf_prueba "
-				+ " left join conf_prueba_param cpp ON cpp.id_conf_prueba_param = er.id_conf_prueba_param "
-				+ " left join lote lo on lo.id_lote = e.id_lote "
-				+ " left join formula_rev_param frp on frp.id_rev_param = lo.id_revision_parametros "
-				+ " left join formula f on f.id_formula = lo.id_formula " + " where lo.id_lote in (:lotesIds) ";
-
-//		if (StringUtils.isNotBlank(filtro.getIdx())) {
-//			query += " order by " + filtro.getIdx();
-//			if (filtro.getAsc() != null && filtro.getAsc().booleanValue()) {
-//				query += " asc ";
-//			} else {
-//				query += " desc ";
-//			}
-//		} else {
-//			query += " order by lo.fecha desc ";
-//		}
-
-		SQLQuery createSQLQuery = getCurrentSession().createSQLQuery(query)
-				.setResultSetMapping("RegistroEnsayoLotePorMaquinaDTOMapper");
-
-		createSQLQuery.setParameterList("lotesIds", ids);
-		createSQLQuery.setString("rows", listCount.toString());
-
 		@SuppressWarnings("unchecked")
-		List<RegistroEnsayoLotePorMaquinaDTO> list = createSQLQuery.list();
+		List<RegistroEnsayoLotePorMaquinaDTO> list = new ArrayList<RegistroEnsayoLotePorMaquinaDTO>();
+
+		if (ids != null && !ids.isEmpty()) {
+
+			String query = "select 	CAST(row_number() over() as integer) as row, CAST(:rows as integer) AS rows, CAST(lo.id_lote as Integer) as idLote "
+					+ " , lo.nro_lote as nroLote " + " , lo.fecha as fecha " + " , lo.observaciones as observaciones "
+					+ " , f.id_formula as idFormula " + " , f.nombre as nombreFormula "
+					+ " , cpp.id_maquina_prueba as idMaquinaPrueba " + " , er.redondeo" + " , er.resultado "
+					+ " , case " + "		when er.redondeo <> er.resultado then 'APROBADO_OBSERVADO'"
+					+ "		when cpp.valor_minimo is null and cpp.valor_maximo is null	then 'APROBADO'"
+					+ "		when cpp.valor_minimo is not null and cpp.valor_maximo is not null and cpp.valor_minimo <= er.redondeo and valor_maximo >= er.redondeo then 'APROBADO'"
+					+ "		when cpp.valor_minimo is null and cpp.valor_maximo is not null and cpp.valor_maximo >= er.redondeo then 'APROBADO'"
+					+ "		when cpp.valor_minimo is not null and cpp.valor_maximo is null and cpp.valor_minimo <= er.redondeo then 'APROBADO' else 'RECHAZADO'"
+					+ "	end estadoEnsayo, lo.estado as estadoLote from ensayo_resultado er "
+					+ " left join ensayo e on e.id_ensayo = er.id_ensayo "
+					+ " left join conf_prueba cp on cp.id_conf_prueba = e.id_conf_prueba "
+					+ " left join conf_prueba_param cpp ON cpp.id_conf_prueba_param = er.id_conf_prueba_param "
+					+ " left join lote lo on lo.id_lote = e.id_lote "
+					+ " left join formula_rev_param frp on frp.id_rev_param = lo.id_revision_parametros "
+					+ " left join formula f on f.id_formula = lo.id_formula " + " where lo.id_lote in (:lotesIds) ";
+
+			SQLQuery createSQLQuery = getCurrentSession().createSQLQuery(query)
+					.setResultSetMapping("RegistroEnsayoLotePorMaquinaDTOMapper");
+
+			createSQLQuery.setParameterList("lotesIds", ids);
+			createSQLQuery.setString("rows", listCount.toString());
+
+			list = createSQLQuery.list();
+
+		}
 
 		return list;
 	}
