@@ -3,6 +3,7 @@ package ar.com.avaco.nitrophyl.service.cliente;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 
 import javax.annotation.Resource;
@@ -18,6 +19,7 @@ import ar.com.avaco.commons.exception.BusinessException;
 import ar.com.avaco.commons.exception.ErrorValidationException;
 import ar.com.avaco.nitrophyl.domain.entities.cliente.Cliente;
 import ar.com.avaco.nitrophyl.domain.entities.cliente.Contacto;
+import ar.com.avaco.nitrophyl.domain.entities.cliente.TipoContacto;
 import ar.com.avaco.nitrophyl.repository.cliente.ClienteRepository;
 import ar.com.avaco.nitrophyl.repository.cliente.ContactoRepository;
 
@@ -182,6 +184,15 @@ public class ClienteServiceImpl extends NJBaseService<Long, Cliente, ClienteRepo
 	@Override
 	public List<Cliente> getByIds(List<Long> ids) {
 		return this.repository.findByIdIn(ids);
+	}
+
+	@Override
+	public String getCorreoInformes(Long idCliente) {
+		Optional<Contacto> findFirst = this.getContactosByCliente(idCliente).stream().filter(x->x.getTipo().equals(TipoContacto.INFORMES)).findFirst();
+		if (findFirst.isPresent()) {
+			return findFirst.get().getEmail();
+		}
+		return null;
 	}
 
 	/*

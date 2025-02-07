@@ -28,11 +28,9 @@ public class RegistroEnsayoLotePorMaquinaDTO {
 
 	private String estadoEnsayo;
 
-	private String estadoLote;
-
 	public RegistroEnsayoLotePorMaquinaDTO(Integer row, Integer rows, Integer idLote, String nroLote, Date fecha,
 			String observaciones, Integer idFormula, String nombreFormula, Integer idMaquinaPrueba, Double redondeo,
-			Double resultado, String estadoEnsayo, String estadoLote) {
+			Double resultado, String estadoEnsayo) {
 		super();
 		this.row = row.longValue();
 		this.rows = rows.longValue();
@@ -46,7 +44,6 @@ public class RegistroEnsayoLotePorMaquinaDTO {
 		this.redondeo = redondeo;
 		this.resultado = resultado;
 		this.estadoEnsayo = estadoEnsayo;
-		this.estadoLote = estadoLote;
 	}
 
 	public Long getIdLote() {
@@ -143,14 +140,6 @@ public class RegistroEnsayoLotePorMaquinaDTO {
 
 	public void setRow(Long row) {
 		this.row = row;
-	}
-
-	public String getEstadoLote() {
-		return estadoLote;
-	}
-
-	public void setEstadoLote(String estadoLote) {
-		this.estadoLote = estadoLote;
 	}
 
 }

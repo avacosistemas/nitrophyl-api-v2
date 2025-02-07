@@ -8,8 +8,6 @@ public class ReporteResultadoEnsayoDTO {
 
 	private Double resultado;
 
-	private String estadoEnsayo;
-
 	public Long getIdMaquinaPrueba() {
 		return idMaquinaPrueba;
 	}
@@ -32,14 +30,6 @@ public class ReporteResultadoEnsayoDTO {
 
 	public void setResultado(Double resultado) {
 		this.resultado = resultado;
-	}
-
-	public String getEstadoEnsayo() {
-		return estadoEnsayo;
-	}
-
-	public void setEstadoEnsayo(String estadoEnsayo) {
-		this.estadoEnsayo = estadoEnsayo;
 	}
 
 }

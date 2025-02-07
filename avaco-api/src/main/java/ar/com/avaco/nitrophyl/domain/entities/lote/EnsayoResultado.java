@@ -1,7 +1,5 @@
 package ar.com.avaco.nitrophyl.domain.entities.lote;
 
-import java.math.BigInteger;
-import java.sql.Timestamp;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -39,8 +37,7 @@ classes = {
                 @ColumnResult(name = "idMaquinaPrueba", type = Integer.class),
                 @ColumnResult(name = "redondeo", type = Double.class),
                 @ColumnResult(name = "resultado", type = Double.class),
-                @ColumnResult(name = "estadoEnsayo", type = String.class),
-        		@ColumnResult(name = "estadoLote", type = String.class)
+                @ColumnResult(name = "estadoEnsayo", type = String.class)
             })
 })
 

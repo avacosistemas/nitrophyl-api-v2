@@ -69,8 +69,8 @@ public class InformeBuilder {
 
 			ByteArrayOutputStream baos = new ByteArrayOutputStream();
 
-			PdfWriter.getInstance(document, new FileOutputStream(
-					"c:\\nitrophyl\\nitrophyl-" + Calendar.getInstance().getTimeInMillis() + ".pdf"));
+//			PdfWriter.getInstance(document, new FileOutputStream(
+//					"c:\\nitrophyl\\nitrophyl-" + Calendar.getInstance().getTimeInMillis() + ".pdf"));
 
 			PdfWriter.getInstance(document, baos);
 

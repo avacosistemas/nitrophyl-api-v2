@@ -1,33 +1,40 @@
 package ar.com.avaco.nitrophyl.ws.service.impl;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import javax.annotation.Resource;
 
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.itextpdf.text.DocumentException;
 
+import ar.com.avaco.arc.core.service.MailSenderSMTPService;
 import ar.com.avaco.commons.exception.BusinessException;
 import ar.com.avaco.nitrophyl.domain.entities.cliente.Cliente;
+import ar.com.avaco.nitrophyl.domain.entities.cliente.Contacto;
+import ar.com.avaco.nitrophyl.domain.entities.cliente.TipoContacto;
 import ar.com.avaco.nitrophyl.domain.entities.formula.Formula;
 import ar.com.avaco.nitrophyl.domain.entities.lote.EstadoLote;
 import ar.com.avaco.nitrophyl.domain.entities.lote.Lote;
+import ar.com.avaco.nitrophyl.domain.entities.moldes.LoteGrafico;
 import ar.com.avaco.nitrophyl.service.cliente.ClienteService;
 import ar.com.avaco.nitrophyl.service.formula.FormulaService;
+import ar.com.avaco.nitrophyl.service.lote.LoteGraficoService;
 import ar.com.avaco.nitrophyl.service.lote.LoteService;
 import ar.com.avaco.nitrophyl.service.reporte.ReporteLoteConfiguracionClienteService;
 import ar.com.avaco.nitrophyl.ws.dto.ArchivoDTO;
-import ar.com.avaco.nitrophyl.ws.dto.ConfiguracionPruebaParametroDTO;
 import ar.com.avaco.nitrophyl.ws.dto.LoteDTO;
+import ar.com.avaco.nitrophyl.ws.dto.LoteGraficoDTO;
 import ar.com.avaco.nitrophyl.ws.dto.PageDTO;
 import ar.com.avaco.nitrophyl.ws.dto.RegistroEnsayoLotePorMaquinaDTO;
 import ar.com.avaco.nitrophyl.ws.dto.ReporteEnsayoLotePorMaquinaDTO;
@@ -47,12 +54,10 @@ public class LoteEPServiceImpl extends CRUDEPBaseService<Long, LoteDTO, Lote, Lo
 
 	private FormulaService formulaService;
 
-	@Resource(name = "reporteLoteConfiguracionClienteService")
+	private LoteGraficoService loteGraficoService;
 
-	public void setReporteLoteConfigClienteService(
-			ReporteLoteConfiguracionClienteService reporteLoteConfigClienteService) {
-		this.reporteLoteConfigClienteService = reporteLoteConfigClienteService;
-	}
+	@Autowired
+	private MailSenderSMTPService mailSenderSMTPService;
 
 	@Override
 	public LoteDTO save(LoteDTO dto) throws BusinessException {
@@ -124,6 +129,7 @@ public class LoteEPServiceImpl extends CRUDEPBaseService<Long, LoteDTO, Lote, Lo
 		if (entity.getRevisionParametros() != null) {
 			dto.setRevision(entity.getRevisionParametros().getRevision());
 		}
+		dto.setMaterial(entity.getFormula().getMaterial().getNombre());
 		return dto;
 	}
 
@@ -156,7 +162,8 @@ public class LoteEPServiceImpl extends CRUDEPBaseService<Long, LoteDTO, Lote, Lo
 	public PageDTO<ReporteEnsayoLotePorMaquinaDTO> generarReporteEnsayoLotePorMaquina(
 			ReporteEnsayoLotePorMaquinaFilterDTO filtro) {
 
-		List<RegistroEnsayoLotePorMaquinaDTO> registrosEnsayosLotePorMaquina = this.service.getRegistrosEnsayosLotePorMaquina(filtro);
+		List<RegistroEnsayoLotePorMaquinaDTO> registrosEnsayosLotePorMaquina = this.service
+				.getRegistrosEnsayosLotePorMaquina(filtro);
 
 		Map<String, ReporteEnsayoLotePorMaquinaDTO> map = new HashMap<String, ReporteEnsayoLotePorMaquinaDTO>();
 
@@ -175,12 +182,12 @@ public class LoteEPServiceImpl extends CRUDEPBaseService<Long, LoteDTO, Lote, Lo
 		List<ReporteEnsayoLotePorMaquinaDTO> values = new ArrayList(map.values());
 
 		values.sort(ReporteEnsayoLotePorMaquinaDTO.getComparator(filtro.getIdx(), filtro.getAsc()));
-		
+
 		page.setPage(new ArrayList<ReporteEnsayoLotePorMaquinaDTO>(values));
 		page.setTotalReg(0);
 		if (!registrosEnsayosLotePorMaquina.isEmpty())
 			page.setTotalReg(registrosEnsayosLotePorMaquina.get(0).getRows());
-		
+
 		return page;
 
 	}
@@ -194,7 +201,7 @@ public class LoteEPServiceImpl extends CRUDEPBaseService<Long, LoteDTO, Lote, Lo
 		ret.setNombreFormula(dto.getNombreFormula());
 		ret.setNroLote(dto.getNroLote());
 		ret.setObservaciones(dto.getObservaciones());
-		ret.setEstadoLote(dto.getEstadoLote());
+		ret.setEstadoEnsayo(dto.getEstadoEnsayo());
 		agregarEnsayoReporteEnsayoLotePorMaquinaDTO(dto, ret);
 		return ret;
 	}
@@ -202,7 +209,6 @@ public class LoteEPServiceImpl extends CRUDEPBaseService<Long, LoteDTO, Lote, Lo
 	private ReporteEnsayoLotePorMaquinaDTO agregarEnsayoReporteEnsayoLotePorMaquinaDTO(
 			RegistroEnsayoLotePorMaquinaDTO dto, ReporteEnsayoLotePorMaquinaDTO reporteEnsayoLotePorMaquinaDTO) {
 		ReporteResultadoEnsayoDTO resultado = new ReporteResultadoEnsayoDTO();
-		resultado.setEstadoEnsayo(dto.getEstadoEnsayo());
 		resultado.setIdMaquinaPrueba(dto.getIdMaquinaPrueba());
 		resultado.setRedondeo(dto.getRedondeo());
 		resultado.setResultado(dto.getResultado());
@@ -223,6 +229,59 @@ public class LoteEPServiceImpl extends CRUDEPBaseService<Long, LoteDTO, Lote, Lo
 	}
 
 	@Override
+	public LoteGraficoDTO addGrafico(LoteGraficoDTO loteGraficoDTO) {
+		LoteGrafico lg = new LoteGrafico();
+		lg.setArchivo(loteGraficoDTO.getArchivo());
+		lg.setFecha(DateUtils.getFechaYHoraActual());
+		lg.setIdLote(loteGraficoDTO.getIdLote());
+		lg = this.loteGraficoService.save(lg);
+		loteGraficoDTO.setId(lg.getId());
+		return loteGraficoDTO;
+	}
+
+	@Override
+	public void enviarReporte(Long idLote, Long idCliente) throws BusinessException {
+
+		Cliente cliente = this.clienteService.getCliente(idCliente);
+		Lote lote = this.service.get(idLote);
+
+		String toMail = this.clienteService.getCorreoInformes(idCliente);
+		String subject = "Informe de Calidad";
+		String msg = "Informe calidad";
+
+		try {
+
+			List<File> archivos = new ArrayList<>();
+
+			// Archivo de reporte
+			ArchivoDTO reporte = generarReporteLoteCliente(idLote, idCliente);
+			String nombreReporte = "Informe Calidad - " + cliente.getNombre().replace(".", " - " + lote.getNroLote());
+			File tempFileReporte = File.createTempFile(nombreReporte, ".pdf");
+			FileOutputStream fosReporte = new FileOutputStream(tempFileReporte);
+			fosReporte.write(reporte.getArchivo());
+			archivos.add(tempFileReporte);
+
+			// Archivo de grafico
+			ArchivoDTO grafico = loteGraficoService.getGraficoByIdLote(idLote);
+			String nombreGrafico = "Informe Calidad - Grafico - "
+					+ cliente.getNombre().replace(".", " - " + lote.getNroLote());
+			File tempFileGrafico = File.createTempFile(nombreGrafico, ".pdf");
+			FileOutputStream fosGrafico = new FileOutputStream(tempFileGrafico);
+			fosGrafico.write(grafico.getArchivo());
+			archivos.add(tempFileGrafico);
+
+//			this.mailSenderSMTPService.sendMail("informes@nitrophyl.com.ar", toMail, subject, msg, archivos);
+
+			fosReporte.close();
+			fosGrafico.close();
+
+		} catch (BusinessException | IOException e) {
+			throw new BusinessException(e);
+		}
+
+	}
+
+	@Override
 	@Resource(name = "loteService")
 	protected void setService(LoteService service) {
 		this.service = service;
@@ -236,6 +295,21 @@ public class LoteEPServiceImpl extends CRUDEPBaseService<Long, LoteDTO, Lote, Lo
 	@Resource(name = "formulaService")
 	public void setFormulaService(FormulaService formulaService) {
 		this.formulaService = formulaService;
+	}
+
+	@Resource(name = "reporteLoteConfiguracionClienteService")
+	public void setReporteLoteConfigClienteService(
+			ReporteLoteConfiguracionClienteService reporteLoteConfigClienteService) {
+		this.reporteLoteConfigClienteService = reporteLoteConfigClienteService;
+	}
+
+	@Resource(name = "loteGraficoService")
+	public void setLoteGraficoService(LoteGraficoService loteGraficoService) {
+		this.loteGraficoService = loteGraficoService;
+	}
+
+	public void setMailSenderSMTPService(MailSenderSMTPService mailSenderSMTPService) {
+		this.mailSenderSMTPService = mailSenderSMTPService;
 	}
 
 }

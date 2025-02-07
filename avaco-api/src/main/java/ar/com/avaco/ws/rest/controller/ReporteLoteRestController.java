@@ -46,6 +46,22 @@ public class ReporteLoteRestController extends AbstractDTORestController<LoteDTO
 		return new ResponseEntity<JSONResponse>(response, HttpStatus.OK);
 	}
 
+	@RequestMapping(value = "/loteReporte/enviar", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<JSONResponse> enviarReporte(ReporteLoteClienteDTO dto) {
+		JSONResponse response = new JSONResponse();
+		response.setStatus(JSONResponse.OK);
+		try {
+			this.service.enviarReporte(dto.getIdLote(), dto.getIdCliente());
+			response.setData(true);
+		} catch (Exception e) {
+			ErrorResponse eresp = new ErrorResponse();
+			eresp.setStatus(JSONResponse.ERROR);
+			eresp.setError(e.getMessage());
+			response = eresp;
+		}
+		return new ResponseEntity<JSONResponse>(response, HttpStatus.OK);
+	}
+
 	@RequestMapping(value = "/lotePorMaquinaReporte", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<JSONResponse> generarReporte(ReporteEnsayoLotePorMaquinaFilterDTO filtro) {
 		JSONResponse response = new JSONResponse();

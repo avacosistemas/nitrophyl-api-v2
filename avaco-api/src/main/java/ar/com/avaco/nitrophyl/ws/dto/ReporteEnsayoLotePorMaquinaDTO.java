@@ -5,8 +5,6 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
-import org.apache.commons.collections.ComparatorUtils;
-
 import ar.com.avaco.utils.DateUtils;
 import ar.com.avaco.ws.rest.dto.DTOEntity;
 
@@ -26,7 +24,7 @@ public class ReporteEnsayoLotePorMaquinaDTO extends DTOEntity<Long> {
 
 	private String nombreFormula;
 
-	private String estadoLote;
+	private String estadoEnsayo;
 
 	public List<ReporteResultadoEnsayoDTO> resultados = new ArrayList<ReporteResultadoEnsayoDTO>();
 
@@ -104,12 +102,12 @@ public class ReporteEnsayoLotePorMaquinaDTO extends DTOEntity<Long> {
 		this.row = row;
 	}
 
-	public String getEstadoLote() {
-		return estadoLote;
+	public String getEstadoEnsayo() {
+		return estadoEnsayo;
 	}
 
-	public void setEstadoLote(String estadoLote) {
-		this.estadoLote = estadoLote;
+	public void setEstadoEnsayo(String estadoEnsayo) {
+		this.estadoEnsayo = estadoEnsayo;
 	}
 
 	public static Comparator<ReporteEnsayoLotePorMaquinaDTO> getComparator(String campo, Boolean asc) {

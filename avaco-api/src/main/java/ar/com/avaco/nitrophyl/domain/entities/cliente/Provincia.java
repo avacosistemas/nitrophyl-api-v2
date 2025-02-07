@@ -25,6 +25,7 @@ public enum Provincia {
 	RIO_NEGRO("Río Negro"),
 	SALTA("Salta"),
 	SAN_JUAN("San Juan"),
+	SAN_LUIS("San Luis"),
 	SANTA_CRUZ("Santa Cruz"),
 	SANTA_FE("Santa Fe"),
 	SANTIAGO_DEL_ESTERO("Santiago del Estero"),

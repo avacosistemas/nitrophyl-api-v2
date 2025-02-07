@@ -40,6 +40,11 @@ public class ClienteEPServiceImpl extends CRUDEPBaseService<Long, ClienteDTO, Cl
 	public List<ClienteDTO> list() {
 		return convertToDtos(this.service.list());
 	}
+	
+	@Override
+	public String getCorreoInformes(Long idCliente) {
+		return this.service.getCorreoInformes(idCliente);
+	}
 
 	@Override
 	public ClienteDTO addCliente(ClienteDTO clienteDTO) throws ErrorValidationException, BusinessException {
@@ -177,7 +182,7 @@ public class ClienteEPServiceImpl extends CRUDEPBaseService<Long, ClienteDTO, Cl
 
 		return contacto;
 	}
-
+	
 	@Override
 	@Resource(name = "clienteService")
 	protected void setService(ClienteService service) {

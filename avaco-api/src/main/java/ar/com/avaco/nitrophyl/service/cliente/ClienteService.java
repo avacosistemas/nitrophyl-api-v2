@@ -27,6 +27,8 @@ public interface ClienteService extends NJService<Long, Cliente> {
 
 	List<Cliente> getByIds(List<Long> collect);
 
+	String getCorreoInformes(Long idCliente);
+	
 	/*
 	 * Cliente getClientePorUsername(String username);
 	 * 

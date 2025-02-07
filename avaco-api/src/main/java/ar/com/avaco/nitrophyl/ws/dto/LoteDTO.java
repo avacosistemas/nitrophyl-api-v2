@@ -26,6 +26,8 @@ public class LoteDTO extends DTOEntity<Long> {
 
 	private Long revision;
 
+	private String material;
+
 	public String getNroLote() {
 		return nroLote;
 	}
@@ -112,6 +114,14 @@ public class LoteDTO extends DTOEntity<Long> {
 
 	public void setRevision(Long revision) {
 		this.revision = revision;
+	}
+
+	public String getMaterial() {
+		return material;
+	}
+
+	public void setMaterial(String material) {
+		this.material = material;
 	}
 
 }

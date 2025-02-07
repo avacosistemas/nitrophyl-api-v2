@@ -24,4 +24,6 @@ public interface ClienteEPService extends CRUDEPService<Long, ClienteDTO> {
 
 	ContactoDTO updateContactoCliente(ContactoDTO contactoDTO) throws ErrorValidationException, BusinessException;
 
+	String getCorreoInformes(Long idCliente);
+
 }

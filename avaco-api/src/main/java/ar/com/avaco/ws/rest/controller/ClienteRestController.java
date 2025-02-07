@@ -33,8 +33,6 @@ public class ClienteRestController extends AbstractDTORestController<ClienteDTO,
 		super.service = clienteEPService;
 	}
 
-	/* EP Clientes */
-
 	@RequestMapping(value = "/clientes", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<JSONResponse> listClientes(ClienteFilterDTO filterDTO) throws Exception {
 		filterDTO.setAsc(true);
@@ -45,7 +43,16 @@ public class ClienteRestController extends AbstractDTORestController<ClienteDTO,
 		response.setStatus(JSONResponse.OK);
 		return new ResponseEntity<JSONResponse>(response, HttpStatus.OK);
 	}
-	
+
+	@RequestMapping(value = "/cliente/correoinforme/{idCliente}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<JSONResponse> getMailInforme(@PathVariable Long idCliente) throws Exception {
+		String mail = this.service.getCorreoInformes(idCliente);
+		JSONResponse response = new JSONResponse();
+		response.setData(mail);
+		response.setStatus(JSONResponse.OK);
+		return new ResponseEntity<JSONResponse>(response, HttpStatus.OK);
+	}
+
 	@RequestMapping(value = "/clientes/autocomplete", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<JSONResponse> listClientesAutocomplete(ClienteFilterDTO filterDTO) throws Exception {
 		filterDTO.setAsc(true);
@@ -58,7 +65,7 @@ public class ClienteRestController extends AbstractDTORestController<ClienteDTO,
 		response.setStatus(JSONResponse.OK);
 		return new ResponseEntity<JSONResponse>(response, HttpStatus.OK);
 	}
-	
+
 	@RequestMapping(value = "/cliente", method = RequestMethod.POST)
 	public ResponseEntity<JSONResponse> addCliente(@RequestBody ClienteDTO clienteDTO) throws Exception {
 		clienteDTO.setId(null);
