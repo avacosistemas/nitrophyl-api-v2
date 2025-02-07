@@ -129,7 +129,12 @@ public class LoteEPServiceImpl extends CRUDEPBaseService<Long, LoteDTO, Lote, Lo
 		if (entity.getRevisionParametros() != null) {
 			dto.setRevision(entity.getRevisionParametros().getRevision());
 		}
-		dto.setMaterial(entity.getFormula().getMaterial().getNombre());
+
+		if (entity.getFormula().getMaterial() == null) {
+			dto.setMaterial(formulaService.get(entity.getFormula().getId()).getMaterial().getNombre());
+		} else {
+			dto.setMaterial(entity.getFormula().getMaterial().getNombre());
+		}
 		return dto;
 	}
 
