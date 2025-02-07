@@ -210,8 +210,8 @@ public class LoteEPServiceImpl extends CRUDEPBaseService<Long, LoteDTO, Lote, Lo
 			RegistroEnsayoLotePorMaquinaDTO dto, ReporteEnsayoLotePorMaquinaDTO reporteEnsayoLotePorMaquinaDTO) {
 		ReporteResultadoEnsayoDTO resultado = new ReporteResultadoEnsayoDTO();
 		resultado.setIdMaquinaPrueba(dto.getIdMaquinaPrueba());
-		resultado.setRedondeo(dto.getRedondeo());
-		resultado.setResultado(dto.getResultado());
+		resultado.setRedondeo(dto.getRedondeo() != null ? String.format("%.2f", dto.getRedondeo()) : "");
+		resultado.setResultado(dto.getResultado() != null ? String.format("%.2f", dto.getResultado()) : "");
 		reporteEnsayoLotePorMaquinaDTO.getResultados().add(resultado);
 		return reporteEnsayoLotePorMaquinaDTO;
 	}

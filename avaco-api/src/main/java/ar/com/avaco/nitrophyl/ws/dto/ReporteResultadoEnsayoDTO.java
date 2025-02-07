@@ -4,9 +4,9 @@ public class ReporteResultadoEnsayoDTO {
 
 	private Long idMaquinaPrueba;
 
-	private Double redondeo;
+	private String redondeo;
 
-	private Double resultado;
+	private String resultado;
 
 	public Long getIdMaquinaPrueba() {
 		return idMaquinaPrueba;
@@ -16,19 +16,19 @@ public class ReporteResultadoEnsayoDTO {
 		this.idMaquinaPrueba = idMaquinaPrueba;
 	}
 
-	public Double getRedondeo() {
+	public String getRedondeo() {
 		return redondeo;
 	}
 
-	public void setRedondeo(Double redondeo) {
+	public void setRedondeo(String redondeo) {
 		this.redondeo = redondeo;
 	}
 
-	public Double getResultado() {
+	public String getResultado() {
 		return resultado;
 	}
 
-	public void setResultado(Double resultado) {
+	public void setResultado(String resultado) {
 		this.resultado = resultado;
 	}
 
