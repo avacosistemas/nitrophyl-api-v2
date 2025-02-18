@@ -36,6 +36,7 @@ import com.itextpdf.text.pdf.PdfPCellEvent;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 
+import ar.com.avaco.commons.exception.ErrorValidationException;
 import ar.com.avaco.nitrophyl.domain.entities.cliente.Cliente;
 import ar.com.avaco.nitrophyl.domain.entities.formula.ConfiguracionPrueba;
 import ar.com.avaco.nitrophyl.domain.entities.formula.ConfiguracionPruebaCondicion;
@@ -43,7 +44,6 @@ import ar.com.avaco.nitrophyl.domain.entities.formula.RevisionParametros;
 import ar.com.avaco.nitrophyl.domain.entities.lote.Ensayo;
 import ar.com.avaco.nitrophyl.domain.entities.lote.EnsayoResultado;
 import ar.com.avaco.nitrophyl.domain.entities.lote.Lote;
-import ar.com.avaco.nitrophyl.domain.entities.maquina.MaquinaPrueba;
 import ar.com.avaco.nitrophyl.domain.entities.reporte.ReporteLoteConfiguracionCliente;
 import ar.com.avaco.nitrophyl.service.reporte.ReporteLoteConfiguracionClienteService;
 import ar.com.avaco.nitrophyl.ws.dto.ArchivoDTO;
@@ -57,7 +57,7 @@ public class InformeBuilder {
 	private final static Font fontText = FontFactory.getFont(FontFactory.HELVETICA, 10, BaseColor.BLACK);
 
 	public ArchivoDTO generarReporte(Lote lote, ReporteLoteConfiguracionClienteService serviceConfiguracion,
-			Cliente cliente) throws DocumentException, IOException, URISyntaxException {
+			Cliente cliente) throws DocumentException, IOException, URISyntaxException, ErrorValidationException {
 
 		// Obtengo la empresa para el logo
 		String empresa = cliente.getEmpresa().name();
@@ -354,8 +354,7 @@ public class InformeBuilder {
 
 		if (config != null) {
 			mostrarParametros = config.isMostrarParametros();
-			// Si el id del ensayo es nulo, es un ensayo sin resultados.
-			mostrarResultados = config.isMostrarResultados() && ensayo.getId() != null;
+			mostrarResultados = config.isMostrarResultados();
 			mostrarCondiciones = config.isMostrarCondiciones();
 			mostraObervacionesParametros = config.isMostrarObservacionesParametro();
 			mostrarTodasLasPruebas = config.getMaquina() == null;
@@ -403,6 +402,8 @@ public class InformeBuilder {
 			List<EnsayoResultado> resultados = resultadossinorden.stream()
 					.sorted(Comparator.comparing(EnsayoResultado::getPosicion)).collect(Collectors.toList());
 
+			Map<String, String> resultadosError = new HashMap<>();
+			
 			for (EnsayoResultado resultado : resultados) {
 
 				boolean existePrueba = config.getPruebas().stream().filter(
@@ -499,11 +500,16 @@ public class InformeBuilder {
 
 					if (mostrarResultados) {
 						cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
-						cell.setPhrase(new Phrase(String.format("%.2f", resultado.getRedondeo()), fontText));
-						if (!hayObservaciones && !hayCondiciones && ultimo) {
-							cell.setBorderWidthBottom(0);
+						
+						if (resultado.getRedondeo() == null) {
+							resultadosError.put(nombre, "No tiene resultado");
+						} else {
+							cell.setPhrase(new Phrase(String.format("%.2f", resultado.getRedondeo()), fontText));
+							if (!hayObservaciones && !hayCondiciones && ultimo) {
+								cell.setBorderWidthBottom(0);
+							}
+							tableResultados.addCell(cell);
 						}
-						tableResultados.addCell(cell);
 					} else {
 						cell = getPDFPCell();
 						cell.setPhrase(new Phrase("", fontHeaderTable));
@@ -520,6 +526,10 @@ public class InformeBuilder {
 
 					tableResultados.addCell(cell);
 				}
+			}
+			
+			if (!resultadosError.isEmpty()) {
+				throw new ErrorValidationException("Faltan cargar resultados en la máquina " + ensayo.getConfiguracionPrueba().getMaquina().getNombre(), resultadosError);
 			}
 
 			first = true;
