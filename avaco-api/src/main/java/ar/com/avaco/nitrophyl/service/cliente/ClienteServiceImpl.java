@@ -11,6 +11,7 @@ import javax.persistence.EntityNotFoundException;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
+import org.hibernate.metamodel.ValidationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -192,7 +193,7 @@ public class ClienteServiceImpl extends NJBaseService<Long, Cliente, ClienteRepo
 		if (findFirst.isPresent()) {
 			return findFirst.get().getEmail();
 		}
-		return null;
+		throw new ValidationException("El cliente seleccionado no tiene un correo electrónico de informes definido.");
 	}
 
 	/*

@@ -266,19 +266,23 @@ public class LoteEPServiceImpl extends CRUDEPBaseService<Long, LoteDTO, Lote, Lo
 			fosReporte.write(reporte.getArchivo());
 			archivos.add(tempFileReporte);
 
+			FileOutputStream fosGrafico = null;
+			
 			// Archivo de grafico
 			ArchivoDTO grafico = loteGraficoService.getGraficoByIdLote(idLote);
-			String nombreGrafico = "Informe Calidad - Grafico - "
-					+ cliente.getNombre().replace(".", " - " + lote.getNroLote());
-			File tempFileGrafico = File.createTempFile(nombreGrafico, ".pdf");
-			FileOutputStream fosGrafico = new FileOutputStream(tempFileGrafico);
-			fosGrafico.write(grafico.getArchivo());
-			archivos.add(tempFileGrafico);
+			if (grafico != null) {
+				String nombreGrafico = "Informe Calidad - Grafico - "
+						+ cliente.getNombre().replace(".", " - " + lote.getNroLote());
+				File tempFileGrafico = File.createTempFile(nombreGrafico, ".pdf");
+				fosGrafico = new FileOutputStream(tempFileGrafico);
+				fosGrafico.write(grafico.getArchivo());
+				archivos.add(tempFileGrafico);
+			}
 
-//			this.mailSenderSMTPService.sendMail("informes@nitrophyl.com.ar", toMail, subject, msg, archivos);
+			this.mailSenderSMTPService.sendMail("informes@nitrophyl.com.ar", toMail, subject, msg, archivos);
 
 			fosReporte.close();
-			fosGrafico.close();
+			if (fosGrafico != null) fosGrafico.close();
 
 		} catch (BusinessException | IOException e) {
 			throw new BusinessException(e);
