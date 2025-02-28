@@ -1,5 +1,6 @@
 package ar.com.avaco.nitrophyl.service.lote;
 
+import java.util.List;
 import java.util.Optional;
 
 import javax.annotation.Resource;
@@ -34,6 +35,11 @@ public class LoteGraficoServiceImpl extends NJBaseService<Long, LoteGrafico, Lot
 	@Resource(name = "loteGraficoRepository")
 	void setLoteGraficoRepository(LoteGraficoRepository loteGraficoRepository) {
 		this.repository = loteGraficoRepository;
+	}
+
+	@Override
+	public List<Long> filterIdsConGrafico(List<Long> loteIds) {
+		return this.repository.findLoteIdLoteByIdLoteIn(loteIds);
 	}
 
 	

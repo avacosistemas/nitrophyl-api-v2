@@ -27,4 +27,6 @@ public interface LoteEPService extends CRUDEPService<Long, LoteDTO> {
 	LoteGraficoDTO addGrafico(LoteGraficoDTO loteGraficoDTO);
 
 	void enviarReporte(Long idLote, Long idCliente) throws BusinessException;
+
+	ArchivoDTO getGrafico(Long idLote);
 }

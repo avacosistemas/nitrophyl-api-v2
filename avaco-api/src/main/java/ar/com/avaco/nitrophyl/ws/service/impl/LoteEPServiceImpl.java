@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
+import java.util.stream.Collectors;
 
 import javax.annotation.Resource;
 
@@ -18,11 +18,11 @@ import org.springframework.stereotype.Service;
 
 import com.itextpdf.text.DocumentException;
 
+import ar.com.avaco.arc.core.domain.filter.AbstractFilter;
 import ar.com.avaco.arc.core.service.MailSenderSMTPService;
 import ar.com.avaco.commons.exception.BusinessException;
 import ar.com.avaco.nitrophyl.domain.entities.cliente.Cliente;
-import ar.com.avaco.nitrophyl.domain.entities.cliente.Contacto;
-import ar.com.avaco.nitrophyl.domain.entities.cliente.TipoContacto;
+import ar.com.avaco.nitrophyl.domain.entities.cliente.EmpresaCliente;
 import ar.com.avaco.nitrophyl.domain.entities.formula.Formula;
 import ar.com.avaco.nitrophyl.domain.entities.lote.EstadoLote;
 import ar.com.avaco.nitrophyl.domain.entities.lote.Lote;
@@ -58,6 +58,19 @@ public class LoteEPServiceImpl extends CRUDEPBaseService<Long, LoteDTO, Lote, Lo
 
 	@Autowired
 	private MailSenderSMTPService mailSenderSMTPService;
+
+	@Override
+	public List<LoteDTO> listFilter(AbstractFilter abstractFilter) {
+		List<LoteDTO> lotes = super.listFilter(abstractFilter);
+		List<Long> loteIds = lotes.stream().map(x -> x.getId()).collect(Collectors.toList());
+		if (loteIds != null && !loteIds.isEmpty()) { 
+			List<Long> loteConGraficoIds = loteGraficoService.filterIdsConGrafico(loteIds);
+			lotes.forEach(x -> {
+				x.setHasGrafico(loteConGraficoIds.contains(x.getId()));
+			});
+		}
+		return lotes;
+	}
 
 	@Override
 	public LoteDTO save(LoteDTO dto) throws BusinessException {
@@ -251,9 +264,15 @@ public class LoteEPServiceImpl extends CRUDEPBaseService<Long, LoteDTO, Lote, Lo
 		Lote lote = this.service.get(idLote);
 
 		String toMail = this.clienteService.getCorreoInformes(idCliente);
-		String subject = "Informe de Calidad";
-		String msg = "Informe calidad";
-
+		EmpresaCliente empresa = this.clienteService.getCliente(idCliente).getEmpresa();
+		String subject = "CERTIFICADO DE CALIDAD";
+		String msg = "Estimados, <br> <br> Adjuntamos el certificado de calidad del material entregado. <br><br>Saludos cordiales<br><br>";
+		
+		if(empresa.equals(EmpresaCliente.NITROPHYL))
+			msg = msg + getFirmaNitrophyl();
+		else 
+			msg = msg + getFirmaElasint();
+		
 		try {
 
 			List<File> archivos = new ArrayList<>();
@@ -267,7 +286,7 @@ public class LoteEPServiceImpl extends CRUDEPBaseService<Long, LoteDTO, Lote, Lo
 			archivos.add(tempFileReporte);
 
 			FileOutputStream fosGrafico = null;
-			
+
 			// Archivo de grafico
 			ArchivoDTO grafico = loteGraficoService.getGraficoByIdLote(idLote);
 			if (grafico != null) {
@@ -282,12 +301,18 @@ public class LoteEPServiceImpl extends CRUDEPBaseService<Long, LoteDTO, Lote, Lo
 			this.mailSenderSMTPService.sendMail("informes@nitrophyl.com.ar", toMail, subject, msg, archivos);
 
 			fosReporte.close();
-			if (fosGrafico != null) fosGrafico.close();
+			if (fosGrafico != null)
+				fosGrafico.close();
 
 		} catch (BusinessException | IOException e) {
 			throw new BusinessException(e);
 		}
 
+	}
+
+	@Override
+	public ArchivoDTO getGrafico(Long idLote) {
+		return this.loteGraficoService.getGraficoByIdLote(idLote);
 	}
 
 	@Override
@@ -319,6 +344,16 @@ public class LoteEPServiceImpl extends CRUDEPBaseService<Long, LoteDTO, Lote, Lo
 
 	public void setMailSenderSMTPService(MailSenderSMTPService mailSenderSMTPService) {
 		this.mailSenderSMTPService = mailSenderSMTPService;
+	}
+
+	private String getFirmaElasint() {
+		return "<strong><span style='color: green;'>Elasint S.R.L.</span> </strong> <br>" + "Dr. Rebizzo 5378<br>"
+				+ "(1678) Caseros, Buenos Aires<br>" + "+54 11 4759-0592 / 4759-0954 / 4750-3052";
+	}
+
+	private String getFirmaNitrophyl() {
+		return "<strong><span style='color: blue;'>Nitrophyl S.A.</span></strong> <br>" + "Dr. Rebizzo 5378<br>"
+				+ "(1678) Caseros, Buenos Aires<br>" + "+54 11 4759-0592 / 4759-0954 / 4750-3052";
 	}
 
 }

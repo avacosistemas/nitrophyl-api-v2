@@ -28,6 +28,8 @@ public class LoteDTO extends DTOEntity<Long> {
 
 	private String material;
 
+	private Boolean hasGrafico;
+
 	public String getNroLote() {
 		return nroLote;
 	}
@@ -122,6 +124,14 @@ public class LoteDTO extends DTOEntity<Long> {
 
 	public void setMaterial(String material) {
 		this.material = material;
+	}
+
+	public Boolean getHasGrafico() {
+		return hasGrafico;
+	}
+
+	public void setHasGrafico(Boolean hasGrafico) {
+		this.hasGrafico = hasGrafico;
 	}
 
 }

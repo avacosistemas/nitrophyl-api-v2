@@ -193,7 +193,7 @@ public class ClienteServiceImpl extends NJBaseService<Long, Cliente, ClienteRepo
 		if (findFirst.isPresent()) {
 			return findFirst.get().getEmail();
 		}
-		throw new ValidationException("El cliente seleccionado no tiene un correo electrónico de informes definido.");
+		throw new ErrorValidationException("El cliente seleccionado no tiene un correo electrónico de informes definido.", null);
 	}
 
 	/*

@@ -12,9 +12,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import ar.com.avaco.commons.exception.BusinessException;
+import ar.com.avaco.nitrophyl.ws.dto.ArchivoDTO;
 import ar.com.avaco.nitrophyl.ws.dto.ComboDTO;
 import ar.com.avaco.nitrophyl.ws.dto.LoteAprobarDTO;
 import ar.com.avaco.nitrophyl.ws.dto.LoteDTO;
@@ -187,6 +189,15 @@ public class LoteRestController extends AbstractDTORestController<LoteDTO, Long,
 		JSONResponse response = new JSONResponse();
 		response.setData(saved);
 		response.setStatus(JSONResponse.OK);
+		return new ResponseEntity<JSONResponse>(response, HttpStatus.OK);
+	}
+	
+	@RequestMapping(value = "/lote/grafico", method = RequestMethod.GET)
+	public ResponseEntity<JSONResponse> getGrafico(@RequestParam Long idLote) throws Exception {
+		JSONResponse response = new JSONResponse();
+		response.setStatus(JSONResponse.OK);
+		ArchivoDTO archivo = this.service.getGrafico(idLote);
+		response.setData(archivo);
 		return new ResponseEntity<JSONResponse>(response, HttpStatus.OK);
 	}
 	
