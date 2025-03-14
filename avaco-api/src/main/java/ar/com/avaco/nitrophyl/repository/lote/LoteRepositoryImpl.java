@@ -131,12 +131,14 @@ public class LoteRepositoryImpl extends NJBaseRepository<Long, Lote> implements 
 					+ " left join conf_prueba_param cpp ON cpp.id_conf_prueba_param = er.id_conf_prueba_param "
 					+ " left join lote lo on lo.id_lote = e.id_lote "
 					+ " left join formula_rev_param frp on frp.id_rev_param = lo.id_revision_parametros "
-					+ " left join formula f on f.id_formula = lo.id_formula where lo.id_lote in (:lotesIds) ";
+					+ " left join formula f on f.id_formula = lo.id_formula where lo.id_lote in (:lotesIds) "
+					+ " and cpp.id_maquina_prueba in (select mp.id_maquina_prueba from maquina_prueba mp where mp.id_maquina = :idMaquina)";
 
 			SQLQuery createSQLQuery = getCurrentSession().createSQLQuery(query)
 					.setResultSetMapping("RegistroEnsayoLotePorMaquinaDTOMapper");
 
 			createSQLQuery.setParameterList("lotesIds", ids);
+			createSQLQuery.setLong("idMaquina", filtro.getIdMaquina());
 			createSQLQuery.setString("rows", listCount.toString());
 
 			list = createSQLQuery.list();

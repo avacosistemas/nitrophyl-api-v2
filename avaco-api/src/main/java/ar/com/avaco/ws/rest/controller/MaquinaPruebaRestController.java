@@ -1,9 +1,6 @@
 package ar.com.avaco.ws.rest.controller;
 
-import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import javax.annotation.Resource;
 
@@ -18,13 +15,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import ar.com.avaco.commons.exception.BusinessException;
-import ar.com.avaco.nitrophyl.ws.dto.ComboDTO;
-import ar.com.avaco.nitrophyl.ws.dto.MaquinaDTO;
-import ar.com.avaco.nitrophyl.ws.dto.MaquinaFilterDTO;
 import ar.com.avaco.nitrophyl.ws.dto.MaquinaPruebaDTO;
-import ar.com.avaco.nitrophyl.ws.service.MaquinaEPService;
 import ar.com.avaco.nitrophyl.ws.service.MaquinaPruebaEPService;
-import ar.com.avaco.nitrophyl.ws.service.filter.MaquinaFilter;
 import ar.com.avaco.ws.rest.dto.ErrorResponse;
 import ar.com.avaco.ws.rest.dto.JSONResponse;
 
