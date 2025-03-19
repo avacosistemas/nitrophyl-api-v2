@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 
 import javax.annotation.Resource;
 
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,13 +19,16 @@ import ar.com.avaco.nitrophyl.domain.entities.moldes.Molde;
 import ar.com.avaco.nitrophyl.domain.entities.moldes.MoldeBoca;
 import ar.com.avaco.nitrophyl.domain.entities.moldes.MoldeDimension;
 import ar.com.avaco.nitrophyl.domain.entities.moldes.MoldeFoto;
+import ar.com.avaco.nitrophyl.domain.entities.moldes.MoldeObservacion;
 import ar.com.avaco.nitrophyl.domain.entities.moldes.MoldePlano;
+import ar.com.avaco.nitrophyl.domain.entities.moldes.MoldePlanoClasificacion;
 import ar.com.avaco.nitrophyl.domain.entities.moldes.MoldeRegistro;
 import ar.com.avaco.nitrophyl.domain.entities.moldes.TipoRegistroMolde;
 import ar.com.avaco.nitrophyl.service.cliente.ClienteService;
 import ar.com.avaco.nitrophyl.service.molde.MoldeBocaService;
 import ar.com.avaco.nitrophyl.service.molde.MoldeDimensionService;
 import ar.com.avaco.nitrophyl.service.molde.MoldeFotoService;
+import ar.com.avaco.nitrophyl.service.molde.MoldeObservacionService;
 import ar.com.avaco.nitrophyl.service.molde.MoldePlanoService;
 import ar.com.avaco.nitrophyl.service.molde.MoldeRegistroService;
 import ar.com.avaco.nitrophyl.service.molde.MoldeService;
@@ -32,9 +36,11 @@ import ar.com.avaco.nitrophyl.ws.dto.MoldeBocaListadoDTO;
 import ar.com.avaco.nitrophyl.ws.dto.MoldeClienteDTO;
 import ar.com.avaco.nitrophyl.ws.dto.MoldeDTO;
 import ar.com.avaco.nitrophyl.ws.dto.MoldeDimensionListadoDTO;
+import ar.com.avaco.nitrophyl.ws.dto.MoldeFilterDTO;
 import ar.com.avaco.nitrophyl.ws.dto.MoldeFotoDTO;
 import ar.com.avaco.nitrophyl.ws.dto.MoldeFotoListadoDTO;
 import ar.com.avaco.nitrophyl.ws.dto.MoldeListadoDTO;
+import ar.com.avaco.nitrophyl.ws.dto.MoldeObservacionDTO;
 import ar.com.avaco.nitrophyl.ws.dto.MoldePlanoDTO;
 import ar.com.avaco.nitrophyl.ws.dto.MoldePlanoListadoDTO;
 import ar.com.avaco.nitrophyl.ws.dto.MoldeRegistroDTO;
@@ -49,6 +55,9 @@ public class MoldeEPServiceImpl extends CRUDEPBaseService<Long, MoldeDTO, Molde,
 
 	@Resource(name = "moldeDimensionService")
 	private MoldeDimensionService moldeDimensionService;
+
+	@Resource(name = "moldeObservacionService")
+	private MoldeObservacionService moldeObservacionService;
 
 	@Resource(name = "moldeBocaService")
 	private MoldeBocaService moldeBocaService;
@@ -120,6 +129,7 @@ public class MoldeEPServiceImpl extends CRUDEPBaseService<Long, MoldeDTO, Molde,
 				dto.setCodigo(molde.getCodigo());
 				dto.setEstado(molde.getEstado().toString());
 				dto.setNombre(molde.getNombre());
+				dto.setUbicacion(molde.getUbicacion());
 				dto.setId(molde.getId());
 				returnedList.add(dto);
 			}
@@ -253,7 +263,7 @@ public class MoldeEPServiceImpl extends CRUDEPBaseService<Long, MoldeDTO, Molde,
 			mp.setFecha(DateUtils.getFechaYHoraActual());
 			mp.setDescripcion(moldePlanoDTO.getDescripcion());
 			mp.setVersion(1);
-
+			mp.setClasificacion(MoldePlanoClasificacion.valueOf(moldePlanoDTO.getClasificacion()));
 			MoldePlano nmp = this.moldePlanoService.addMoldePlano(mp);
 			return new MoldePlanoDTO(nmp);
 		}
@@ -329,6 +339,32 @@ public class MoldeEPServiceImpl extends CRUDEPBaseService<Long, MoldeDTO, Molde,
 		m.getClientes().addAll(clientes);
 		this.service.update(m);
 		return getMoldeClientes(idMolde);
+	}
+
+	@Override
+	public List<MoldeObservacionDTO> getMoldeObservaciones(Long idMolde) {
+		List<MoldeObservacion> observaciones = this.moldeObservacionService.listByMoldeId(idMolde);
+		List<MoldeObservacionDTO> list = new ArrayList<>();
+		observaciones.forEach(obs -> list.add(new MoldeObservacionDTO(obs)));
+		return list;
+	}
+
+	@Override
+	public MoldeObservacionDTO addMoldeObservacion(MoldeObservacionDTO dto) {
+		MoldeObservacion mo = new MoldeObservacion();
+		mo.setFechaCreacion(DateUtils.getFechaYHoraActual());
+		mo.setUsuarioCreacion(SecurityContextHolder.getContext().getAuthentication().getName());
+		mo.setIdMolde(dto.getIdMolde());
+		mo.setObservacion(dto.getObservacion());
+		MoldeObservacion save = this.moldeObservacionService.save(mo);
+		dto.setId(save.getId());
+		return dto;
+	}
+
+	@Override
+	public List<MoldeListadoDTO> list(MoldeFilterDTO filter) {
+		List<MoldeListadoDTO> list = this.service.list(filter);
+		return list;
 	}
 
 }

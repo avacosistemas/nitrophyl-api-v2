@@ -11,4 +11,7 @@ public interface ReporteLoteConfiguracionClienteService extends NJService<Long, 
 
 	List<ReporteLoteConfiguracionCliente> findConfiguracionesByClienteFormula(Formula formula, Cliente cliente);
 
+	ReporteLoteConfiguracionCliente buscarConfiguracion(Long idCliente,
+			List<ReporteLoteConfiguracionCliente> configuracion, Long idMaquina);
+
 }

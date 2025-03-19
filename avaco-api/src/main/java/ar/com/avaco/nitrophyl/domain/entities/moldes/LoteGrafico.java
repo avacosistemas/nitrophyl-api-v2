@@ -3,7 +3,10 @@ package ar.com.avaco.nitrophyl.domain.entities.moldes;
 import java.util.Date;
 
 import javax.persistence.Column;
+import javax.persistence.ColumnResult;
+import javax.persistence.ConstructorResult;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -12,11 +15,25 @@ import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
+import javax.persistence.SqlResultSetMapping;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.Type;
 
 import ar.com.avaco.nitrophyl.domain.entities.lote.Lote;
+import ar.com.avaco.nitrophyl.domain.entities.maquina.Maquina;
+import ar.com.avaco.nitrophyl.ws.dto.LoteGraficoSinArchivoDTO;
+
+@SqlResultSetMapping(name="LoteGraficoSinArchivoDTOMapper",
+classes = {
+    @ConstructorResult(
+            targetClass = LoteGraficoSinArchivoDTO.class,
+            columns = {
+        		@ColumnResult(name = "id", type = Integer.class),
+                @ColumnResult(name = "fecha", type = Date.class),
+        		@ColumnResult(name = "maquina", type = String.class)
+            })
+})
 
 @Entity
 @Table(name = "LOTE_GRAFICO")
@@ -41,6 +58,10 @@ public class LoteGrafico extends ar.com.avaco.arc.core.domain.Entity<Long> {
 
 	@Column(name = "FECHA")
 	private Date fecha;
+
+	@ManyToOne(fetch = FetchType.LAZY, optional = false)
+	@JoinColumn(name = "ID_MAQUINA")
+	private Maquina maquina;
 
 	@Column(name = "ARCHIVO", nullable = true)
 	@Type(type = "org.hibernate.type.BinaryType")
@@ -84,6 +105,18 @@ public class LoteGrafico extends ar.com.avaco.arc.core.domain.Entity<Long> {
 
 	public void setArchivo(byte[] archivo) {
 		this.archivo = archivo;
+	}
+
+	public Maquina getMaquina() {
+		return maquina;
+	}
+
+	public void setMaquina(Maquina maquina) {
+		this.maquina = maquina;
+	}
+
+	public static long getSerialversionuid() {
+		return serialVersionUID;
 	}
 
 }

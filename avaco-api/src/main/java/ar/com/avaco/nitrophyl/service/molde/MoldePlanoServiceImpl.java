@@ -76,17 +76,4 @@ public class MoldePlanoServiceImpl extends NJBaseService<Long, MoldePlano, Molde
 
 	}
 
-	/*
-	 * @Override public MoldeRegistro registrarIngreso(String comentarios, Long
-	 * idMolde) { MoldeRegistro mr = new MoldeRegistro();
-	 * mr.setComentarios(comentarios); mr.setFecha(DateUtils.getFechaYHoraActual());
-	 * mr.setIdMolde(idMolde); mr.setTipoRegistro(TipoRegistroMolde.INGRESO); return
-	 * this.repository.save(mr); }
-	 * 
-	 * @Override public void removeByMolde(Long idMolde) {
-	 * this.repository.deleteByIdMolde(idMolde);
-	 * 
-	 * }
-	 */
-
 }

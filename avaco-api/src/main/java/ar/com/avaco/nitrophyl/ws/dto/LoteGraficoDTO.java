@@ -7,6 +7,33 @@ public class LoteGraficoDTO extends DTOEntity<Long> {
 	private Long id;
 	private Long idLote;
 	private byte[] archivo;
+	private Long idMaquina;
+	private String maquina;
+	private String lote;
+
+	public String getLote() {
+		return lote;
+	}
+
+	public void setLote(String lote) {
+		this.lote = lote;
+	}
+
+	public Long getIdMaquina() {
+		return idMaquina;
+	}
+
+	public void setIdMaquina(Long idMaquina) {
+		this.idMaquina = idMaquina;
+	}
+
+	public String getMaquina() {
+		return maquina;
+	}
+
+	public void setMaquina(String maquina) {
+		this.maquina = maquina;
+	}
 
 	public Long getIdLote() {
 		return idLote;

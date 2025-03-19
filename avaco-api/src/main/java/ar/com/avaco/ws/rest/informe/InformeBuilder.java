@@ -2,17 +2,14 @@ package ar.com.avaco.ws.rest.informe;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.util.Calendar;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -117,36 +114,8 @@ public class InformeBuilder {
 				if (ensayo == null)
 					ensayo = generarEnsayoVacio(parametro);
 
-				ReporteLoteConfiguracionCliente reporteLoteConfiguracionCliente = null;
-
-				// Busco coincidencia maquina-cliente
-				Optional<ReporteLoteConfiguracionCliente> findFirst = configuracion.stream()
-						.filter(x -> x.getMaquina() != null && x.getMaquina().getId() == idMaquina
-								&& x.getCliente() != null && x.getCliente().getId() == cliente.getId())
-						.findFirst();
-
-				if (findFirst.isPresent()) {
-					reporteLoteConfiguracionCliente = findFirst.get();
-				} else {
-					// Busco coincidencia solo de maquina para todos los clientes
-					findFirst = configuracion.stream().filter(x -> x.getMaquina() != null
-							&& x.getMaquina().getId() == idMaquina && x.getCliente() == null).findFirst();
-					if (findFirst.isPresent()) {
-						reporteLoteConfiguracionCliente = findFirst.get();
-					} else {
-						// Busco coincidencia solo en cliente para todas las maquinas
-						findFirst = configuracion.stream().filter(x -> x.getMaquina() == null && x.getCliente() != null
-								&& x.getCliente().getId() == cliente.getId()).findFirst();
-						if (findFirst.isPresent()) {
-							reporteLoteConfiguracionCliente = findFirst.get();
-						} else {
-							findFirst = configuracion.stream()
-									.filter(x -> x.getMaquina() == null && x.getCliente() == null).findFirst();
-							if (findFirst.isPresent())
-								reporteLoteConfiguracionCliente = findFirst.get();
-						}
-					}
-				}
+				ReporteLoteConfiguracionCliente reporteLoteConfiguracionCliente = serviceConfiguracion.buscarConfiguracion(cliente,
+						configuracion, idMaquina);
 
 				if (reporteLoteConfiguracionCliente != null) {
 					Element addEnsayo = addEnsayo(ensayo, reporteLoteConfiguracionCliente);
@@ -353,10 +322,10 @@ public class InformeBuilder {
 		boolean mostrarTodasLasPruebas = false;
 
 		if (config != null) {
-			mostrarParametros = config.isMostrarParametros();
-			mostrarResultados = config.isMostrarResultados();
-			mostrarCondiciones = config.isMostrarCondiciones();
-			mostraObervacionesParametros = config.isMostrarObservacionesParametro();
+			mostrarParametros = config.getMostrarParametros();
+			mostrarResultados = config.getMostrarResultados();
+			mostrarCondiciones = config.getMostrarCondiciones();
+			mostraObervacionesParametros = config.getMostrarObservacionesParametro();
 			mostrarTodasLasPruebas = config.getMaquina() == null;
 		}
 

@@ -20,7 +20,6 @@ import org.hibernate.annotations.Type;
 @Table(name = "MOLDEFOTO")
 @Inheritance(strategy = InheritanceType.JOINED)
 @SequenceGenerator(name = "MOLDEFOTO_SEQ", sequenceName = "MOLDEFOTO_SEQ", allocationSize = 1)
-
 public class MoldeFoto extends ar.com.avaco.arc.core.domain.Entity<Long> {
 
 	private static final long serialVersionUID = -1452187713424215163L;

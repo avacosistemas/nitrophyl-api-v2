@@ -49,16 +49,19 @@ public class ReporteLoteConfiguracionCliente extends ar.com.avaco.arc.core.domai
 	private Maquina maquina;
 
 	@Column(name = "MOSTRAR_PARAMETROS")
-	private boolean mostrarParametros;
+	private Boolean mostrarParametros;
 
 	@Column(name = "MOSTRAR_RESULTADOS")
-	private boolean mostrarResultados;
+	private Boolean mostrarResultados;
 
 	@Column(name = "MOSTRAR_CONDICIONES")
-	private boolean mostrarCondiciones;
+	private Boolean mostrarCondiciones;
 
 	@Column(name = "MOSTRAR_OBS_PARAM")
-	private boolean mostrarObservacionesParametro;
+	private Boolean mostrarObservacionesParametro;
+
+	@Column(name = "ENVIAR_GRAFICO")
+	private Boolean enviarGrafico;
 
 	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(name = "REPORTE_LOTE_CONF_PRUEBA", joinColumns = @JoinColumn(name = "ID_REPORTE_LOTE_CONF_CLIENTE", referencedColumnName = "ID_REPORTE_LOTE_CONF_CLIENTE"), inverseJoinColumns = @JoinColumn(name = "ID_MAQUINA_PRUEBA", referencedColumnName = "ID_MAQUINA_PRUEBA"))
@@ -97,36 +100,44 @@ public class ReporteLoteConfiguracionCliente extends ar.com.avaco.arc.core.domai
 		this.maquina = maquina;
 	}
 
-	public boolean isMostrarParametros() {
+	public Boolean getMostrarParametros() {
 		return mostrarParametros;
 	}
 
-	public void setMostrarParametros(boolean mostrarParametros) {
+	public void setMostrarParametros(Boolean mostrarParametros) {
 		this.mostrarParametros = mostrarParametros;
 	}
 
-	public boolean isMostrarResultados() {
+	public Boolean getMostrarResultados() {
 		return mostrarResultados;
 	}
 
-	public void setMostrarResultados(boolean mostrarResultados) {
+	public void setMostrarResultados(Boolean mostrarResultados) {
 		this.mostrarResultados = mostrarResultados;
 	}
 
-	public boolean isMostrarCondiciones() {
+	public Boolean getMostrarCondiciones() {
 		return mostrarCondiciones;
 	}
 
-	public void setMostrarCondiciones(boolean mostrarCondiciones) {
+	public void setMostrarCondiciones(Boolean mostrarCondiciones) {
 		this.mostrarCondiciones = mostrarCondiciones;
 	}
 
-	public boolean isMostrarObservacionesParametro() {
+	public Boolean getMostrarObservacionesParametro() {
 		return mostrarObservacionesParametro;
 	}
 
-	public void setMostrarObservacionesParametro(boolean mostrarObservacionesParametro) {
+	public void setMostrarObservacionesParametro(Boolean mostrarObservacionesParametro) {
 		this.mostrarObservacionesParametro = mostrarObservacionesParametro;
+	}
+
+	public Boolean getEnviarGrafico() {
+		return enviarGrafico;
+	}
+
+	public void setEnviarGrafico(Boolean enviarGrafico) {
+		this.enviarGrafico = enviarGrafico;
 	}
 
 	public Set<MaquinaPrueba> getPruebas() {

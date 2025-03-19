@@ -1,18 +1,14 @@
 package ar.com.avaco.nitrophyl.ws.service.impl;
 
-import java.util.List;
-
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
 
-import ar.com.avaco.commons.exception.BusinessException;
 import ar.com.avaco.nitrophyl.domain.entities.cliente.Cliente;
 import ar.com.avaco.nitrophyl.domain.entities.formula.Formula;
 import ar.com.avaco.nitrophyl.domain.entities.maquina.Maquina;
 import ar.com.avaco.nitrophyl.domain.entities.maquina.MaquinaPrueba;
 import ar.com.avaco.nitrophyl.domain.entities.reporte.ReporteLoteConfiguracionCliente;
-import ar.com.avaco.nitrophyl.service.maquina.MaquinaPruebaService;
 import ar.com.avaco.nitrophyl.service.reporte.ReporteLoteConfiguracionClienteService;
 import ar.com.avaco.nitrophyl.ws.dto.ReporteLoteConfiguracionClienteDTO;
 import ar.com.avaco.nitrophyl.ws.service.ReporteLoteConfiguracionClienteEPService;
@@ -48,10 +44,11 @@ public class ReporteLoteConfiguracionClienteEPServiceImpl extends
 			}
 		}
 
-		entity.setMostrarObservacionesParametro(dto.isMostrarObservacionesParametro());
-		entity.setMostrarCondiciones(dto.isMostrarCondiciones());
-		entity.setMostrarParametros(dto.isMostrarParametros());
-		entity.setMostrarResultados(dto.isMostrarResultados());
+		entity.setMostrarObservacionesParametro(dto.getMostrarObservacionesParametro());
+		entity.setMostrarCondiciones(dto.getMostrarCondiciones());
+		entity.setMostrarParametros(dto.getMostrarParametros());
+		entity.setMostrarResultados(dto.getMostrarResultados());
+		entity.setEnviarGrafico(dto.getEnviarGrafico());
 
 		return entity;
 	}
@@ -75,10 +72,11 @@ public class ReporteLoteConfiguracionClienteEPServiceImpl extends
 			dto.setMaquina(entity.getMaquina().getNombre());
 		}
 
-		dto.setMostrarObservacionesParametro(entity.isMostrarObservacionesParametro());
-		dto.setMostrarCondiciones(entity.isMostrarCondiciones());
-		dto.setMostrarParametros(entity.isMostrarParametros());
-		dto.setMostrarResultados(entity.isMostrarResultados());
+		dto.setMostrarObservacionesParametro(entity.getMostrarObservacionesParametro());
+		dto.setMostrarCondiciones(entity.getMostrarCondiciones());
+		dto.setMostrarParametros(entity.getMostrarParametros());
+		dto.setMostrarResultados(entity.getMostrarResultados());
+		dto.setEnviarGrafico(entity.getEnviarGrafico());
 		
 		for (MaquinaPrueba mp : entity.getPruebas()) {
 			dto.getIdsPruebas().add(mp.getId());

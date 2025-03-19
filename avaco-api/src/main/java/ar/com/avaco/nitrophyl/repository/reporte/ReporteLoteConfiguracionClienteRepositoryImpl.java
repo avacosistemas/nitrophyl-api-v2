@@ -24,7 +24,7 @@ public class ReporteLoteConfiguracionClienteRepositoryImpl extends NJBaseReposit
 	}
 
 	@Override
-	public List<ReporteLoteConfiguracionCliente> findConfiguracionesByClienteFormula(Formula formula, Cliente cliente) {
+	public List<ReporteLoteConfiguracionCliente> findConfiguracionesByClienteIdFormulaId(Formula formula, Cliente cliente) {
 		Criteria criteria = getCurrentSession().createCriteria(ReporteLoteConfiguracionCliente.class);
 		criteria.add(Restrictions.eq("formula", formula));
 		Disjunction disjunction = Restrictions.disjunction();

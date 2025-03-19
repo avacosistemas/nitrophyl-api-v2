@@ -4,6 +4,8 @@ import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.Column;
+import javax.persistence.ColumnResult;
+import javax.persistence.ConstructorResult;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -18,12 +20,31 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
+import javax.persistence.SqlResultSetMapping;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
 import ar.com.avaco.nitrophyl.domain.entities.cliente.Cliente;
+import ar.com.avaco.nitrophyl.ws.dto.MoldeListadoDTO;
+
+@SqlResultSetMapping(name="MoldeListadoDTOMapper",
+classes = {
+    @ConstructorResult(
+            targetClass = MoldeListadoDTO.class,
+            columns = {
+                @ColumnResult(name = "id", type = Integer.class),
+                @ColumnResult(name = "codigo", type = String.class),
+                @ColumnResult(name = "estado", type = String.class),
+                @ColumnResult(name = "nombre", type = String.class),
+                @ColumnResult(name = "ubicacion", type = String.class),
+                @ColumnResult(name = "alto", type = Integer.class),
+                @ColumnResult(name = "ancho", type = Integer.class),
+                @ColumnResult(name = "diametro", type = Integer.class),
+                @ColumnResult(name = "profundidad", type = Integer.class),
+            })
+})
 
 @Entity
 @Table(name = "MOLDES")

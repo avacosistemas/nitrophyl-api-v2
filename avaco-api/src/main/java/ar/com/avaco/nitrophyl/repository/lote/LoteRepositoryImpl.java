@@ -24,6 +24,7 @@ public class LoteRepositoryImpl extends NJBaseRepository<Long, Lote> implements 
 	}
 
 	@Override
+	@SuppressWarnings("unchecked")
 	public List<RegistroEnsayoLotePorMaquinaDTO> getEnsayosLotePorMaquina(ReporteEnsayoLotePorMaquinaFilterDTO filtro) {
 
 		String lotesquery = "select distinct(l.id_lote) from ensayo_resultado er "
@@ -107,25 +108,16 @@ public class LoteRepositoryImpl extends NJBaseRepository<Long, Lote> implements 
 
 		Integer listCount = this.listCount(lf);
 
-		@SuppressWarnings("unchecked")
 		List<RegistroEnsayoLotePorMaquinaDTO> list = new ArrayList<RegistroEnsayoLotePorMaquinaDTO>();
 
 		if (ids != null && !ids.isEmpty()) {
 
-			String query = "select 	"
-					+ "	  CAST(row_number() over() as integer) as row"
-					+ " , CAST(:rows as integer) AS rows"
-					+ " , CAST(lo.id_lote as Integer) as idLote "
-					+ " , lo.nro_lote as nroLote"
-					+ " , lo.fecha as fecha"
-					+ " , lo.observaciones as observaciones "
-					+ " , f.id_formula as idFormula"
-					+ " , f.nombre as nombreFormula "
-					+ " , cpp.id_maquina_prueba as idMaquinaPrueba"
-					+ " , er.redondeo"
-					+ " , er.resultado "
-					+ " , e.estado as estadoEnsayo "
-					+ " from ensayo_resultado er "
+			String query = "select 	" + "	  CAST(row_number() over() as integer) as row"
+					+ " , CAST(:rows as integer) AS rows" + " , CAST(lo.id_lote as Integer) as idLote "
+					+ " , lo.nro_lote as nroLote" + " , lo.fecha as fecha" + " , lo.observaciones as observaciones "
+					+ " , f.id_formula as idFormula" + " , f.nombre as nombreFormula "
+					+ " , cpp.id_maquina_prueba as idMaquinaPrueba" + " , er.redondeo" + " , er.resultado "
+					+ " , e.estado as estadoEnsayo " + " from ensayo_resultado er "
 					+ " left join ensayo e on e.id_ensayo = er.id_ensayo "
 					+ " left join conf_prueba cp on cp.id_conf_prueba = e.id_conf_prueba "
 					+ " left join conf_prueba_param cpp ON cpp.id_conf_prueba_param = er.id_conf_prueba_param "

@@ -8,6 +8,7 @@ public class MoldePlanoDTO {
 	private String nombreArchivo;
 	private byte[] archivo;
 	private String descripcion;
+	private String clasificacion;
 
 	public MoldePlanoDTO() {
 		super();
@@ -19,6 +20,7 @@ public class MoldePlanoDTO {
 		this.nombreArchivo = mp.getNombreArchivo();
 		this.archivo = mp.getArchivo();
 		this.descripcion = mp.getDescripcion();
+		this.clasificacion = mp.getClasificacion().toString();
 	}
 
 	public Long getIdMolde() {
@@ -51,6 +53,14 @@ public class MoldePlanoDTO {
 
 	public void setDescripcion(String descripcion) {
 		this.descripcion = descripcion;
+	}
+
+	public String getClasificacion() {
+		return clasificacion;
+	}
+
+	public void setClasificacion(String clasificacion) {
+		this.clasificacion = clasificacion;
 	}
 
 }

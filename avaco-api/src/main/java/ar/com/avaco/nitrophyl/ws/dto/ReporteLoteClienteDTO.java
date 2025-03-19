@@ -4,6 +4,9 @@ public class ReporteLoteClienteDTO {
 
 	private Long idCliente;
 	private Long idLote;
+	private byte[] archivo;
+	private String observaciones;
+	private String nombreArchivo;
 
 	public Long getIdCliente() {
 		return idCliente;
@@ -19,6 +22,30 @@ public class ReporteLoteClienteDTO {
 
 	public void setIdLote(Long idLote) {
 		this.idLote = idLote;
+	}
+
+	public byte[] getArchivo() {
+		return archivo;
+	}
+
+	public void setArchivo(byte[] archivo) {
+		this.archivo = archivo;
+	}
+
+	public String getObservaciones() {
+		return observaciones;
+	}
+
+	public void setObservaciones(String observaciones) {
+		this.observaciones = observaciones;
+	}
+
+	public String getNombreArchivo() {
+		return nombreArchivo;
+	}
+
+	public void setNombreArchivo(String nombreArchivo) {
+		this.nombreArchivo = nombreArchivo;
 	}
 
 }

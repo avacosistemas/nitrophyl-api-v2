@@ -183,22 +183,22 @@ public class LoteRestController extends AbstractDTORestController<LoteDTO, Long,
 		return new ResponseEntity<JSONResponse>(response, HttpStatus.OK);
 	}
 	
-	@RequestMapping(value = "/lote/grafico", method = RequestMethod.POST)
-	public ResponseEntity<JSONResponse> addGrafico(@RequestBody LoteGraficoDTO loteGraficoDTO) throws Exception {
-		LoteGraficoDTO saved = this.service.addGrafico(loteGraficoDTO);
-		JSONResponse response = new JSONResponse();
-		response.setData(saved);
-		response.setStatus(JSONResponse.OK);
-		return new ResponseEntity<JSONResponse>(response, HttpStatus.OK);
-	}
-	
-	@RequestMapping(value = "/lote/grafico", method = RequestMethod.GET)
-	public ResponseEntity<JSONResponse> getGrafico(@RequestParam Long idLote) throws Exception {
-		JSONResponse response = new JSONResponse();
-		response.setStatus(JSONResponse.OK);
-		ArchivoDTO archivo = this.service.getGrafico(idLote);
-		response.setData(archivo);
-		return new ResponseEntity<JSONResponse>(response, HttpStatus.OK);
-	}
+//	@RequestMapping(value = "/lote/grafico", method = RequestMethod.POST)
+//	public ResponseEntity<JSONResponse> addGrafico(@RequestBody LoteGraficoDTO loteGraficoDTO) throws Exception {
+//		LoteGraficoDTO saved = this.service.addGrafico(loteGraficoDTO);
+//		JSONResponse response = new JSONResponse();
+//		response.setData(saved);
+//		response.setStatus(JSONResponse.OK);
+//		return new ResponseEntity<JSONResponse>(response, HttpStatus.OK);
+//	}
+//	
+//	@RequestMapping(value = "/lote/grafico", method = RequestMethod.GET)
+//	public ResponseEntity<JSONResponse> getGrafico(@RequestParam Long idLote) throws Exception {
+//		JSONResponse response = new JSONResponse();
+//		response.setStatus(JSONResponse.OK);
+//		ArchivoDTO archivo = this.service.getGrafico(idLote);
+//		response.setData(archivo);
+//		return new ResponseEntity<JSONResponse>(response, HttpStatus.OK);
+//	}
 	
 }

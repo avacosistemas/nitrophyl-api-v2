@@ -14,13 +14,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import ar.com.avaco.nitrophyl.domain.entities.moldes.MoldeObservacion;
 import ar.com.avaco.nitrophyl.ws.dto.MoldeBocaListadoDTO;
 import ar.com.avaco.nitrophyl.ws.dto.MoldeClienteDTO;
 import ar.com.avaco.nitrophyl.ws.dto.MoldeDTO;
 import ar.com.avaco.nitrophyl.ws.dto.MoldeDimensionListadoDTO;
+import ar.com.avaco.nitrophyl.ws.dto.MoldeFilterDTO;
 import ar.com.avaco.nitrophyl.ws.dto.MoldeFotoDTO;
 import ar.com.avaco.nitrophyl.ws.dto.MoldeFotoListadoDTO;
 import ar.com.avaco.nitrophyl.ws.dto.MoldeListadoDTO;
+import ar.com.avaco.nitrophyl.ws.dto.MoldeObservacionDTO;
 import ar.com.avaco.nitrophyl.ws.dto.MoldePlanoDTO;
 import ar.com.avaco.nitrophyl.ws.dto.MoldePlanoListadoDTO;
 import ar.com.avaco.nitrophyl.ws.dto.MoldeRegistroDTO;
@@ -38,13 +41,23 @@ public class MoldeRestController extends AbstractDTORestController<MoldeDTO, Lon
 	/* EP Molde */
 
 	@RequestMapping(value = "/molde", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<JSONResponse> listMoldes() throws Exception {
-		List<MoldeListadoDTO> listMoldeListado = this.service.listado();
+	public ResponseEntity<JSONResponse> list(MoldeFilterDTO filter) throws Exception {
+		List<MoldeListadoDTO> listMoldeListado = this.service.list(filter);
 		JSONResponse response = new JSONResponse();
 		response.setData(listMoldeListado);
 		response.setStatus(JSONResponse.OK);
 		return new ResponseEntity<JSONResponse>(response, HttpStatus.OK);
 	}
+
+	
+//	@RequestMapping(value = "/molde", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+//	public ResponseEntity<JSONResponse> listMoldes() throws Exception {
+//		List<MoldeListadoDTO> listMoldeListado = this.service.listado();
+//		JSONResponse response = new JSONResponse();
+//		response.setData(listMoldeListado);
+//		response.setStatus(JSONResponse.OK);
+//		return new ResponseEntity<JSONResponse>(response, HttpStatus.OK);
+//	}
 
 	@RequestMapping(value = "/molde/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<JSONResponse> getMolde(@PathVariable("id") Long id) throws Exception {
@@ -208,6 +221,25 @@ public class MoldeRestController extends AbstractDTORestController<MoldeDTO, Lon
 		List<MoldeClienteDTO> result = this.service.updateMoldeClientes(idMolde, moldeClientesListadoDTOs);
 		JSONResponse response = new JSONResponse();
 		response.setData(result);
+		response.setStatus(JSONResponse.OK);
+		return new ResponseEntity<JSONResponse>(response, HttpStatus.OK);
+	}
+	
+	/* EP Molde Observaciones */
+	@RequestMapping(value = "/molde/observacion/{idMolde}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<JSONResponse> getObservaciones(@PathVariable("idMolde") Long idMolde) throws Exception {
+		List<MoldeObservacionDTO> observaciones = this.service.getMoldeObservaciones(idMolde);
+		JSONResponse response = new JSONResponse();
+		response.setData(observaciones);
+		response.setStatus(JSONResponse.OK);
+		return new ResponseEntity<JSONResponse>(response, HttpStatus.OK);
+	}
+	
+	@RequestMapping(value = "/molde/observacion/", method = RequestMethod.POST)
+	public ResponseEntity<JSONResponse> addMoldeFoto(@RequestBody MoldeObservacionDTO dto) throws Exception {
+		MoldeObservacionDTO saved = this.service.addMoldeObservacion(dto);
+		JSONResponse response = new JSONResponse();
+		response.setData(saved);
 		response.setStatus(JSONResponse.OK);
 		return new ResponseEntity<JSONResponse>(response, HttpStatus.OK);
 	}

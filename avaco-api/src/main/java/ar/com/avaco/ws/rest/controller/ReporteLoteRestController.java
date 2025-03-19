@@ -1,7 +1,5 @@
 package ar.com.avaco.ws.rest.controller;
 
-import java.util.List;
-
 import javax.annotation.Resource;
 
 import org.springframework.http.HttpStatus;
@@ -16,8 +14,8 @@ import ar.com.avaco.nitrophyl.ws.dto.ArchivoDTO;
 import ar.com.avaco.nitrophyl.ws.dto.LoteDTO;
 import ar.com.avaco.nitrophyl.ws.dto.PageDTO;
 import ar.com.avaco.nitrophyl.ws.dto.ReporteEnsayoLotePorMaquinaDTO;
-import ar.com.avaco.nitrophyl.ws.dto.ReporteLoteClienteDTO;
 import ar.com.avaco.nitrophyl.ws.dto.ReporteEnsayoLotePorMaquinaFilterDTO;
+import ar.com.avaco.nitrophyl.ws.dto.ReporteLoteClienteDTO;
 import ar.com.avaco.nitrophyl.ws.service.LoteEPService;
 import ar.com.avaco.ws.rest.dto.ErrorResponse;
 import ar.com.avaco.ws.rest.dto.JSONResponse;
@@ -51,7 +49,7 @@ public class ReporteLoteRestController extends AbstractDTORestController<LoteDTO
 		JSONResponse response = new JSONResponse();
 		response.setStatus(JSONResponse.OK);
 		try {
-			this.service.enviarReporte(dto.getIdLote(), dto.getIdCliente());
+			this.service.enviarReporte(dto.getIdLote(), dto.getIdCliente(), dto.getArchivo(), dto.getNombreArchivo(), dto.getObservaciones());
 			response.setData(true);
 		} catch (Exception e) {
 			ErrorResponse eresp = new ErrorResponse();

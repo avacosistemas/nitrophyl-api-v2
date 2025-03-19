@@ -11,6 +11,7 @@ public class MoldePlanoListadoDTO {
 	private Integer version;
 	private String fecha;
 	private String descripcion;
+	private String clasificacion;
 
 	public MoldePlanoListadoDTO() {
 	}
@@ -23,6 +24,7 @@ public class MoldePlanoListadoDTO {
 		this.version = mp.getVersion();
 		this.fecha = DateUtils.toString(mp.getFecha(), DateUtils.dd_MM_yy_HH_mm);
 		this.descripcion = mp.getDescripcion();
+		this.clasificacion = mp.getClasificacion() == null ? "NITROPHYL" : mp.getClasificacion().toString();
 	}
 
 	public Long getId() {
@@ -71,6 +73,14 @@ public class MoldePlanoListadoDTO {
 
 	public void setDescripcion(String descripcion) {
 		this.descripcion = descripcion;
+	}
+
+	public String getClasificacion() {
+		return clasificacion;
+	}
+
+	public void setClasificacion(String clasificacion) {
+		this.clasificacion = clasificacion;
 	}
 
 }

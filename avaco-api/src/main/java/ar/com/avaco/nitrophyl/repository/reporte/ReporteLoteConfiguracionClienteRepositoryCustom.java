@@ -9,7 +9,7 @@ import ar.com.avaco.nitrophyl.domain.entities.reporte.ReporteLoteConfiguracionCl
 
 public interface ReporteLoteConfiguracionClienteRepositoryCustom {
 
-	List<ReporteLoteConfiguracionCliente> findConfiguracionesByClienteFormula(Formula formula, Cliente cliente);
+	List<ReporteLoteConfiguracionCliente> findConfiguracionesByClienteIdFormulaId(Long idFormula, Long idCliente);
 
 	ReporteLoteConfiguracionCliente findByFormulaClienteMaquina(Formula formula, Cliente cliente, Maquina maquina);
 

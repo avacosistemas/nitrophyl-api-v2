@@ -4,6 +4,8 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -51,6 +53,9 @@ public class MoldePlano extends ar.com.avaco.arc.core.domain.Entity<Long> {
 	@Column(name = "ARCHIVO", nullable = true)
 	@Type(type = "org.hibernate.type.BinaryType")
 	private byte[] archivo;
+
+	@Enumerated(EnumType.STRING)
+	private MoldePlanoClasificacion clasificacion;
 
 	public MoldePlano() {
 		super();
@@ -118,6 +123,14 @@ public class MoldePlano extends ar.com.avaco.arc.core.domain.Entity<Long> {
 
 	public void setDescripcion(String descripcion) {
 		this.descripcion = descripcion;
+	}
+
+	public MoldePlanoClasificacion getClasificacion() {
+		return clasificacion;
+	}
+
+	public void setClasificacion(MoldePlanoClasificacion clasificacion) {
+		this.clasificacion = clasificacion;
 	}
 
 }
