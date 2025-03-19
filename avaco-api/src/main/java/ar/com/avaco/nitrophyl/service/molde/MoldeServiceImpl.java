@@ -20,7 +20,6 @@ public class MoldeServiceImpl extends NJBaseService<Long, Molde, MoldeRepository
 		this.repository = moldeRepository;
 	}
 
-	@Override
 	public List<MoldeListadoDTO> list(MoldeFilterDTO filter) {
 		return this.repository.listGrilla(filter);
 	}

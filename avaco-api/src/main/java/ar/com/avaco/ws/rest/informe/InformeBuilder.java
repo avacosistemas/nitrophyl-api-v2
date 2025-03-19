@@ -114,7 +114,7 @@ public class InformeBuilder {
 				if (ensayo == null)
 					ensayo = generarEnsayoVacio(parametro);
 
-				ReporteLoteConfiguracionCliente reporteLoteConfiguracionCliente = serviceConfiguracion.buscarConfiguracion(cliente,
+				ReporteLoteConfiguracionCliente reporteLoteConfiguracionCliente = serviceConfiguracion.buscarConfiguracion(cliente.getId(),
 						configuracion, idMaquina);
 
 				if (reporteLoteConfiguracionCliente != null) {

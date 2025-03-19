@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import ar.com.avaco.nitrophyl.domain.entities.moldes.MoldeObservacion;
 import ar.com.avaco.nitrophyl.ws.dto.MoldeBocaListadoDTO;
 import ar.com.avaco.nitrophyl.ws.dto.MoldeClienteDTO;
 import ar.com.avaco.nitrophyl.ws.dto.MoldeDTO;

@@ -8,7 +8,7 @@ import ar.com.avaco.arc.core.component.bean.repository.NJBaseRepository;
 import ar.com.avaco.nitrophyl.domain.entities.moldes.MoldeBoca;
 
 @Repository("moldeBocaRepository")
-public class MoldeBocaRepositoryImpl extends NJBaseRepository<Long, MoldeBoca> implements MoldeRepositoryCustom {
+public class MoldeBocaRepositoryImpl extends NJBaseRepository<Long, MoldeBoca> implements MoldeBocaRepositoryCustom {
 
 	public MoldeBocaRepositoryImpl(EntityManager entityManager) {
 		super(MoldeBoca.class, entityManager);

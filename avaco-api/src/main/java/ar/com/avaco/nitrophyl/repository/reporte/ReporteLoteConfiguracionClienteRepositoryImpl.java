@@ -16,7 +16,8 @@ import ar.com.avaco.nitrophyl.domain.entities.maquina.Maquina;
 import ar.com.avaco.nitrophyl.domain.entities.reporte.ReporteLoteConfiguracionCliente;
 
 @Repository("reporteLoteConfiguracionClienteRepository")
-public class ReporteLoteConfiguracionClienteRepositoryImpl extends NJBaseRepository<Long, ReporteLoteConfiguracionCliente>
+public class ReporteLoteConfiguracionClienteRepositoryImpl
+		extends NJBaseRepository<Long, ReporteLoteConfiguracionCliente>
 		implements ReporteLoteConfiguracionClienteRepositoryCustom {
 
 	public ReporteLoteConfiguracionClienteRepositoryImpl(EntityManager entityManager) {
@@ -24,38 +25,37 @@ public class ReporteLoteConfiguracionClienteRepositoryImpl extends NJBaseReposit
 	}
 
 	@Override
-	public List<ReporteLoteConfiguracionCliente> findConfiguracionesByClienteIdFormulaId(Formula formula, Cliente cliente) {
-		Criteria criteria = getCurrentSession().createCriteria(ReporteLoteConfiguracionCliente.class);
-		criteria.add(Restrictions.eq("formula", formula));
-		Disjunction disjunction = Restrictions.disjunction();
-		disjunction.add(Restrictions.eqOrIsNull("cliente", cliente));
-		disjunction.add(Restrictions.isNull("cliente"));
-		criteria.add(disjunction);
-		return criteria.list();
-	}
-
-	@Override
 	public ReporteLoteConfiguracionCliente findByFormulaClienteMaquina(Formula formula, Cliente cliente,
 			Maquina maquina) {
 		Criteria criteria = getCurrentSession().createCriteria(ReporteLoteConfiguracionCliente.class);
-		
+
 		criteria.add(Restrictions.eq("formula", formula));
-		
+
 		if (cliente == null || cliente.getId() == 0) {
 			criteria.add(Restrictions.isNull("cliente"));
 		} else {
 			criteria.add(Restrictions.eq("cliente.id", cliente.getId()));
 		}
-		
+
 		if (maquina == null || maquina.getId() == 0) {
 			criteria.add(Restrictions.isNull("maquina"));
 		} else {
 			criteria.add(Restrictions.eq("maquina.id", maquina.getId()));
 		}
-		
+
 		return (ReporteLoteConfiguracionCliente) criteria.uniqueResult();
 	}
 
-	
-	
+	@Override
+	public List<ReporteLoteConfiguracionCliente> findConfiguracionesByClienteIdFormulaId(Long idFormula,
+			Long idCliente) {
+		Criteria criteria = getCurrentSession().createCriteria(ReporteLoteConfiguracionCliente.class);
+		criteria.add(Restrictions.eq("formula.id", idFormula));
+		Disjunction disjunction = Restrictions.disjunction();
+		disjunction.add(Restrictions.eqOrIsNull("cliente.id", idCliente));
+		disjunction.add(Restrictions.isNull("cliente"));
+		criteria.add(disjunction);
+		return criteria.list();
+	}
+
 }
