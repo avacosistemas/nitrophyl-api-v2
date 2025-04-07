@@ -8,7 +8,7 @@ import ar.com.avaco.nitrophyl.ws.dto.PiezaDTO;
 import ar.com.avaco.nitrophyl.ws.service.PiezaEPService;
 
 @RestController
-public class ProductosRestController extends AbstractDTORestController<PiezaDTO, Long, PiezaEPService> {
+public class PiezaRestController extends AbstractDTORestController<PiezaDTO, Long, PiezaEPService> {
 
 	@Resource(name = "piezaEPService")
 	public void setService(PiezaEPService piezaEPService) {
