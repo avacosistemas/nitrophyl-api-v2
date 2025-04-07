@@ -11,28 +11,12 @@ public class LoteGraficoDTO extends DTOEntity<Long> {
 	private String maquina;
 	private String lote;
 
-	public String getLote() {
-		return lote;
+	public Long getId() {
+		return id;
 	}
 
-	public void setLote(String lote) {
-		this.lote = lote;
-	}
-
-	public Long getIdMaquina() {
-		return idMaquina;
-	}
-
-	public void setIdMaquina(Long idMaquina) {
-		this.idMaquina = idMaquina;
-	}
-
-	public String getMaquina() {
-		return maquina;
-	}
-
-	public void setMaquina(String maquina) {
-		this.maquina = maquina;
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	public Long getIdLote() {
@@ -51,12 +35,28 @@ public class LoteGraficoDTO extends DTOEntity<Long> {
 		this.archivo = archivo;
 	}
 
-	public Long getId() {
-		return id;
+	public Long getIdMaquina() {
+		return idMaquina;
 	}
 
-	public void setId(Long id) {
-		this.id = id;
+	public void setIdMaquina(Long idMaquina) {
+		this.idMaquina = idMaquina;
+	}
+
+	public String getMaquina() {
+		return maquina;
+	}
+
+	public void setMaquina(String maquina) {
+		this.maquina = maquina;
+	}
+
+	public String getLote() {
+		return lote;
+	}
+
+	public void setLote(String lote) {
+		this.lote = lote;
 	}
 
 }

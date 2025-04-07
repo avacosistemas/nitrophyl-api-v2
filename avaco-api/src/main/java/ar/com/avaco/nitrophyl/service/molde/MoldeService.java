@@ -11,4 +11,6 @@ public interface MoldeService extends NJService<Long, Molde> {
 
 	List<MoldeListadoDTO> list(MoldeFilterDTO filter);
 
+	int listCount(MoldeFilterDTO filter);
+
 }

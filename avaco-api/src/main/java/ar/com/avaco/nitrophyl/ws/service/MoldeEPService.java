@@ -17,6 +17,7 @@ import ar.com.avaco.nitrophyl.ws.dto.MoldeObservacionDTO;
 import ar.com.avaco.nitrophyl.ws.dto.MoldePlanoDTO;
 import ar.com.avaco.nitrophyl.ws.dto.MoldePlanoListadoDTO;
 import ar.com.avaco.nitrophyl.ws.dto.MoldeRegistroDTO;
+import ar.com.avaco.nitrophyl.ws.dto.PageDTO;
 import ar.com.avaco.ws.rest.service.CRUDEPService;
 
 public interface MoldeEPService extends CRUDEPService<Long, MoldeDTO> {
@@ -58,6 +59,6 @@ public interface MoldeEPService extends CRUDEPService<Long, MoldeDTO> {
 
 	MoldeObservacionDTO addMoldeObservacion(MoldeObservacionDTO dto);
 
-	List<MoldeListadoDTO> list(MoldeFilterDTO filter);
+	PageDTO<MoldeListadoDTO> list(MoldeFilterDTO filter);
 
 }

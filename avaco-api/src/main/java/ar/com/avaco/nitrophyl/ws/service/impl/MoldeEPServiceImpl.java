@@ -44,6 +44,7 @@ import ar.com.avaco.nitrophyl.ws.dto.MoldeObservacionDTO;
 import ar.com.avaco.nitrophyl.ws.dto.MoldePlanoDTO;
 import ar.com.avaco.nitrophyl.ws.dto.MoldePlanoListadoDTO;
 import ar.com.avaco.nitrophyl.ws.dto.MoldeRegistroDTO;
+import ar.com.avaco.nitrophyl.ws.dto.PageDTO;
 import ar.com.avaco.nitrophyl.ws.service.MoldeEPService;
 import ar.com.avaco.utils.DateUtils;
 import ar.com.avaco.ws.rest.service.CRUDEPBaseService;
@@ -362,9 +363,13 @@ public class MoldeEPServiceImpl extends CRUDEPBaseService<Long, MoldeDTO, Molde,
 	}
 
 	@Override
-	public List<MoldeListadoDTO> list(MoldeFilterDTO filter) {
+	public PageDTO<MoldeListadoDTO> list(MoldeFilterDTO filter) {
 		List<MoldeListadoDTO> list = this.service.list(filter);
-		return list;
+		int cantidad = this.service.listCount(filter);
+		PageDTO<MoldeListadoDTO> pagedto = new PageDTO<>();
+		pagedto.setPage(list);
+		pagedto.setTotalReg(cantidad);
+		return pagedto;
 	}
 
 }

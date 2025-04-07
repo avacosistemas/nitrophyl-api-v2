@@ -1,5 +1,5 @@
 package ar.com.avaco.nitrophyl.domain.entities.moldes;
 
 public enum TipoDimension {
-	ALTO, ANCHO, PROFUNDIDAD
+	ALTO, ANCHO, PROFUNDIDAD, DIAMETRO
 }

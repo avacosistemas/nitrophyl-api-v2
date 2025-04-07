@@ -3,7 +3,9 @@
  */
 package ar.com.avaco.nitrophyl.ws.dto;
 
-public class MoldeListadoDTO {
+import ar.com.avaco.ws.rest.dto.DTOEntity;
+
+public class MoldeListadoDTO extends DTOEntity<Long> {
 
 	private Long id;
 	private String codigo;

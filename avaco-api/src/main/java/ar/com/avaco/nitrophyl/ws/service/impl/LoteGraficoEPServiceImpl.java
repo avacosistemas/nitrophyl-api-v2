@@ -6,9 +6,11 @@ import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
 
+import ar.com.avaco.nitrophyl.domain.entities.lote.Lote;
 import ar.com.avaco.nitrophyl.domain.entities.maquina.Maquina;
 import ar.com.avaco.nitrophyl.domain.entities.moldes.LoteGrafico;
 import ar.com.avaco.nitrophyl.service.lote.LoteGraficoService;
+import ar.com.avaco.nitrophyl.service.lote.LoteService;
 import ar.com.avaco.nitrophyl.service.maquina.MaquinaService;
 import ar.com.avaco.nitrophyl.ws.dto.LoteGraficoDTO;
 import ar.com.avaco.nitrophyl.ws.dto.LoteGraficoSinArchivoDTO;
@@ -21,15 +23,19 @@ public class LoteGraficoEPServiceImpl extends CRUDEPBaseService<Long, LoteGrafic
 		implements LoteGraficoEPService {
 
 	private MaquinaService maquinaService;
+	private LoteService loteService;
 	
 	@Override
 	protected LoteGrafico convertToEntity(LoteGraficoDTO dto) {
-		Maquina maquina = maquinaService.get(dto.getIdMaquina());
 		LoteGrafico lg = new LoteGrafico();
+
+		Lote lote = loteService.get(dto.getIdLote());
+		lg.setLote(lote);
+		Maquina maquina = maquinaService.get(dto.getIdMaquina());
+		lg.setMaquina(maquina);
 		lg.setArchivo(dto.getArchivo());
 		lg.setFecha(DateUtils.getFechaYHoraActual());
 		lg.setIdLote(dto.getIdLote());
-		lg.setMaquina(maquina);
 		return lg;
 	}
 
@@ -59,6 +65,11 @@ public class LoteGraficoEPServiceImpl extends CRUDEPBaseService<Long, LoteGrafic
 	@Override
 	public List<LoteGraficoSinArchivoDTO> listByIdLote(Long idLote) {
 		return this.service.listGraficosByLote(idLote);
+	}
+
+	@Resource(name = "loteService")
+	public void setLoteService(LoteService loteService) {
+		this.loteService = loteService;
 	}
 	
 }
