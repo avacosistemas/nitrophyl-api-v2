@@ -226,7 +226,7 @@ public class MoldeRestController extends AbstractDTORestController<MoldeDTO, Lon
 	}
 	
 	@RequestMapping(value = "/molde/observacion/", method = RequestMethod.POST)
-	public ResponseEntity<JSONResponse> addMoldeFoto(@RequestBody MoldeObservacionDTO dto) throws Exception {
+	public ResponseEntity<JSONResponse> addMoldeObservacion(@RequestBody MoldeObservacionDTO dto) throws Exception {
 		MoldeObservacionDTO saved = this.service.addMoldeObservacion(dto);
 		JSONResponse response = new JSONResponse();
 		response.setData(saved);
@@ -234,5 +234,12 @@ public class MoldeRestController extends AbstractDTORestController<MoldeDTO, Lon
 		return new ResponseEntity<JSONResponse>(response, HttpStatus.OK);
 	}
 	
+	@RequestMapping(value = "/molde/observacion/{idObservacion}", method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<JSONResponse> deleteObservacion(@PathVariable("idObservacion") Long idObservacion) throws Exception {
+		this.service.remove(idObservacion);
+		JSONResponse response = new JSONResponse();
+		response.setStatus(JSONResponse.OK);
+		return new ResponseEntity<JSONResponse>(response, HttpStatus.OK);
+	}
 	
 }

@@ -14,14 +14,14 @@ public class ReporteEnsayoLotePorMaquinaFilterDTO extends SortPageDTO {
 
 	public String nroLote;
 
-	public String estadoLote;
+	public String estadoEnsayo;
 
-	public String getEstadoLote() {
-		return estadoLote;
+	public String getEstadoEnsayo() {
+		return estadoEnsayo;
 	}
 
-	public void setEstadoLote(String estadoLote) {
-		this.estadoLote = estadoLote;
+	public void setEstadoEnsayo(String estadoEnsayo) {
+		this.estadoEnsayo = estadoEnsayo;
 	}
 
 	public Date getFechaDesde() {

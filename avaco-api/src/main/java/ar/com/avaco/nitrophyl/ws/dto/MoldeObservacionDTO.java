@@ -22,6 +22,7 @@ public class MoldeObservacionDTO extends DTOAuditableEntity<Long> {
 		super(obs);
 		this.idMolde = obs.getIdMolde();
 		this.observacion = obs.getObservacion();
+		this.id = obs.getId();
 	}
 
 	public Long getId() {

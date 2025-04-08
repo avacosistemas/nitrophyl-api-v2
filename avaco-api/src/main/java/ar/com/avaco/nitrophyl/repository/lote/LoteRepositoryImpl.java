@@ -2,18 +2,19 @@ package ar.com.avaco.nitrophyl.repository.lote;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.persistence.EntityManager;
 
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.SQLQuery;
+import org.hibernate.type.StandardBasicTypes;
 import org.springframework.stereotype.Repository;
 
 import ar.com.avaco.arc.core.component.bean.repository.NJBaseRepository;
 import ar.com.avaco.nitrophyl.domain.entities.lote.Lote;
 import ar.com.avaco.nitrophyl.ws.dto.RegistroEnsayoLotePorMaquinaDTO;
 import ar.com.avaco.nitrophyl.ws.dto.ReporteEnsayoLotePorMaquinaFilterDTO;
-import ar.com.avaco.nitrophyl.ws.service.filter.LoteFilter;
 import ar.com.avaco.utils.DateUtils;
 
 @Repository("loteRepository")
@@ -31,9 +32,13 @@ public class LoteRepositoryImpl extends NJBaseRepository<Long, Lote> implements 
 				+ " left join ensayo e on e.id_ensayo = er.id_ensayo left join conf_prueba cp on "
 				+ "	cp.id_conf_prueba = e.id_conf_prueba left join conf_prueba_param cpp on "
 				+ "	cpp.id_conf_prueba_param = er.id_conf_prueba_param left join lote l on "
-				+ "	l.id_lote = e.id_lote where cp.id_maquina = :idMaquina group by l.id_lote ";
+				+ "	l.id_lote = e.id_lote where cp.id_maquina = :idMaquina ";
+				if (StringUtils.isNotBlank(filtro.getEstadoEnsayo())) {
+					lotesquery+= " and e.estado = '" + filtro.getEstadoEnsayo() + "' ";
+				}
+				lotesquery += " group by l.id_lote ";
 
-		String lotesFiltradosQuery = " select lo.id_lote from lote lo left join formula f on "
+		String lotesFiltradosQuery = " select cast(lo.id_lote as integer) as id_lote, cast(COUNT(*) OVER () as integer) AS total_registros from lote lo left join formula f on "
 				+ " f.id_formula = lo.id_formula where 1 = 1 ";
 
 		if (filtro.getFechaDesde() != null) {
@@ -48,10 +53,6 @@ public class LoteRepositoryImpl extends NJBaseRepository<Long, Lote> implements 
 
 		if (StringUtils.isNotBlank(filtro.getNroLote())) {
 			lotesFiltradosQuery += " and lo.nro_lote like '%" + filtro.getNroLote() + "%' ";
-		}
-
-		if (StringUtils.isNotBlank(filtro.getEstadoLote())) {
-			lotesFiltradosQuery += " and lo.estado = '" + filtro.getEstadoLote() + "' ";
 		}
 
 		if (filtro.getIdFormula() != null) {
@@ -76,48 +77,28 @@ public class LoteRepositoryImpl extends NJBaseRepository<Long, Lote> implements 
 		lotesFiltradosQuery += " offset " + (filtro.getFirst() - 1);
 
 		SQLQuery createSQLQueryLotes = getCurrentSession().createSQLQuery(lotesFiltradosQuery);
-
 		createSQLQueryLotes.setLong("idMaquina", filtro.getIdMaquina());
+		createSQLQueryLotes.addScalar("id_lote", StandardBasicTypes.INTEGER);
+		createSQLQueryLotes.addScalar("total_registros", StandardBasicTypes.INTEGER);
+		
+		List<Object[]> idsCantidad = createSQLQueryLotes.list();
 
-		List<Long> ids = createSQLQueryLotes.list();
-
-		LoteFilter lf = new LoteFilter();
-
-		if (filtro.getFechaDesde() != null) {
-			lf.setFechaDesde(filtro.getFechaDesde());
-		}
-
-		if (filtro.getFechaHasta() != null) {
-			lf.setFechaHasta(filtro.getFechaHasta());
-		}
-
-		if (StringUtils.isNotBlank(filtro.getNroLote())) {
-			lf.setNroLote(filtro.getNroLote());
-		}
-
-		if (StringUtils.isNotBlank(filtro.getEstadoLote())) {
-			lf.setEstado(filtro.getEstadoLote());
-		}
-
-		if (filtro.getIdFormula() != null) {
-			lf.setIdFormula(filtro.getIdFormula());
-		}
-
-		lf.setRows(filtro.getRows());
-		lf.setFirst(filtro.getFirst());
-
-		Integer listCount = this.listCount(lf);
-
+		Integer rows = (Integer) idsCantidad.get(0)[1];
+		
 		List<RegistroEnsayoLotePorMaquinaDTO> list = new ArrayList<RegistroEnsayoLotePorMaquinaDTO>();
 
+		List<Integer> ids = idsCantidad.stream()
+			    .map(fila -> (Integer) fila[0])
+			    .collect(Collectors.toList());
+		
 		if (ids != null && !ids.isEmpty()) {
 
-			String query = "select 	" + "	  CAST(row_number() over() as integer) as row"
-					+ " , CAST(:rows as integer) AS rows" + " , CAST(lo.id_lote as Integer) as idLote "
-					+ " , lo.nro_lote as nroLote" + " , lo.fecha as fecha" + " , lo.observaciones as observaciones "
-					+ " , f.id_formula as idFormula" + " , f.nombre as nombreFormula "
-					+ " , cpp.id_maquina_prueba as idMaquinaPrueba" + " , er.redondeo" + " , er.resultado "
-					+ " , e.estado as estadoEnsayo " + " from ensayo_resultado er "
+			String query = "select 	CAST(row_number() over() as integer) as row"
+					+ " , CAST(:rows as integer) AS rows, CAST(lo.id_lote as Integer) as idLote "
+					+ " , lo.nro_lote as nroLote, lo.fecha as fecha, lo.observaciones as observaciones "
+					+ " , f.id_formula as idFormula, f.nombre as nombreFormula "
+					+ " , cpp.id_maquina_prueba as idMaquinaPrueba, er.redondeo, er.resultado "
+					+ " , e.estado as estadoEnsayo from ensayo_resultado er "
 					+ " left join ensayo e on e.id_ensayo = er.id_ensayo "
 					+ " left join conf_prueba cp on cp.id_conf_prueba = e.id_conf_prueba "
 					+ " left join conf_prueba_param cpp ON cpp.id_conf_prueba_param = er.id_conf_prueba_param "
@@ -131,7 +112,7 @@ public class LoteRepositoryImpl extends NJBaseRepository<Long, Lote> implements 
 
 			createSQLQuery.setParameterList("lotesIds", ids);
 			createSQLQuery.setLong("idMaquina", filtro.getIdMaquina());
-			createSQLQuery.setString("rows", listCount.toString());
+			createSQLQuery.setString("rows", rows.toString());
 
 			list = createSQLQuery.list();
 
