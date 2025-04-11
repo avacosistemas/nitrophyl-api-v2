@@ -22,12 +22,13 @@ import javax.persistence.Table;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
+import ar.com.avaco.nitrophyl.domain.entities.AuditableEntity;
 import ar.com.avaco.nitrophyl.domain.entities.formula.ConfiguracionPrueba;
 
 @Entity
 @Table(name = "ENSAYO")
 @SequenceGenerator(name = "ENSAYO_SEQ", sequenceName = "ENSAYO_SEQ", allocationSize = 1)
-public class Ensayo extends ar.com.avaco.arc.core.domain.Entity<Long> {
+public class Ensayo extends AuditableEntity<Long> {
 
 	private static final long serialVersionUID = 3379140593827986759L;
 
@@ -42,7 +43,7 @@ public class Ensayo extends ar.com.avaco.arc.core.domain.Entity<Long> {
 	private Lote lote;
 
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
-	@JoinColumn(name = "ID_CONF_PRUEBA")
+	@JoinColumn(name = "ID_CONF_PRUEBA", updatable = false)
 	private ConfiguracionPrueba configuracionPrueba;
 
 	@Column(name = "fecha")

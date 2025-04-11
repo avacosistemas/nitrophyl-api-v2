@@ -18,6 +18,7 @@ import javax.persistence.Table;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
+import ar.com.avaco.nitrophyl.domain.entities.AuditableEntity;
 import ar.com.avaco.nitrophyl.domain.entities.formula.ConfiguracionPruebaParametro;
 import ar.com.avaco.nitrophyl.ws.dto.RegistroEnsayoLotePorMaquinaDTO;
 
@@ -44,7 +45,7 @@ classes = {
 @Entity
 @Table(name = "ENSAYO_RESULTADO")
 @SequenceGenerator(name = "ENSAYO_RESULTADO_SEQ", sequenceName = "ENSAYO_RESULTADO_SEQ", allocationSize = 1)
-public class EnsayoResultado extends ar.com.avaco.arc.core.domain.Entity<Long> {
+public class EnsayoResultado extends AuditableEntity<Long> {
 
 	private static final long serialVersionUID = 7613782310720480769L;
 

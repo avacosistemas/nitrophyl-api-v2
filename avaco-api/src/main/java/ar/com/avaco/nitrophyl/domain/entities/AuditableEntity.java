@@ -13,10 +13,10 @@ public abstract class AuditableEntity<T extends Serializable> extends Entity<T> 
 
 	private static final long serialVersionUID = -8258576478153946986L;
 
-	@Column(name = "USUARIO_CREACION", nullable = false)
+	@Column(name = "USUARIO_CREACION", nullable = false, updatable = false)
 	private String usuarioCreacion;
 
-	@Column(name = "FECHA_CREACION", nullable = false)
+	@Column(name = "FECHA_CREACION", nullable = false, updatable = false)
 	private Date fechaCreacion;
 
 	@Column(name = "USUARIO_ACTUALIZACION", nullable = false)
