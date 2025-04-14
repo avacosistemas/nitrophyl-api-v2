@@ -28,6 +28,7 @@ public class Vulcanizacion {
 		this.temperaturaMinVulcanizacion = temperaturaVulcanizacion;
 	}
 
+	// Siempre en minutos
 	private Long tiempoVulcanizacion;
 	private Double temperaturaMinVulcanizacion;
 	private Double temperaturaMaxVulcanizacion;

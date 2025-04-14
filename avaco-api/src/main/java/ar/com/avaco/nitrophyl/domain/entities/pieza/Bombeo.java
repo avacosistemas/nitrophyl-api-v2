@@ -6,6 +6,10 @@ public class Bombeo {
 
 	private TipoBombeo tipo;
 
+	private Integer cantidad;
+	
+	private Double presion;
+
 	public Moldeo getMoldeo() {
 		return moldeo;
 	}
@@ -37,8 +41,5 @@ public class Bombeo {
 	public void setMax(Integer max) {
 		this.max = max;
 	}
-
-	private Integer min;
-	private Integer max;
-
+	
 }

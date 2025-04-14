@@ -2,7 +2,8 @@ package ar.com.avaco.nitrophyl.domain.entities.pieza;
 
 public enum TipoBombeo {
 
-	ESCALONADO("Escalonado"), SUAVE("Suave"), FONDO("A Fondo");
+	
+	AUTOMATICO ("Automatico"),ESCALONADO("Escalonado"), SUAVE("Suave"), FONDO("A Fondo");
 
 	private String label;
 

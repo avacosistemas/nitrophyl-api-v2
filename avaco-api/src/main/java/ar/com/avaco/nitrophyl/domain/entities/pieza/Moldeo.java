@@ -6,9 +6,12 @@ public class Moldeo {
 
 	private Proceso proceso;
 
+	// Cambiar por un id a un ABM de prensas
 	private String prensa;
 
+	// Agregar unidad de tiempo (seg o min)
 	private Integer precalentamiento;
+
 	private Vulcanizacion vulcanizacion;
 	private List<Bombeo> bombeos;
 
@@ -28,11 +31,11 @@ public class Moldeo {
 		this.prensa = prensa;
 	}
 
-	public String getPrecalentamiento() {
+	public Integer getPrecalentamiento() {
 		return precalentamiento;
 	}
 
-	public void setPrecalentamiento(String precalentamiento) {
+	public void setPrecalentamiento(Integer precalentamiento) {
 		this.precalentamiento = precalentamiento;
 	}
 
