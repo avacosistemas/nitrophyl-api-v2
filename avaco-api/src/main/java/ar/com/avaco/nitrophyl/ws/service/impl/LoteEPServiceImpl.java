@@ -105,7 +105,7 @@ public class LoteEPServiceImpl extends CRUDEPBaseService<Long, LoteDTO, Lote, Lo
 
 		update.setNroLote(dto.getNroLote());
 		update.setObservaciones(dto.getObservaciones());
-		return convertToDto(this.service.save(update));
+		return convertToDto(this.service.update(update));
 	}
 
 	@Override
