@@ -34,6 +34,7 @@ public class EnsayoResultadoEPServiceImpl
 		EnsayoResultadoDTO erdto = new EnsayoResultadoDTO();
 		erdto.setId(entity.getId());
 		erdto.setIdEnsayo(entity.getEnsayo().getId());
+		erdto.setIdConfiguracionPruebaParametro(entity.getConfiguracionPruebaParametro().getId());
 		erdto.setMaximo(entity.getConfiguracionPruebaParametro().getMaximo());
 		erdto.setMinimo(entity.getConfiguracionPruebaParametro().getMinimo());
 		erdto.setNombre(entity.getConfiguracionPruebaParametro().getMaquinaPrueba().getNombre());

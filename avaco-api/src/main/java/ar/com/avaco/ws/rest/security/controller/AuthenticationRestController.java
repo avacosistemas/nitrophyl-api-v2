@@ -64,10 +64,11 @@ public class AuthenticationRestController {
 		final String token = authToken.substring(7);
 		String username = jwtTokenUtil.getUsernameFromToken(token);
 		Usuario user = (Usuario) userDetailsService.loadUserByUsername(username);
-
 		if (jwtTokenUtil.canTokenBeRefreshed(token, user.getFechaAltaPassword())) {
-			String refreshedToken = jwtTokenUtil.refreshToken(token);
-			return ResponseEntity.ok(new JwtAuthenticationResponse(refreshedToken));
+			final UserDetails userDetails = userDetailsService.loadUserByUsername(user.getUsername());
+			final String newtoken = jwtTokenUtil.generateToken(userDetails);
+			User usuario=userService.getByUsername(userDetails.getUsername());	
+			return ResponseEntity.ok(new JwtAuthenticationResponse(newtoken, usuario));
 		} else {
 			return ResponseEntity.badRequest().body(null);
 		}

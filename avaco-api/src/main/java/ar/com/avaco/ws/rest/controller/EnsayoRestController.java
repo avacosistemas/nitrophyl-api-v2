@@ -51,5 +51,17 @@ public class EnsayoRestController extends AbstractDTORestController<EnsayoDTO, L
 		response.setStatus(JSONResponse.OK);
 		return new ResponseEntity<JSONResponse>(response, HttpStatus.OK);
 	}
+	
+	/**
+	 * Guarda un nuevo ensayo.
+	 */
+	@RequestMapping(value = "/ensayo", method = RequestMethod.PUT)
+	public ResponseEntity<JSONResponse> update(@RequestBody EnsayoDTO ensayoDTO) throws BusinessException {
+		EnsayoDTO saved = this.service.update(ensayoDTO);
+		JSONResponse response = new JSONResponse();
+		response.setData(saved);
+		response.setStatus(JSONResponse.OK);
+		return new ResponseEntity<JSONResponse>(response, HttpStatus.OK);
+	}
 
 }

@@ -75,6 +75,7 @@ public class EnsayoEPServiceImpl extends CRUDEPBaseService<Long, EnsayoDTO, Ensa
 		dto.setMaquina(entity.getConfiguracionPrueba().getMaquina().getNombre());
 		dto.setObservaciones(entity.getObservaciones());
 		dto.setEstado(entity.getEstado().toString());
+		dto.setIdConfiguracionPrueba(entity.getConfiguracionPrueba().getId());
 		return dto;
 	}
 
