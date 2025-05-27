@@ -2,33 +2,36 @@ package ar.com.avaco.nitrophyl.domain.entities.pieza;
 
 import java.util.List;
 
+import javax.persistence.Embeddable;
+import javax.persistence.Embedded;
+import javax.persistence.OneToMany;
+
+import ar.com.avaco.nitrophyl.domain.entities.fabrica.Prensa;
+
+@Embeddable
 public class Moldeo {
 
-	private Proceso proceso;
-
-	// Cambiar por un id a un ABM de prensas
-	private String prensa;
-
-	// Agregar unidad de tiempo (seg o min)
 	private Integer precalentamiento;
 
+	@OneToMany
+	private List<Prensa> prensas;
+
+	private String unidadPrecalentamiento;
+
+	@Embedded
 	private Vulcanizacion vulcanizacion;
+
+	@OneToMany
 	private List<Bombeo> bombeos;
 
-	public Proceso getProceso() {
-		return proceso;
-	}
-
-	public void setProceso(Proceso proceso) {
-		this.proceso = proceso;
-	}
-
-	public String getPrensa() {
-		return prensa;
-	}
-
-	public void setPrensa(String prensa) {
-		this.prensa = prensa;
+	public Moldeo clonar(Proceso proceso) {
+		Moldeo moldeo = new Moldeo();
+		this.bombeos.forEach(bombeo -> moldeo.getBombeos().add(bombeo.clonar(moldeo)));
+		moldeo.setPrecalentamiento(precalentamiento);
+		moldeo.setPrensa(prensas);
+		moldeo.setUnidadPrecalentamiento(unidadPrecalentamiento);
+		moldeo.setVulcanizacion(vulcanizacion);
+		return moldeo;
 	}
 
 	public Integer getPrecalentamiento() {
@@ -53,6 +56,22 @@ public class Moldeo {
 
 	public void setBombeos(List<Bombeo> bombeos) {
 		this.bombeos = bombeos;
+	}
+
+	public List<Prensa> getPrensa() {
+		return prensas;
+	}
+
+	public void setPrensa(List<Prensa> prensa) {
+		this.prensas = prensa;
+	}
+
+	public String getUnidadPrecalentamiento() {
+		return unidadPrecalentamiento;
+	}
+
+	public void setUnidadPrecalentamiento(String unidadPrecalentamiento) {
+		this.unidadPrecalentamiento = unidadPrecalentamiento;
 	}
 
 }

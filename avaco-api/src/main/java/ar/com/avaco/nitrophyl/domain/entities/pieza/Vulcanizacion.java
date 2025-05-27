@@ -1,15 +1,28 @@
 package ar.com.avaco.nitrophyl.domain.entities.pieza;
 
+import javax.persistence.Embeddable;
+
+@Embeddable
 public class Vulcanizacion {
 
-	private Moldeo moldeo;
+	private Long tiempoVulcanizacion;
+	private Double temperaturaMinVulcanizacion;
+	private Double temperaturaMaxVulcanizacion;
 
-	public Moldeo getMoldeo() {
-		return moldeo;
+	public Double getTemperaturaMinVulcanizacion() {
+		return temperaturaMinVulcanizacion;
 	}
 
-	public void setMoldeo(Moldeo moldeo) {
-		this.moldeo = moldeo;
+	public void setTemperaturaMinVulcanizacion(Double temperaturaMinVulcanizacion) {
+		this.temperaturaMinVulcanizacion = temperaturaMinVulcanizacion;
+	}
+
+	public Double getTemperaturaMaxVulcanizacion() {
+		return temperaturaMaxVulcanizacion;
+	}
+
+	public void setTemperaturaMaxVulcanizacion(Double temperaturaMaxVulcanizacion) {
+		this.temperaturaMaxVulcanizacion = temperaturaMaxVulcanizacion;
 	}
 
 	public Long getTiempoVulcanizacion() {
@@ -29,8 +42,5 @@ public class Vulcanizacion {
 	}
 
 	// Siempre en minutos
-	private Long tiempoVulcanizacion;
-	private Double temperaturaMinVulcanizacion;
-	private Double temperaturaMaxVulcanizacion;
 
 }

@@ -1,5 +1,5 @@
 package ar.com.avaco.nitrophyl.domain.entities.moldes;
 
-public enum MoldePlanoClasificacion {
+public enum PlanoClasificacion {
 	NITROPHYL, CLIENTE
 }

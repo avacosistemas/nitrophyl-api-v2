@@ -2,25 +2,63 @@ package ar.com.avaco.nitrophyl.domain.entities.pieza;
 
 import java.util.List;
 
-public class Proceso {
+import javax.persistence.Column;
+import javax.persistence.Embedded;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
 
+import ar.com.avaco.nitrophyl.domain.entities.AuditableEntity;
+
+@Entity
+@Table(name = "PROCESO")
+@SequenceGenerator(name = "PROCESO_SEQ", sequenceName = "PROCESO_SEQ", allocationSize = 1)
+public class Proceso extends AuditableEntity<Long> {
+
+	@Id
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "PROCESO_SEQ")
+	@Column(name = "ID_PROCESO", unique = true, nullable = false)
+	private Long id;
+
+	@ManyToOne
 	private Pieza pieza;
 
+	@Embedded
 	private Moldeo moldeo;
 
 	private String desmoldante;
 
 	private String postCura;
 
-	private String refilado;
+	@Embedded
+	private Terminacion terminacion;
 
-	private String identificacion;
-
-	private String embalaje;
-
-	private byte[] imagenTerminada;
-
+	@OneToMany
 	private List<Esquema> esquema;
+
+	public Proceso clonar(Pieza pieza) {
+		Proceso proceso = new Proceso();
+		proceso.setDesmoldante(this.desmoldante);
+		this.esquema.forEach(esquema -> this.esquema.add(esquema.clonar(proceso)));
+		proceso.setMoldeo(moldeo.clonar(proceso));
+		proceso.setPieza(pieza);
+		proceso.setPostCura(postCura);
+		proceso.setTerminacion(terminacion);
+		return proceso;
+	}
+
+	public Terminacion getTerminacion() {
+		return terminacion;
+	}
+
+	public void setTerminacion(Terminacion terminacion) {
+		this.terminacion = terminacion;
+	}
 
 	public Pieza getPieza() {
 		return pieza;
@@ -54,38 +92,6 @@ public class Proceso {
 		this.postCura = postCura;
 	}
 
-	public String getRefilado() {
-		return refilado;
-	}
-
-	public void setRefilado(String refilado) {
-		this.refilado = refilado;
-	}
-
-	public String getIdentificacion() {
-		return identificacion;
-	}
-
-	public void setIdentificacion(String identificacion) {
-		this.identificacion = identificacion;
-	}
-
-	public String getEmbalaje() {
-		return embalaje;
-	}
-
-	public void setEmbalaje(String embalaje) {
-		this.embalaje = embalaje;
-	}
-
-	public byte[] getImagenTerminada() {
-		return imagenTerminada;
-	}
-
-	public void setImagenTerminada(byte[] imagenTerminada) {
-		this.imagenTerminada = imagenTerminada;
-	}
-
 	public List<Esquema> getEsquema() {
 		return esquema;
 	}
@@ -93,4 +99,13 @@ public class Proceso {
 	public void setEsquema(List<Esquema> esquema) {
 		this.esquema = esquema;
 	}
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
 }

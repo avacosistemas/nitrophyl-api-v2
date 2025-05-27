@@ -5,4 +5,6 @@ import ar.com.avaco.nitrophyl.domain.entities.pieza.Pieza;
 
 public interface PiezaService extends NJService<Long, Pieza> {
 
+	Pieza getVigenteByCodigoInterno(String codigoInterno);
+
 }

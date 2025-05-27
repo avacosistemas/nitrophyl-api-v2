@@ -21,7 +21,7 @@ import ar.com.avaco.nitrophyl.domain.entities.moldes.MoldeDimension;
 import ar.com.avaco.nitrophyl.domain.entities.moldes.MoldeFoto;
 import ar.com.avaco.nitrophyl.domain.entities.moldes.MoldeObservacion;
 import ar.com.avaco.nitrophyl.domain.entities.moldes.MoldePlano;
-import ar.com.avaco.nitrophyl.domain.entities.moldes.MoldePlanoClasificacion;
+import ar.com.avaco.nitrophyl.domain.entities.moldes.PlanoClasificacion;
 import ar.com.avaco.nitrophyl.domain.entities.moldes.MoldeRegistro;
 import ar.com.avaco.nitrophyl.domain.entities.moldes.TipoRegistroMolde;
 import ar.com.avaco.nitrophyl.service.cliente.ClienteService;
@@ -264,7 +264,7 @@ public class MoldeEPServiceImpl extends CRUDEPBaseService<Long, MoldeDTO, Molde,
 			mp.setFecha(DateUtils.getFechaYHoraActual());
 			mp.setDescripcion(moldePlanoDTO.getDescripcion());
 			mp.setVersion(1);
-			mp.setClasificacion(MoldePlanoClasificacion.valueOf(moldePlanoDTO.getClasificacion()));
+			mp.setClasificacion(PlanoClasificacion.valueOf(moldePlanoDTO.getClasificacion()));
 			MoldePlano nmp = this.moldePlanoService.addMoldePlano(mp);
 			return new MoldePlanoDTO(nmp);
 		}
