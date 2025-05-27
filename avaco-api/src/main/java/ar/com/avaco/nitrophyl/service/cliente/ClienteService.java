@@ -28,25 +28,7 @@ public interface ClienteService extends NJService<Long, Cliente> {
 	List<Cliente> getByIds(List<Long> collect);
 
 	String getCorreoInformes(Long idCliente);
-	
-	/*
-	 * Cliente getClientePorUsername(String username);
-	 * 
-	 * Cliente registrarClientePersona(Cliente cliente) throws
-	 * ErrorValidationException, BusinessException;
-	 * 
-	 * void validaContactoCliente(Contacto contacto) throws
-	 * ErrorValidationException;
-	 * 
-	 * Cliente getClienteCompleto(Long id);
-	 * 
-	 * List<Cliente> listClientesListado();
-	 * 
-	 * void resetPassword(Long id);
-	 * 
-	 * void updatePassword(Cliente user, String password,String newPassword);
-	 * 
-	 * Cliente getClientePorMail(String username);
-	 */
+
+	List<String> getCorreoInformesList(Long idCliente);
 
 }

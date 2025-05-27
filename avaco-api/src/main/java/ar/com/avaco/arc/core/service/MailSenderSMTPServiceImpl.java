@@ -2,19 +2,22 @@ package ar.com.avaco.arc.core.service;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 
-import org.apache.commons.lang3.CharEncoding;
 import org.apache.log4j.Logger;
 import org.springframework.mail.MailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+
+import ar.com.avaco.commons.exception.ErrorValidationException;
 
 @Service("mailSenderSMTPService")
 public class MailSenderSMTPServiceImpl implements MailSenderSMTPService {
@@ -104,6 +107,9 @@ public class MailSenderSMTPServiceImpl implements MailSenderSMTPService {
 			String errorMessage = "Error al enviar el mail a: " + sb.toString() + "\n" + "Asunto: " + asunto + "\n"
 					+ "Cuerpo: " + sbText.toString();
 			logger.error(errorMessage, e);
+			Map<String, String> errores = new HashMap<String, String>();
+			errores.put("Email", e.getMessage());
+			throw new ErrorValidationException("Ocurio un error al enviar el email", errores);
 		}
 	}
 

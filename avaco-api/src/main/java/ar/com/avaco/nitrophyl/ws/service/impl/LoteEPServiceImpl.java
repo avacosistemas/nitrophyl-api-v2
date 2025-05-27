@@ -254,7 +254,7 @@ public class LoteEPServiceImpl extends CRUDEPBaseService<Long, LoteDTO, Lote, Lo
 		Cliente cliente = this.clienteService.getCliente(idCliente);
 		Lote lote = this.service.get(idLote);
 
-		String toMail = this.clienteService.getCorreoInformes(idCliente);
+		List<String> correos = this.clienteService.getCorreoInformesList(idCliente);
 		EmpresaCliente empresa = this.clienteService.getCliente(idCliente).getEmpresa();
 		String subject = "CERTIFICADO DE CALIDAD";
 		String msg = "Estimados, <br> <br> Adjuntamos el certificado de calidad del material entregado.<br><br>";
@@ -307,7 +307,8 @@ public class LoteEPServiceImpl extends CRUDEPBaseService<Long, LoteDTO, Lote, Lo
 				archivos.add(tempFileAdjunto);
 			}
 
-			this.mailSenderSMTPService.sendMail("informes@nitrophyl.com.ar", toMail, subject, msg, archivos);
+			this.mailSenderSMTPService.sendMail("informes@nitrophyl.com.ar", correos.toArray(new String[0]), null, subject, msg, archivos);  
+//			this.mailSenderSMTPService.sendMail("informes@nitrophyl.com.ar", correos.toArray(), subject, msg, archivos);
 
 			fosReporte.close();
 			
