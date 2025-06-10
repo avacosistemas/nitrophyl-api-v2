@@ -7,6 +7,8 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
@@ -20,20 +22,28 @@ import ar.com.avaco.nitrophyl.domain.entities.moldes.PlanoClasificacion;
 @SequenceGenerator(name = "PIEZA_PLANO_SEQ", sequenceName = "PIEZA_PLANO_SEQ", allocationSize = 1)
 public class PiezaPlano extends AuditableEntity<Long> {
 
+	private static final long serialVersionUID = 6238103037912066925L;
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "PIEZA_PLANO_SEQ")
 	@Column(name = "ID_PIEZA_PLANO", unique = true, nullable = false)
 	private Long id;
 
+	@ManyToOne
+	@JoinColumn(name = "ID_PIEZA")
+	private Pieza pieza;
+	
 	@Column(name = "ARCHIVO", nullable = true)
 	@Type(type = "org.hibernate.type.BinaryType")
 	private byte[] archivo;
 
+	@Column(name = "CODIGO", nullable = true)
 	private String codigo;
 
 	@Column(name = "REVISION")
 	private Integer revision;
 
+	@Column(name = "CLASIFICACION")
 	@Enumerated(EnumType.STRING)
 	private PlanoClasificacion clasificacion;
 

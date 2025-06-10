@@ -1,46 +1,42 @@
 package ar.com.avaco.nitrophyl.domain.entities.pieza;
 
+import javax.persistence.Column;
 import javax.persistence.Embeddable;
 
 @Embeddable
 public class Vulcanizacion {
 
-	private Long tiempoVulcanizacion;
-	private Double temperaturaMinVulcanizacion;
-	private Double temperaturaMaxVulcanizacion;
+	@Column(name = "VULCANIZACION_TIEMPO")
+	private Long tiempo;
 
-	public Double getTemperaturaMinVulcanizacion() {
-		return temperaturaMinVulcanizacion;
+	@Column(name = "VULCANIZACION_TEMP_MIN")
+	private Double temperaturaMin;
+
+	@Column(name = "VULCANIZACION_TEMP_MAX")
+	private Double temperaturaMax;
+
+	public Long getTiempo() {
+		return tiempo;
 	}
 
-	public void setTemperaturaMinVulcanizacion(Double temperaturaMinVulcanizacion) {
-		this.temperaturaMinVulcanizacion = temperaturaMinVulcanizacion;
+	public void setTiempo(Long tiempo) {
+		this.tiempo = tiempo;
 	}
 
-	public Double getTemperaturaMaxVulcanizacion() {
-		return temperaturaMaxVulcanizacion;
+	public Double getTemperaturaMin() {
+		return temperaturaMin;
 	}
 
-	public void setTemperaturaMaxVulcanizacion(Double temperaturaMaxVulcanizacion) {
-		this.temperaturaMaxVulcanizacion = temperaturaMaxVulcanizacion;
+	public void setTemperaturaMin(Double temperaturaMin) {
+		this.temperaturaMin = temperaturaMin;
 	}
 
-	public Long getTiempoVulcanizacion() {
-		return tiempoVulcanizacion;
+	public Double getTemperaturaMax() {
+		return temperaturaMax;
 	}
 
-	public void setTiempoVulcanizacion(Long tiempoVulcanizacion) {
-		this.tiempoVulcanizacion = tiempoVulcanizacion;
+	public void setTemperaturaMax(Double temperaturaMax) {
+		this.temperaturaMax = temperaturaMax;
 	}
-
-	public Double getTemperaturaVulcanizacion() {
-		return temperaturaMinVulcanizacion;
-	}
-
-	public void setTemperaturaVulcanizacion(Double temperaturaVulcanizacion) {
-		this.temperaturaMinVulcanizacion = temperaturaVulcanizacion;
-	}
-
-	// Siempre en minutos
 
 }

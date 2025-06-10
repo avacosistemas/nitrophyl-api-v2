@@ -5,22 +5,25 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
-import javax.persistence.ManyToMany;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+
 import ar.com.avaco.nitrophyl.domain.entities.AuditableEntity;
-import ar.com.avaco.nitrophyl.domain.entities.formula.Formula;
-import ar.com.avaco.nitrophyl.domain.entities.moldes.Molde;
 import ar.com.avaco.utils.DateUtils;
 
 @Entity
@@ -28,44 +31,102 @@ import ar.com.avaco.utils.DateUtils;
 @SequenceGenerator(name = "PIEZA_SEQ", sequenceName = "PIEZA_SEQ", allocationSize = 1)
 public class Pieza extends AuditableEntity<Long> {
 
+	private static final long serialVersionUID = 2865115894963877402L;
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "PIEZA_SEQ")
 	@Column(name = "ID_PIEZA", unique = true, nullable = false)
 	private Long id;
-	
-	private Formula formula;
+
+	/**
+	 * Nombre de la pieza.
+	 */
+	@Column(name = "DENOMINACION", nullable = false)
 	private String denominacion;
+
+	/**
+	 * Tipo de pieza.
+	 */
+	@Fetch(FetchMode.JOIN)
+	@ManyToOne(fetch = FetchType.EAGER, optional = false)
+	@JoinColumn(name = "ID_TIPO")
 	private PiezaTipo tipo;
-	
-	@OneToMany
+
+	/**
+	 * Listado de dimensiones de la pieza.
+	 */
+	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "pieza")
+	@Fetch(FetchMode.SELECT)
 	private Set<PiezaDimension> dimensiones = new HashSet<>();
 
-	// Empleado para agrupar la misma pieza/proceso con diferentes revisiones
-	private String codigoInterno;
+	/**
+	 * Codigo univoco de pieza.
+	 */
+	@Column(name = "CODIGO", nullable = false)
+	private String codigo;
 
-	@ManyToMany
+	/**
+	 * Detalles de la formula.
+	 */
+	@Embedded
+	private PiezaFormula detalleFormula;
+
+	/**
+	 * Planos asociados a la pieza
+	 */
+	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "pieza")
+	@Fetch(FetchMode.SELECT)
 	private Set<PiezaPlano> planos = new HashSet<>();
 
-	@OneToMany
-	private List<InsumoTratado> insumos;
+	/**
+	 * Insumos de la pieza con su tratamiento y pegamento.
+	 */
+	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "pieza")
+	@Fetch(FetchMode.SELECT)
+	private Set<InsumoTratado> insumos = new HashSet<>();
 
-	@ManyToMany
-	private List<Molde> moldes;
+	/**
+	 * Listado de moldes asociados de la pieza.
+	 */
+	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "pieza")
+	private List<PiezaMolde> moldes;
 
-	@OneToOne
-	private Proceso proceso;
+	/**
+	 * Proceso de creacion de la pieza.
+	 */
+	@OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "ID_PROCESO", referencedColumnName = "ID_PROCESO", unique = true)
+    private Proceso proceso;
 
+	/**
+	 * Revision.
+	 */
+	@Column(name = "REVISION", nullable = false, unique = true)
 	private Long revision;
-	private Date fechaRevision;
-	private Boolean vigente;
-	private Date fechaCreacionPiezaProceso;
-	private String observacionesRevision;
 
-	private Long dureza;
-	private Long espesorMinimo;
-	private Long espesorMaximo;
-	private Long pesoCrudo;
-	private String observacionesPesoCrudo;
+	/**
+	 * Fecha de la revision.
+	 */
+	@Column(name = "FECHA_REVISION", nullable = false, unique = true)
+	private Date fechaRevision;
+
+	/**
+	 * Determina si la revision de la pieza es la vigente.
+	 */
+	@Column(name = "VIGENTE", nullable = false)
+	private Boolean vigente;
+
+	/**
+	 * Fecha en que se creo la pieza.
+	 */
+	@Column(name = "FECHA_CREACION_PROCESO")
+	private Date fechaCreacionPiezaProceso;
+
+	/**
+	 * Observaciones de la revision.
+	 */
+	@Column(name = "OBSERVACIONES_REVISION")
+	private String observacionesRevision;
 
 	public Long getId() {
 		return id;
@@ -73,14 +134,6 @@ public class Pieza extends AuditableEntity<Long> {
 
 	public void setId(Long id) {
 		this.id = id;
-	}
-
-	public Formula getFormula() {
-		return formula;
-	}
-
-	public void setFormula(Formula formula) {
-		this.formula = formula;
 	}
 
 	public String getDenominacion() {
@@ -131,19 +184,19 @@ public class Pieza extends AuditableEntity<Long> {
 		this.dimensiones = dimensiones;
 	}
 
-	public List<InsumoTratado> getInsumos() {
+	public Set<InsumoTratado> getInsumos() {
 		return insumos;
 	}
 
-	public void setInsumos(List<InsumoTratado> insumos) {
+	public void setInsumos(Set<InsumoTratado> insumos) {
 		this.insumos = insumos;
 	}
 
-	public List<Molde> getMoldes() {
+	public List<PiezaMolde> getMoldes() {
 		return moldes;
 	}
 
-	public void setMoldes(List<Molde> moldes) {
+	public void setMoldes(List<PiezaMolde> moldes) {
 		this.moldes = moldes;
 	}
 
@@ -179,69 +232,39 @@ public class Pieza extends AuditableEntity<Long> {
 		this.fechaCreacionPiezaProceso = fechaCreacionPiezaProceso;
 	}
 
-	public Long getDureza() {
-		return dureza;
+	public PiezaFormula getDetalleFormula() {
+		return detalleFormula;
 	}
 
-	public void setDureza(Long dureza) {
-		this.dureza = dureza;
+	public void setDetalleFormula(PiezaFormula detalleFormula) {
+		this.detalleFormula = detalleFormula;
 	}
 
-	public Long getEspesorMinimo() {
-		return espesorMinimo;
+	public String getCodigo() {
+		return codigo;
 	}
 
-	public void setEspesorMinimo(Long espesorMinimo) {
-		this.espesorMinimo = espesorMinimo;
-	}
-
-	public Long getEspesorMaximo() {
-		return espesorMaximo;
-	}
-
-	public void setEspesorMaximo(Long espesorMaximo) {
-		this.espesorMaximo = espesorMaximo;
-	}
-
-	public Long getPesoCrudo() {
-		return pesoCrudo;
-	}
-
-	public void setPesoCrudo(Long pesoCrudo) {
-		this.pesoCrudo = pesoCrudo;
-	}
-
-	public String getObservacionesPesoCrudo() {
-		return observacionesPesoCrudo;
-	}
-
-	public void setObservacionesPesoCrudo(String observacionesPesoCrudo) {
-		this.observacionesPesoCrudo = observacionesPesoCrudo;
-	}
-
-	public String getCodigoInterno() {
-		return codigoInterno;
-	}
-
-	public void setCodigoInterno(String codigoInterno) {
-		this.codigoInterno = codigoInterno;
+	public void setCodigo(String codigo) {
+		this.codigo = codigo;
 	}
 
 	public Pieza clonar(String username) {
 		Pieza pieza = new Pieza();
-		pieza.setDenominacion(this.denominacion);
-		this.dimensiones.forEach(dimension -> pieza.getDimensiones().add(dimension.clonar(pieza)));
-		pieza.setFormula(this.formula);
-		this.insumos.forEach(insumo -> pieza.getInsumos().add(insumo.clonar(pieza)));
-		pieza.setMoldes(this.moldes);
-		pieza.setPlanos(this.planos);
-		pieza.setProceso(this.proceso.clonar(pieza));
 
+		pieza.setDenominacion(this.denominacion);
 		pieza.setTipo(this.tipo);
+		this.dimensiones.forEach(dimension -> pieza.getDimensiones().add(dimension.clonar(pieza)));
+		pieza.setCodigo(this.codigo);
+		pieza.setDetalleFormula(this.detalleFormula);
+		pieza.setPlanos(this.planos);
+		this.insumos.forEach(insumo -> pieza.getInsumos().add(insumo.clonar(pieza)));
+		this.moldes.forEach(molde -> pieza.getMoldes().add(molde.clonar(pieza)));
+		pieza.setProceso(this.proceso.clonar(pieza));
 
 		// Incremento la revisión y seteo la fecha actual
 		pieza.setRevision(revision + 1);
 		pieza.setFechaRevision(DateUtils.getFechaYHoraActual());
+
 		// No es la vigente, debera setearse a demanda
 		pieza.setVigente(false);
 
@@ -253,15 +276,11 @@ public class Pieza extends AuditableEntity<Long> {
 		pieza.setUsuarioActualizacion(username);
 		pieza.setFechaActualizacion(DateUtils.getFechaYHoraActual());
 
-		pieza.setDureza(this.dureza);
-		pieza.setEspesorMaximo(this.espesorMaximo);
-		pieza.setEspesorMinimo(this.espesorMinimo);
-		pieza.setObservacionesPesoCrudo(this.observacionesPesoCrudo);
-		pieza.setPesoCrudo(this.pesoCrudo);
-		
-		pieza.setCodigoInterno(this.codigoInterno);
+		// Fecha de creacion de la pieza se mantiene
+		pieza.setFechaCreacionPiezaProceso(this.fechaCreacionPiezaProceso);
 
 		return pieza;
+
 	}
 
 }

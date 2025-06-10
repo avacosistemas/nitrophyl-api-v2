@@ -1,8 +1,5 @@
 package ar.com.avaco.nitrophyl.ws.dto;
 
-import java.util.Date;
-
-import ar.com.avaco.nitrophyl.domain.entities.formula.Formula;
 import ar.com.avaco.ws.rest.dto.DTOEntity;
 
 public class RevisionParametrosDTO extends DTOEntity<Long> {

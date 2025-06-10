@@ -14,8 +14,6 @@ import ar.com.avaco.nitrophyl.domain.entities.cliente.Cliente;
 import ar.com.avaco.nitrophyl.domain.entities.formula.Formula;
 import ar.com.avaco.nitrophyl.domain.entities.reporte.ReporteLoteConfiguracionCliente;
 import ar.com.avaco.nitrophyl.repository.reporte.ReporteLoteConfiguracionClienteRepository;
-import ar.com.avaco.nitrophyl.service.cliente.ClienteService;
-import ar.com.avaco.nitrophyl.service.lote.LoteService;
 
 @Transactional
 @Service("reporteLoteConfiguracionClienteService")

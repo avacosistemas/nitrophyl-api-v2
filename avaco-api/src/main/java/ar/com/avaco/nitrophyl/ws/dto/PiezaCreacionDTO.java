@@ -3,16 +3,13 @@
  */
 package ar.com.avaco.nitrophyl.ws.dto;
 
-import javax.persistence.Column;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-
-import ar.com.avaco.nitrophyl.domain.entities.moldes.PlanoClasificacion;
 import ar.com.avaco.ws.rest.dto.DTOEntity;
 
 public class PiezaCreacionDTO extends DTOEntity<Long> {
 
 	private Long id;
+
+	private Long revisionIncial;
 
 	private String denominacion;
 
@@ -22,17 +19,25 @@ public class PiezaCreacionDTO extends DTOEntity<Long> {
 
 	private Long idMolde;
 
+	private String observacionesMolde;
+
 	private Long idCliente;
 
 	private String nombrePiezaCliente;
 
-	private Long dureza;
+	private String codigo;
 
-	private Long espesorMinimo;
+	private Double durezaMinima;
 
-	private Long espesorMaximo;
+	private Double durezaMaxima;
 
-	private Long pesoCrudo;
+	private String unidadDureza;
+
+	private Double espesorMinimo;
+
+	private Double espesorMaximo;
+
+	private Double pesoCrudo;
 
 	private String observacionesPesoCrudo;
 
@@ -102,35 +107,59 @@ public class PiezaCreacionDTO extends DTOEntity<Long> {
 		this.nombrePiezaCliente = nombrePiezaCliente;
 	}
 
-	public Long getDureza() {
-		return dureza;
+	public String getCodigo() {
+		return codigo;
 	}
 
-	public void setDureza(Long dureza) {
-		this.dureza = dureza;
+	public void setCodigo(String codigo) {
+		this.codigo = codigo;
 	}
 
-	public Long getEspesorMinimo() {
+	public Double getDurezaMinima() {
+		return durezaMinima;
+	}
+
+	public void setDurezaMinima(Double durezaMinima) {
+		this.durezaMinima = durezaMinima;
+	}
+
+	public Double getDurezaMaxima() {
+		return durezaMaxima;
+	}
+
+	public void setDurezaMaxima(Double durezaMaxima) {
+		this.durezaMaxima = durezaMaxima;
+	}
+
+	public String getUnidadDureza() {
+		return unidadDureza;
+	}
+
+	public void setUnidadDureza(String unidadDureza) {
+		this.unidadDureza = unidadDureza;
+	}
+
+	public Double getEspesorMinimo() {
 		return espesorMinimo;
 	}
 
-	public void setEspesorMinimo(Long espesorMinimo) {
+	public void setEspesorMinimo(Double espesorMinimo) {
 		this.espesorMinimo = espesorMinimo;
 	}
 
-	public Long getEspesorMaximo() {
+	public Double getEspesorMaximo() {
 		return espesorMaximo;
 	}
 
-	public void setEspesorMaximo(Long espesorMaximo) {
+	public void setEspesorMaximo(Double espesorMaximo) {
 		this.espesorMaximo = espesorMaximo;
 	}
 
-	public Long getPesoCrudo() {
+	public Double getPesoCrudo() {
 		return pesoCrudo;
 	}
 
-	public void setPesoCrudo(Long pesoCrudo) {
+	public void setPesoCrudo(Double pesoCrudo) {
 		this.pesoCrudo = pesoCrudo;
 	}
 
@@ -180,6 +209,22 @@ public class PiezaCreacionDTO extends DTOEntity<Long> {
 
 	public void setPlanoObservaciones(String planoObservaciones) {
 		this.planoObservaciones = planoObservaciones;
+	}
+
+	public String getObservacionesMolde() {
+		return observacionesMolde;
+	}
+
+	public void setObservacionesMolde(String observacionesMolde) {
+		this.observacionesMolde = observacionesMolde;
+	}
+
+	public Long getRevisionIncial() {
+		return revisionIncial;
+	}
+
+	public void setRevisionIncial(Long revisionIncial) {
+		this.revisionIncial = revisionIncial;
 	}
 
 }

@@ -5,6 +5,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
@@ -16,14 +17,21 @@ import ar.com.avaco.nitrophyl.domain.entities.AuditableEntity;
 @SequenceGenerator(name = "ESQUEMA_PASO_SEQ", sequenceName = "ESQUEMA_PASO_SEQ", allocationSize = 1)
 public class EsquemaPaso extends AuditableEntity<Long> {
 
+	private static final long serialVersionUID = 3947885269693718530L;
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "ESQUEMA_PASO_SEQ")
 	@Column(name = "ID_ESQUEMA_PASO", unique = true, nullable = false)
 	private Long id;
 
 	@ManyToOne
+	@JoinColumn(name = "ID_ESQUEMA")
 	private Esquema esquema;
+
+	@Column(name = "PASO")
 	private Long paso;
+
+	@Column(name = "DESCRIPCION")
 	private String descripcion;
 
 	public EsquemaPaso clonar(Esquema esquema) {

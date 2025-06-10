@@ -23,7 +23,7 @@ public class PiezaServiceImpl extends NJBaseService<Long, Pieza, PiezaRepository
 
 	@Override
 	public Pieza getVigenteByCodigoInterno(String codigoInterno) {
-		return this.repository.findByCodigoInternoAndVigente(codigoInterno, true);
+		return this.repository.findByCodigoAndVigente(codigoInterno, true);
 	}
 
 }

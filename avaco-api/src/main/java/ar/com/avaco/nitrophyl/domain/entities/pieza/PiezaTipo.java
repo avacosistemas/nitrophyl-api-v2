@@ -15,11 +15,14 @@ import ar.com.avaco.nitrophyl.domain.entities.AuditableEntity;
 @SequenceGenerator(name = "PIEZA_TIPO_SEQ", sequenceName = "PIEZA_TIPO_SEQ", allocationSize = 1)
 public class PiezaTipo extends AuditableEntity<Long> {
 
+	private static final long serialVersionUID = -4375607783210704758L;
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "PIEZA_TIPO_SEQ")
 	@Column(name = "ID_PIEZA_TIPO", unique = true, nullable = false)
 	private Long id;
 
+	@Column(name = "NOMBRE", unique = true, nullable = false)
 	private String nombre;
 
 	public Long getId() {

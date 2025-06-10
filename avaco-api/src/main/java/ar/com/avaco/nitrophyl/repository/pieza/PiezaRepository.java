@@ -5,7 +5,6 @@ import ar.com.avaco.nitrophyl.domain.entities.pieza.Pieza;
 
 public interface PiezaRepository extends NJRepository<Long, Pieza>, PiezaRepositoryCustom {
 
-	Pieza findByCodigoInternoAndVigente(String codigoInterno, boolean b);
-
+	Pieza findByCodigoAndVigente(String codigoInterno, boolean b);
 
 }

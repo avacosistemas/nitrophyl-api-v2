@@ -1,7 +1,6 @@
 package ar.com.avaco.nitrophyl.ws.service.impl;
 
 import java.util.Date;
-import java.util.UUID;
 
 import javax.annotation.Resource;
 
@@ -14,9 +13,12 @@ import ar.com.avaco.nitrophyl.domain.entities.formula.Formula;
 import ar.com.avaco.nitrophyl.domain.entities.moldes.Molde;
 import ar.com.avaco.nitrophyl.domain.entities.moldes.PlanoClasificacion;
 import ar.com.avaco.nitrophyl.domain.entities.pieza.Pieza;
+import ar.com.avaco.nitrophyl.domain.entities.pieza.PiezaFormula;
+import ar.com.avaco.nitrophyl.domain.entities.pieza.PiezaMolde;
 import ar.com.avaco.nitrophyl.domain.entities.pieza.PiezaPlano;
 import ar.com.avaco.nitrophyl.domain.entities.pieza.PiezaTipo;
 import ar.com.avaco.nitrophyl.domain.entities.pieza.Proceso;
+import ar.com.avaco.nitrophyl.domain.entities.pieza.UnidadDureza;
 import ar.com.avaco.nitrophyl.service.formula.FormulaService;
 import ar.com.avaco.nitrophyl.service.molde.MoldeService;
 import ar.com.avaco.nitrophyl.service.molde.PiezaTipoService;
@@ -42,14 +44,14 @@ public class PiezaEPServiceImpl extends CRUDEPBaseService<Long, PiezaDTO, Pieza,
 		// TODO Auto-generated method stub
 		return super.update(dto);
 	}
-	
+
 	@Override
 	public void marcarVigente(Long piezaId) {
 		// Pieza a marcar
 		Pieza pieza = this.service.get(piezaId);
 
 		// Pieza vigente actual
-		Pieza piezaVigente = this.service.getVigenteByCodigoInterno(pieza.getCodigoInterno());
+		Pieza piezaVigente = this.service.getVigenteByCodigoInterno(pieza.getCodigo());
 
 		if (pieza.getRevision() != piezaVigente.getRevision() + 1) {
 			// Ocurrio un error, no puede setearse como vigente una revisión que no es la
@@ -91,12 +93,29 @@ public class PiezaEPServiceImpl extends CRUDEPBaseService<Long, PiezaDTO, Pieza,
 		pieza.setFechaRevision(fechaYHoraActual);
 
 		Formula formula = formulaService.get(dto.getIdFormula());
-		pieza.setFormula(formula);
+		PiezaFormula detalle = new PiezaFormula();
+		detalle.setDurezaMaxima(dto.getDurezaMinima());
+		detalle.setDurezaMinima(dto.getDurezaMinima());
+		detalle.setEspesorMaximo(dto.getEspesorMaximo());
+		detalle.setEspesorMinimo(dto.getEspesorMinimo());
+		detalle.setFormula(formula);
+		detalle.setObservacionesPesoCrudo(dto.getObservacionesPesoCrudo());
+		detalle.setPesoCrudo(dto.getPesoCrudo());
+		detalle.setUnidadDureza(UnidadDureza.valueOf(dto.getUnidadDureza()));
+
+		pieza.setDetalleFormula(detalle);
 
 		pieza.setId(null);
 
 		Molde molde = moldeService.get(dto.getIdMolde());
-		pieza.getMoldes().add(molde);
+		PiezaMolde pm = new PiezaMolde();
+		pm.setFechaActualizacion(fechaYHoraActual);
+		pm.setFechaCreacion(fechaYHoraActual);
+		pm.setUsuarioActualizacion(username);
+		pm.setUsuarioCreacion(username);
+		pm.setMolde(molde);
+		pm.setObservaciones(dto.getObservacionesMolde());
+		pieza.getMoldes().add(pm);
 
 		PiezaPlano plano = new PiezaPlano();
 		plano.setArchivo(dto.getPlanoArchivo());
@@ -110,25 +129,15 @@ public class PiezaEPServiceImpl extends CRUDEPBaseService<Long, PiezaDTO, Pieza,
 		plano.setUsuarioCreacion(username);
 		pieza.getPlanos().add(plano);
 
-		pieza.setDureza(dto.getDureza());
-		pieza.setEspesorMaximo(dto.getEspesorMaximo());
-		pieza.setEspesorMinimo(dto.getEspesorMinimo());
-		pieza.setObservacionesPesoCrudo(dto.getObservacionesPesoCrudo());
-		pieza.setPesoCrudo(dto.getPesoCrudo());
-
 		Proceso proceso = new Proceso();
-		proceso.setPieza(pieza);
 		pieza.setProceso(proceso);
 
-		pieza.setRevision(0L);
+		pieza.setRevision(dto.getRevisionIncial());
 
 		PiezaTipo tipo = this.piezaTipoService.get(dto.getIdTipoPieza());
 		pieza.setTipo(tipo);
 
 		pieza.setVigente(false);
-
-		UUID randomUUID = java.util.UUID.randomUUID();
-		pieza.setCodigoInterno(randomUUID.toString());
 
 		this.service.save(pieza);
 	}
@@ -163,5 +172,5 @@ public class PiezaEPServiceImpl extends CRUDEPBaseService<Long, PiezaDTO, Pieza,
 	public void setPiezaTipoService(PiezaTipoService piezaTipoService) {
 		this.piezaTipoService = piezaTipoService;
 	}
-	
+
 }

@@ -2,9 +2,12 @@ package ar.com.avaco.nitrophyl.domain.entities.pieza;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
@@ -16,18 +19,25 @@ import ar.com.avaco.nitrophyl.domain.entities.moldes.TipoDimension;
 @SequenceGenerator(name = "PIEZA_DIMENSION_SEQ", sequenceName = "PIEZA_DIMENSION_SEQ", allocationSize = 1)
 public class PiezaDimension extends ar.com.avaco.arc.core.domain.Entity<Long> {
 
+	private static final long serialVersionUID = 7387245754379595320L;
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "PIEZA_DIMENSION_SEQ")
 	@Column(name = "ID_PIEZA_DIMENSION", unique = true, nullable = false)
 	private Long id;
 
-	@ManyToOne
+	@ManyToOne(optional = false)
+	@JoinColumn(name = "ID_PIEZA")
 	private Pieza pieza;
 
-	private TipoDimension tipodimension;
+	@Column(name = "TIPO")
+	@Enumerated(EnumType.STRING)
+	private TipoDimension tipo;
 
-	private Integer valordimension;
+	@Column(name = "VALOR")
+	private Integer valor;
 
+	@Column(name = "OBSERVACIONES")
 	private String observaciones;
 
 	public Long getId() {
@@ -46,20 +56,20 @@ public class PiezaDimension extends ar.com.avaco.arc.core.domain.Entity<Long> {
 		this.pieza = pieza;
 	}
 
-	public TipoDimension getTipodimension() {
-		return tipodimension;
+	public TipoDimension getTipo() {
+		return tipo;
 	}
 
-	public void setTipodimension(TipoDimension tipodimension) {
-		this.tipodimension = tipodimension;
+	public void setTipo(TipoDimension tipo) {
+		this.tipo = tipo;
 	}
 
-	public Integer getValordimension() {
-		return valordimension;
+	public Integer getValor() {
+		return valor;
 	}
 
-	public void setValordimension(Integer valordimension) {
-		this.valordimension = valordimension;
+	public void setValor(Integer valor) {
+		this.valor = valor;
 	}
 
 	public String getObservaciones() {
@@ -73,8 +83,8 @@ public class PiezaDimension extends ar.com.avaco.arc.core.domain.Entity<Long> {
 	public PiezaDimension clonar(Pieza pieza) {
 		PiezaDimension p = new PiezaDimension();
 		p.setPieza(pieza);
-		p.setTipodimension(this.tipodimension);
-		p.setValordimension(this.valordimension);
+		p.setTipo(this.tipo);
+		p.setValor(this.valor);
 		p.setObservaciones(this.observaciones);
 		return p;
 	}
