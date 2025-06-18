@@ -9,20 +9,23 @@ import org.springframework.stereotype.Service;
 
 import ar.com.avaco.commons.exception.BusinessException;
 import ar.com.avaco.commons.exception.ErrorValidationException;
+import ar.com.avaco.nitrophyl.domain.entities.cliente.Cliente;
 import ar.com.avaco.nitrophyl.domain.entities.formula.Formula;
 import ar.com.avaco.nitrophyl.domain.entities.moldes.Molde;
 import ar.com.avaco.nitrophyl.domain.entities.moldes.PlanoClasificacion;
 import ar.com.avaco.nitrophyl.domain.entities.pieza.Pieza;
+import ar.com.avaco.nitrophyl.domain.entities.pieza.PiezaCliente;
 import ar.com.avaco.nitrophyl.domain.entities.pieza.PiezaFormula;
 import ar.com.avaco.nitrophyl.domain.entities.pieza.PiezaMolde;
 import ar.com.avaco.nitrophyl.domain.entities.pieza.PiezaPlano;
 import ar.com.avaco.nitrophyl.domain.entities.pieza.PiezaTipo;
 import ar.com.avaco.nitrophyl.domain.entities.pieza.Proceso;
 import ar.com.avaco.nitrophyl.domain.entities.pieza.UnidadDureza;
+import ar.com.avaco.nitrophyl.service.cliente.ClienteService;
 import ar.com.avaco.nitrophyl.service.formula.FormulaService;
 import ar.com.avaco.nitrophyl.service.molde.MoldeService;
-import ar.com.avaco.nitrophyl.service.molde.PiezaTipoService;
 import ar.com.avaco.nitrophyl.service.pieza.PiezaService;
+import ar.com.avaco.nitrophyl.service.pieza.PiezaTipoService;
 import ar.com.avaco.nitrophyl.ws.dto.PiezaCreacionDTO;
 import ar.com.avaco.nitrophyl.ws.dto.PiezaDTO;
 import ar.com.avaco.nitrophyl.ws.service.PiezaEPService;
@@ -33,6 +36,8 @@ import ar.com.avaco.ws.rest.service.CRUDEPBaseService;
 public class PiezaEPServiceImpl extends CRUDEPBaseService<Long, PiezaDTO, Pieza, PiezaService>
 		implements PiezaEPService {
 
+	private ClienteService clienteService;
+	
 	private FormulaService formulaService;
 
 	private MoldeService moldeService;
@@ -87,21 +92,31 @@ public class PiezaEPServiceImpl extends CRUDEPBaseService<Long, PiezaDTO, Pieza,
 		Date fechaYHoraActual = DateUtils.getFechaYHoraActual();
 
 		Pieza pieza = new Pieza();
+		pieza.setCodigo(dto.getCodigo());
 		pieza.setDenominacion(dto.getDenominacion());
-		pieza.setFechaActualizacion(fechaYHoraActual);
-		pieza.setFechaCreacion(fechaYHoraActual);
+
+		pieza.setRevision(dto.getRevisionIncial());
 		pieza.setFechaRevision(fechaYHoraActual);
 
+		pieza.setFechaCreacionPiezaProceso(fechaYHoraActual);
+		
+		pieza.setUsuarioCreacion(username);
+		pieza.setFechaCreacion(fechaYHoraActual);
+
 		Formula formula = formulaService.get(dto.getIdFormula());
+		
 		PiezaFormula detalle = new PiezaFormula();
-		detalle.setDurezaMaxima(dto.getDurezaMinima());
-		detalle.setDurezaMinima(dto.getDurezaMinima());
-		detalle.setEspesorMaximo(dto.getEspesorMaximo());
-		detalle.setEspesorMinimo(dto.getEspesorMinimo());
 		detalle.setFormula(formula);
-		detalle.setObservacionesPesoCrudo(dto.getObservacionesPesoCrudo());
-		detalle.setPesoCrudo(dto.getPesoCrudo());
+
+		detalle.setDurezaMinima(dto.getDurezaMinima());
+		detalle.setDurezaMaxima(dto.getDurezaMinima());
 		detalle.setUnidadDureza(UnidadDureza.valueOf(dto.getUnidadDureza()));
+
+		detalle.setEspesorMinimo(dto.getEspesorMinimo());
+		detalle.setEspesorMaximo(dto.getEspesorMaximo());
+		
+		detalle.setPesoCrudo(dto.getPesoCrudo());
+		detalle.setObservacionesPesoCrudo(dto.getObservacionesPesoCrudo());
 
 		pieza.setDetalleFormula(detalle);
 
@@ -109,26 +124,34 @@ public class PiezaEPServiceImpl extends CRUDEPBaseService<Long, PiezaDTO, Pieza,
 
 		Molde molde = moldeService.get(dto.getIdMolde());
 		PiezaMolde pm = new PiezaMolde();
-		pm.setFechaActualizacion(fechaYHoraActual);
 		pm.setFechaCreacion(fechaYHoraActual);
-		pm.setUsuarioActualizacion(username);
 		pm.setUsuarioCreacion(username);
 		pm.setMolde(molde);
-		pm.setObservaciones(dto.getObservacionesMolde());
+		pm.setPieza(pieza);
 		pieza.getMoldes().add(pm);
 
 		PiezaPlano plano = new PiezaPlano();
 		plano.setArchivo(dto.getPlanoArchivo());
 		plano.setClasificacion(PlanoClasificacion.valueOf(dto.getPlanoClasificacion()));
 		plano.setCodigo(dto.getPlanoCodigo());
-		plano.setFechaActualizacion(fechaYHoraActual);
 		plano.setFechaCreacion(fechaYHoraActual);
 		plano.setObservaciones(dto.getPlanoObservaciones());
 		plano.setRevision(dto.getPlanoRevision());
-		plano.setUsuarioActualizacion(username);
 		plano.setUsuarioCreacion(username);
+		plano.setPieza(pieza);
 		pieza.getPlanos().add(plano);
 
+		Cliente cliente = this.clienteService.get(dto.getIdCliente());
+		
+		PiezaCliente piezaCliente = new PiezaCliente();
+		piezaCliente.setCliente(cliente);
+		piezaCliente.setFechaCreacion(fechaYHoraActual);
+		piezaCliente.setNombrePiezaPersonalizado(dto.getNombrePiezaCliente());
+		piezaCliente.setPieza(pieza);
+		piezaCliente.setUsuarioCreacion(username);
+		
+		pieza.getClientes().add(piezaCliente);
+		
 		Proceso proceso = new Proceso();
 		pieza.setProceso(proceso);
 
@@ -173,4 +196,9 @@ public class PiezaEPServiceImpl extends CRUDEPBaseService<Long, PiezaDTO, Pieza,
 		this.piezaTipoService = piezaTipoService;
 	}
 
+	@Resource(name = "clienteService")
+	public void setClienteService(ClienteService clienteService) {
+		this.clienteService = clienteService;
+	}
+	
 }

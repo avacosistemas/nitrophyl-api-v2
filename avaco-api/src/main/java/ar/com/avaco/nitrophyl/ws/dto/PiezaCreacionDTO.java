@@ -7,39 +7,37 @@ import ar.com.avaco.ws.rest.dto.DTOEntity;
 
 public class PiezaCreacionDTO extends DTOEntity<Long> {
 
-	private Long id;
+	private Long id;//
 
-	private Long revisionIncial;
+	private Long revisionIncial;//
 
-	private String denominacion;
+	private String denominacion;//
 
-	private Long idFormula;
+	private Long idTipoPieza;//
 
-	private Long idTipoPieza;
+	private Long idMolde; //
 
-	private Long idMolde;
+	private String codigo; //
 
-	private String observacionesMolde;
+	private Long idFormula;//
 
-	private Long idCliente;
+	private Double durezaMinima; //
 
-	private String nombrePiezaCliente;
+	private Double durezaMaxima; //
 
-	private String codigo;
+	private String unidadDureza; //
 
-	private Double durezaMinima;
+	private Double espesorMinimo;//
 
-	private Double durezaMaxima;
+	private Double espesorMaximo;//
 
-	private String unidadDureza;
+	private Double pesoCrudo;//
 
-	private Double espesorMinimo;
+	private String observacionesPesoCrudo;//
 
-	private Double espesorMaximo;
+	private Long idCliente; //
 
-	private Double pesoCrudo;
-
-	private String observacionesPesoCrudo;
+	private String nombrePiezaCliente; //
 
 	private byte[] planoArchivo;
 
@@ -209,14 +207,6 @@ public class PiezaCreacionDTO extends DTOEntity<Long> {
 
 	public void setPlanoObservaciones(String planoObservaciones) {
 		this.planoObservaciones = planoObservaciones;
-	}
-
-	public String getObservacionesMolde() {
-		return observacionesMolde;
-	}
-
-	public void setObservacionesMolde(String observacionesMolde) {
-		this.observacionesMolde = observacionesMolde;
 	}
 
 	public Long getRevisionIncial() {

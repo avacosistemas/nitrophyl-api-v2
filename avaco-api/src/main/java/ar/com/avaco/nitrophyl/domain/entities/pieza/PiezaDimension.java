@@ -12,12 +12,13 @@ import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
+import ar.com.avaco.nitrophyl.domain.entities.AuditableEntity;
 import ar.com.avaco.nitrophyl.domain.entities.moldes.TipoDimension;
 
 @Entity
 @Table(name = "PIEZA_DIMENSION")
 @SequenceGenerator(name = "PIEZA_DIMENSION_SEQ", sequenceName = "PIEZA_DIMENSION_SEQ", allocationSize = 1)
-public class PiezaDimension extends ar.com.avaco.arc.core.domain.Entity<Long> {
+public class PiezaDimension extends AuditableEntity<Long> {
 
 	private static final long serialVersionUID = 7387245754379595320L;
 

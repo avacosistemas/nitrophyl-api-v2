@@ -2,7 +2,6 @@ package ar.com.avaco.nitrophyl.domain.entities.pieza;
 
 import java.util.Date;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -89,14 +88,17 @@ public class Pieza extends AuditableEntity<Long> {
 	 * Listado de moldes asociados de la pieza.
 	 */
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "pieza")
-	private List<PiezaMolde> moldes;
+	private Set<PiezaMolde> moldes = new HashSet<>();
 
 	/**
 	 * Proceso de creacion de la pieza.
 	 */
 	@OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "ID_PROCESO", referencedColumnName = "ID_PROCESO", unique = true)
-    private Proceso proceso;
+	@JoinColumn(name = "ID_PROCESO", referencedColumnName = "ID_PROCESO", unique = true)
+	private Proceso proceso;
+
+	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "pieza")
+	private Set<PiezaCliente> clientes = new HashSet<>();
 
 	/**
 	 * Revision.
@@ -127,6 +129,43 @@ public class Pieza extends AuditableEntity<Long> {
 	 */
 	@Column(name = "OBSERVACIONES_REVISION")
 	private String observacionesRevision;
+
+	public Pieza clonar(String username) {
+		Pieza pieza = new Pieza();
+
+		pieza.setDenominacion(this.denominacion);
+		pieza.setTipo(this.tipo);
+		pieza.setCodigo(this.codigo);
+		pieza.setDetalleFormula(this.detalleFormula);
+		pieza.setPlanos(this.planos);
+
+		this.dimensiones.forEach(dimension -> pieza.getDimensiones().add(dimension.clonar(pieza)));
+		this.insumos.forEach(insumo -> pieza.getInsumos().add(insumo.clonar(pieza)));
+		this.moldes.forEach(molde -> pieza.getMoldes().add(molde.clonar(pieza)));
+
+		pieza.setProceso(this.proceso.clonar(pieza));
+
+		// Incremento la revisión y seteo la fecha actual
+		pieza.setRevision(revision + 1);
+		pieza.setFechaRevision(DateUtils.getFechaYHoraActual());
+
+		// No es la vigente, debera setearse a demanda
+		pieza.setVigente(false);
+
+		// Usuario y fecha de creación de la nueva revision
+		pieza.setUsuarioCreacion(username);
+		pieza.setFechaCreacion(DateUtils.getFechaYHoraActual());
+
+		// Usuario y fecha de creación de la nueva revision igual a la creacion
+		pieza.setUsuarioActualizacion(username);
+		pieza.setFechaActualizacion(DateUtils.getFechaYHoraActual());
+
+		// Fecha de creacion de la pieza se mantiene
+		pieza.setFechaCreacionPiezaProceso(this.fechaCreacionPiezaProceso);
+
+		return pieza;
+
+	}
 
 	public Long getId() {
 		return id;
@@ -192,11 +231,11 @@ public class Pieza extends AuditableEntity<Long> {
 		this.insumos = insumos;
 	}
 
-	public List<PiezaMolde> getMoldes() {
+	public Set<PiezaMolde> getMoldes() {
 		return moldes;
 	}
 
-	public void setMoldes(List<PiezaMolde> moldes) {
+	public void setMoldes(Set<PiezaMolde> moldes) {
 		this.moldes = moldes;
 	}
 
@@ -248,39 +287,12 @@ public class Pieza extends AuditableEntity<Long> {
 		this.codigo = codigo;
 	}
 
-	public Pieza clonar(String username) {
-		Pieza pieza = new Pieza();
+	public Set<PiezaCliente> getClientes() {
+		return clientes;
+	}
 
-		pieza.setDenominacion(this.denominacion);
-		pieza.setTipo(this.tipo);
-		this.dimensiones.forEach(dimension -> pieza.getDimensiones().add(dimension.clonar(pieza)));
-		pieza.setCodigo(this.codigo);
-		pieza.setDetalleFormula(this.detalleFormula);
-		pieza.setPlanos(this.planos);
-		this.insumos.forEach(insumo -> pieza.getInsumos().add(insumo.clonar(pieza)));
-		this.moldes.forEach(molde -> pieza.getMoldes().add(molde.clonar(pieza)));
-		pieza.setProceso(this.proceso.clonar(pieza));
-
-		// Incremento la revisión y seteo la fecha actual
-		pieza.setRevision(revision + 1);
-		pieza.setFechaRevision(DateUtils.getFechaYHoraActual());
-
-		// No es la vigente, debera setearse a demanda
-		pieza.setVigente(false);
-
-		// Usuario y fecha de creación de la nueva revision
-		pieza.setUsuarioCreacion(username);
-		pieza.setFechaCreacion(DateUtils.getFechaYHoraActual());
-
-		// Usuario y fecha de creación de la nueva revision igual a la creacion
-		pieza.setUsuarioActualizacion(username);
-		pieza.setFechaActualizacion(DateUtils.getFechaYHoraActual());
-
-		// Fecha de creacion de la pieza se mantiene
-		pieza.setFechaCreacionPiezaProceso(this.fechaCreacionPiezaProceso);
-
-		return pieza;
-
+	public void setClientes(Set<PiezaCliente> clientes) {
+		this.clientes = clientes;
 	}
 
 }

@@ -8,6 +8,8 @@ import java.util.List;
 import ar.com.avaco.arc.core.component.bean.repository.NJRepository;
 import ar.com.avaco.arc.core.domain.Entity;
 import ar.com.avaco.arc.core.domain.filter.AbstractFilter;
+import ar.com.avaco.commons.exception.BusinessException;
+import ar.com.avaco.commons.exception.ErrorValidationException;
 
 /**
  * Default implementation of a {@link NJService} that redirects operations to
@@ -32,7 +34,10 @@ public abstract class NJBaseService<ID extends Serializable, T extends Entity<ID
 	 */
 	@Override
 	public T update(T entity) {
-		return getRepository().save(entity);
+		if (getRepository().findOne(entity.getId()) != null)
+			return getRepository().save(entity);
+		throw new ErrorValidationException("Entidad " + entity.getClass() + " con ID " + entity.getId().toString()
+				+ " no existe y no puede actualizarse.");
 	}
 
 	/**
@@ -86,7 +91,7 @@ public abstract class NJBaseService<ID extends Serializable, T extends Entity<ID
 	public List<T> listEqField(String field, Object pattern) {
 		return getRepository().listEqField(field, pattern);
 	}
-	
+
 	/**
 	 * Gets the repository that handled the CRUD operations on the service.
 	 * 
@@ -95,5 +100,5 @@ public abstract class NJBaseService<ID extends Serializable, T extends Entity<ID
 	protected final R getRepository() {
 		return this.repository;
 	}
-	
+
 }

@@ -98,4 +98,14 @@ public class PiezaPlano extends AuditableEntity<Long> {
 		this.observaciones = observaciones;
 	}
 
+	public Pieza getPieza() {
+		return pieza;
+	}
+
+	public void setPieza(Pieza pieza) {
+		this.pieza = pieza;
+	}
+	
+	
+
 }
