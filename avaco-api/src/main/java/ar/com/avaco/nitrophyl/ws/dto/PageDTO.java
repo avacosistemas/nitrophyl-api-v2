@@ -6,6 +6,15 @@ import ar.com.avaco.ws.rest.dto.DTOEntity;
 
 public class PageDTO<DTO extends DTOEntity<?>> {
 
+	public PageDTO() {
+	}
+
+	public PageDTO(List<DTO> page, long totalReg) {
+		super();
+		this.page = page;
+		this.totalReg = totalReg;
+	}
+
 	private List<DTO> page;
 
 	private long totalReg;

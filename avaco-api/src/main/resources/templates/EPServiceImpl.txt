@@ -14,24 +14,14 @@ import ar.com.avaco.ws.rest.service.CRUDAuditableEPBaseService;
 public class {entity}EPServiceImpl extends CRUDAuditableEPBaseService<Long, {entity}DTO, {entity}, {entity}Service>
 		implements {entity}EPService {
 
+	public {entity}EPServiceImpl() {
+		super({entity}.class, {entity}DTO.class);
+	}
+
 	@Override
 	@Resource(name = "{entityMinuscula}Service")
 	protected void setService({entity}Service service) {
 		this.service = service;
-	}
-
-	@Override
-	protected {entity} convertToEntity({entity}DTO dto) {
-		{entity} {entityMinuscula} = new {entity}();
-		// TODO COMPLETAR CAMPOS
-		return {entityMinuscula};
-	}
-
-	@Override
-	protected {entity}DTO convertToDto({entity} entity) {
-		{entity}DTO dto = new {entity}DTO();
-		// TODO COMPLETAR CAMPOS
-		return dto;
 	}
 
 }

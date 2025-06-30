@@ -6,6 +6,8 @@ import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.ColumnResult;
+import javax.persistence.ConstructorResult;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -17,13 +19,35 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
+import javax.persistence.SqlResultSetMapping;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
 import ar.com.avaco.nitrophyl.domain.entities.AuditableEntity;
+import ar.com.avaco.nitrophyl.ws.dto.PiezaGrillaDTO;
 import ar.com.avaco.utils.DateUtils;
+
+@SqlResultSetMapping(name="PiezaGrillaDTOMapper",
+classes = {
+    @ConstructorResult(
+            targetClass = PiezaGrillaDTO.class,
+            columns = {
+        		@ColumnResult(name = "rows", type = Integer.class),
+                @ColumnResult(name = "denominacion", type = String.class),
+                @ColumnResult(name = "idPieza", type = Integer.class),
+                @ColumnResult(name = "codigo", type = String.class),
+                @ColumnResult(name = "vigente", type = Boolean.class),
+                @ColumnResult(name = "revision", type = Integer.class),
+                @ColumnResult(name = "fechaRevision", type = Date.class),
+                @ColumnResult(name = "tipo", type = String.class),
+                @ColumnResult(name = "material", type = String.class),
+                @ColumnResult(name = "puedeGenerarRevision", type = Boolean.class),
+                @ColumnResult(name = "formula", type = String.class),
+                @ColumnResult(name = "puedeMarcarVigente", type = Boolean.class)
+            })
+})
 
 @Entity
 @Table(name = "PIEZA")

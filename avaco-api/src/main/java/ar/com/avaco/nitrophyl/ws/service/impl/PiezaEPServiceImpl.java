@@ -1,11 +1,13 @@
 package ar.com.avaco.nitrophyl.ws.service.impl;
 
 import java.util.Date;
+import java.util.List;
 
 import javax.annotation.Resource;
 
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import ar.com.avaco.commons.exception.BusinessException;
 import ar.com.avaco.commons.exception.ErrorValidationException;
@@ -26,12 +28,16 @@ import ar.com.avaco.nitrophyl.service.formula.FormulaService;
 import ar.com.avaco.nitrophyl.service.molde.MoldeService;
 import ar.com.avaco.nitrophyl.service.pieza.PiezaService;
 import ar.com.avaco.nitrophyl.service.pieza.PiezaTipoService;
+import ar.com.avaco.nitrophyl.ws.dto.PageDTO;
 import ar.com.avaco.nitrophyl.ws.dto.PiezaCreacionDTO;
 import ar.com.avaco.nitrophyl.ws.dto.PiezaDTO;
+import ar.com.avaco.nitrophyl.ws.dto.PiezaFilterDTO;
+import ar.com.avaco.nitrophyl.ws.dto.PiezaGrillaDTO;
 import ar.com.avaco.nitrophyl.ws.service.PiezaEPService;
 import ar.com.avaco.utils.DateUtils;
 import ar.com.avaco.ws.rest.service.CRUDEPBaseService;
 
+@Transactional
 @Service("piezaEPService")
 public class PiezaEPServiceImpl extends CRUDEPBaseService<Long, PiezaDTO, Pieza, PiezaService>
 		implements PiezaEPService {
@@ -44,6 +50,13 @@ public class PiezaEPServiceImpl extends CRUDEPBaseService<Long, PiezaDTO, Pieza,
 
 	private PiezaTipoService piezaTipoService;
 
+	@Override
+	public PageDTO<PiezaGrillaDTO> listGrilla(PiezaFilterDTO filter) {
+		List<PiezaGrillaDTO> listGrilla = this.service.listGrilla(filter);
+		Integer rows = !listGrilla.isEmpty() ? listGrilla.get(0).getRows() : 0;  
+		return new PageDTO<PiezaGrillaDTO>(listGrilla, rows);
+	}
+	
 	@Override
 	public PiezaDTO update(PiezaDTO dto) throws BusinessException {
 		// TODO Auto-generated method stub
@@ -124,6 +137,7 @@ public class PiezaEPServiceImpl extends CRUDEPBaseService<Long, PiezaDTO, Pieza,
 
 		Molde molde = moldeService.get(dto.getIdMolde());
 		PiezaMolde pm = new PiezaMolde();
+		pm.setObservaciones(dto.getObservacionesMolde());
 		pm.setFechaCreacion(fechaYHoraActual);
 		pm.setUsuarioCreacion(username);
 		pm.setMolde(molde);

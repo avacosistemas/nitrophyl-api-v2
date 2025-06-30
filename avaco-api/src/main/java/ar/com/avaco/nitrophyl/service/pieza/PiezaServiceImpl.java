@@ -1,5 +1,7 @@
 package ar.com.avaco.nitrophyl.service.pieza;
 
+import java.util.List;
+
 import javax.annotation.Resource;
 
 import org.apache.log4j.Logger;
@@ -9,16 +11,20 @@ import org.springframework.transaction.annotation.Transactional;
 import ar.com.avaco.arc.core.component.bean.service.NJBaseService;
 import ar.com.avaco.nitrophyl.domain.entities.pieza.Pieza;
 import ar.com.avaco.nitrophyl.repository.pieza.PiezaRepository;
+import ar.com.avaco.nitrophyl.ws.dto.PiezaFilterDTO;
+import ar.com.avaco.nitrophyl.ws.dto.PiezaGrillaDTO;
 
-@Transactional
 @Service("piezaService")
 public class PiezaServiceImpl extends NJBaseService<Long, Pieza, PiezaRepository> implements PiezaService {
-
-	private Logger logger = Logger.getLogger(getClass());
 
 	@Resource(name = "piezaRepository")
 	void setClienteRepository(PiezaRepository piezaRepository) {
 		this.repository = piezaRepository;
+	}
+
+	@Override
+	public List<PiezaGrillaDTO> listGrilla(PiezaFilterDTO pfdto) {
+		return this.repository.listGrilla(pfdto);
 	}
 
 	@Override

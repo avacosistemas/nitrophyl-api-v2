@@ -14,24 +14,14 @@ import ar.com.avaco.ws.rest.service.CRUDAuditableEPBaseService;
 public class TerminacionEPServiceImpl extends CRUDAuditableEPBaseService<Long, TerminacionDTO, Terminacion, TerminacionService>
 		implements TerminacionEPService {
 
+	public TerminacionEPServiceImpl() {
+		super(Terminacion.class, TerminacionDTO.class);
+	}
+
 	@Override
 	@Resource(name = "terminacionService")
 	protected void setService(TerminacionService service) {
 		this.service = service;
-	}
-
-	@Override
-	protected Terminacion convertToEntity(TerminacionDTO dto) {
-		Terminacion terminacion = new Terminacion();
-		// TODO COMPLETAR CAMPOS
-		return terminacion;
-	}
-
-	@Override
-	protected TerminacionDTO convertToDto(Terminacion entity) {
-		TerminacionDTO dto = new TerminacionDTO();
-		// TODO COMPLETAR CAMPOS
-		return dto;
 	}
 
 }

@@ -14,24 +14,14 @@ import ar.com.avaco.ws.rest.service.CRUDAuditableEPBaseService;
 public class BombeoEPServiceImpl extends CRUDAuditableEPBaseService<Long, BombeoDTO, Bombeo, BombeoService>
 		implements BombeoEPService {
 
+	public BombeoEPServiceImpl() {
+		super(Bombeo.class, BombeoDTO.class);
+	}
+
 	@Override
 	@Resource(name = "bombeoService")
 	protected void setService(BombeoService service) {
 		this.service = service;
-	}
-
-	@Override
-	protected Bombeo convertToEntity(BombeoDTO dto) {
-		Bombeo bombeo = new Bombeo();
-		// TODO COMPLETAR CAMPOS
-		return bombeo;
-	}
-
-	@Override
-	protected BombeoDTO convertToDto(Bombeo entity) {
-		BombeoDTO dto = new BombeoDTO();
-		// TODO COMPLETAR CAMPOS
-		return dto;
 	}
 
 }

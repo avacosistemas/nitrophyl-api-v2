@@ -16,6 +16,10 @@ import ar.com.avaco.ws.rest.service.CRUDAuditableEPBaseService;
 public class InsumoEPServiceImpl extends CRUDAuditableEPBaseService<Long, InsumoDTO, Insumo, InsumoService>
 		implements InsumoEPService {
 
+	public InsumoEPServiceImpl() {
+		super(Insumo.class, InsumoDTO.class);
+	}
+
 	private TipoInsumoService tipoInsumoService;
 	
 	@Override

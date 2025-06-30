@@ -17,6 +17,8 @@ public class PiezaCreacionDTO extends DTOEntity<Long> {
 
 	private Long idMolde; //
 
+	private String observacionesMolde;
+
 	private String codigo; //
 
 	private Long idFormula;//
@@ -215,6 +217,14 @@ public class PiezaCreacionDTO extends DTOEntity<Long> {
 
 	public void setRevisionIncial(Long revisionIncial) {
 		this.revisionIncial = revisionIncial;
+	}
+
+	public String getObservacionesMolde() {
+		return observacionesMolde;
+	}
+
+	public void setObservacionesMolde(String observacionesMolde) {
+		this.observacionesMolde = observacionesMolde;
 	}
 
 }

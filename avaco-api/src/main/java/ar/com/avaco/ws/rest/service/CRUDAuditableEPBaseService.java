@@ -7,6 +7,7 @@ import java.util.List;
 
 import javax.transaction.Transactional;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 import ar.com.avaco.arc.core.component.bean.service.NJService;
@@ -23,6 +24,16 @@ public abstract class CRUDAuditableEPBaseService<ID extends Serializable, DTO ex
 
 	protected S service;
 
+	private final Class<DTO> dtoClass;
+	private final Class<T> entityClass;
+
+	public CRUDAuditableEPBaseService(Class<T> theEntityClass, Class<DTO> theDtoClass) {
+		dtoClass = theDtoClass;
+		entityClass = theEntityClass;
+	}
+	
+	private final ModelMapper modelMapper = new ModelMapper();
+	
 	@Override
 	public DTO save(DTO dto) throws BusinessException {
 		String username = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -99,9 +110,13 @@ public abstract class CRUDAuditableEPBaseService<ID extends Serializable, DTO ex
 		return null;
 	}
 
-	abstract protected T convertToEntity(DTO dto);
+	protected T convertToEntity(DTO dto) {
+		return modelMapper.map(dto, entityClass);
+	}
 
-	abstract protected DTO convertToDto(T entity);
+	protected DTO convertToDto(T entity) {
+		return modelMapper.map(entity, dtoClass);
+	}
 
 	public List<T> convertToEntities(Collection<DTO> dtos) {
 		String username = SecurityContextHolder.getContext().getAuthentication().getName();

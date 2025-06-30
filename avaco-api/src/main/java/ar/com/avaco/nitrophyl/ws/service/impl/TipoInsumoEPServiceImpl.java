@@ -14,6 +14,10 @@ import ar.com.avaco.ws.rest.service.CRUDAuditableEPBaseService;
 public class TipoInsumoEPServiceImpl extends
 		CRUDAuditableEPBaseService<Long, TipoInsumoDTO, TipoInsumo, TipoInsumoService> implements TipoInsumoEPService {
 
+	public TipoInsumoEPServiceImpl() {
+		super(TipoInsumo.class, TipoInsumoDTO.class);
+	}
+
 	@Override
 	@Resource(name = "tipoInsumoService")
 	protected void setService(TipoInsumoService service) {

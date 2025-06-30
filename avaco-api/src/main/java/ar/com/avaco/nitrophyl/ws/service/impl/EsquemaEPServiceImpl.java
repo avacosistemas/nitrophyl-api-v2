@@ -14,24 +14,14 @@ import ar.com.avaco.ws.rest.service.CRUDAuditableEPBaseService;
 public class EsquemaEPServiceImpl extends CRUDAuditableEPBaseService<Long, EsquemaDTO, Esquema, EsquemaService>
 		implements EsquemaEPService {
 
+	public EsquemaEPServiceImpl() {
+		super(Esquema.class, EsquemaDTO.class);
+	}
+
 	@Override
 	@Resource(name = "esquemaService")
 	protected void setService(EsquemaService service) {
 		this.service = service;
-	}
-
-	@Override
-	protected Esquema convertToEntity(EsquemaDTO dto) {
-		Esquema esquema = new Esquema();
-		// TODO COMPLETAR CAMPOS
-		return esquema;
-	}
-
-	@Override
-	protected EsquemaDTO convertToDto(Esquema entity) {
-		EsquemaDTO dto = new EsquemaDTO();
-		// TODO COMPLETAR CAMPOS
-		return dto;
 	}
 
 }

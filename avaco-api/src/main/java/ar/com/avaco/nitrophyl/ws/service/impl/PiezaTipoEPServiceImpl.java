@@ -14,26 +14,15 @@ import ar.com.avaco.ws.rest.service.CRUDAuditableEPBaseService;
 public class PiezaTipoEPServiceImpl extends CRUDAuditableEPBaseService<Long, PiezaTipoDTO, PiezaTipo, PiezaTipoService>
 		implements PiezaTipoEPService {
 
+	public PiezaTipoEPServiceImpl() {
+		super(PiezaTipo.class, PiezaTipoDTO.class);
+	}
+
 	@Override
 	@Resource(name = "piezaTipoService")
 	protected void setService(PiezaTipoService service) {
 		this.service = service;
 	}
 
-	@Override
-	protected PiezaTipo convertToEntity(PiezaTipoDTO dto) {
-		PiezaTipo piezaTipo = new PiezaTipo();
-		piezaTipo.setNombre(dto.getNombre());
-		piezaTipo.setId(dto.getId());
-		return piezaTipo;
-	}
-
-	@Override
-	protected PiezaTipoDTO convertToDto(PiezaTipo entity) {
-		PiezaTipoDTO dto = new PiezaTipoDTO();
-		dto.setId(entity.getId());
-		dto.setNombre(entity.getNombre());
-		return dto;
-	}
 
 }

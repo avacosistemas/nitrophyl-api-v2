@@ -14,26 +14,14 @@ import ar.com.avaco.ws.rest.service.CRUDAuditableEPBaseService;
 public class PrensaEPServiceImpl extends CRUDAuditableEPBaseService<Long, PrensaDTO, Prensa, PrensaService>
 		implements PrensaEPService {
 
+	public PrensaEPServiceImpl() {
+		super(Prensa.class, PrensaDTO.class);
+	}
+
 	@Override
 	@Resource(name = "prensaService")
 	protected void setService(PrensaService service) {
 		this.service = service;
-	}
-
-	@Override
-	protected Prensa convertToEntity(PrensaDTO dto) {
-		Prensa prensa = new Prensa();
-		prensa.setId(dto.getId());
-		prensa.setNombre(dto.getNombre());
-		return prensa;
-	}
-
-	@Override
-	protected PrensaDTO convertToDto(Prensa entity) {
-		PrensaDTO dto = new PrensaDTO();
-		dto.setId(entity.getId());
-		dto.setNombre(entity.getNombre());
-		return dto;
 	}
 
 }

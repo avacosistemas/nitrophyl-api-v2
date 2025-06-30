@@ -11,27 +11,18 @@ import ar.com.avaco.nitrophyl.ws.service.TratamientoEPService;
 import ar.com.avaco.ws.rest.service.CRUDAuditableEPBaseService;
 
 @Service("tratamientoEPService")
-public class TratamientoEPServiceImpl extends CRUDAuditableEPBaseService<Long, TratamientoDTO, Tratamiento, TratamientoService>
+public class TratamientoEPServiceImpl
+		extends CRUDAuditableEPBaseService<Long, TratamientoDTO, Tratamiento, TratamientoService>
 		implements TratamientoEPService {
+
+	public TratamientoEPServiceImpl() {
+		super(Tratamiento.class, TratamientoDTO.class);
+	}
 
 	@Override
 	@Resource(name = "tratamientoService")
 	protected void setService(TratamientoService service) {
 		this.service = service;
-	}
-
-	@Override
-	protected Tratamiento convertToEntity(TratamientoDTO dto) {
-		Tratamiento tratamiento = new Tratamiento();
-		// TODO COMPLETAR CAMPOS
-		return tratamiento;
-	}
-
-	@Override
-	protected TratamientoDTO convertToDto(Tratamiento entity) {
-		TratamientoDTO dto = new TratamientoDTO();
-		// TODO COMPLETAR CAMPOS
-		return dto;
 	}
 
 }

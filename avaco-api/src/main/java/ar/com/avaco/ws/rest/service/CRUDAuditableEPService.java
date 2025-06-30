@@ -7,7 +7,6 @@ import ar.com.avaco.arc.core.domain.filter.AbstractFilter;
 import ar.com.avaco.commons.exception.BusinessException;
 import ar.com.avaco.nitrophyl.ws.dto.PageDTO;
 import ar.com.avaco.ws.rest.dto.DTOAuditableEntity;
-import ar.com.avaco.ws.rest.dto.DTOEntity;
 
 public interface CRUDAuditableEPService<ID extends Serializable, DTO extends DTOAuditableEntity<ID>> {
 

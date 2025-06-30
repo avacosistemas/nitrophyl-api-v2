@@ -11,27 +11,18 @@ import ar.com.avaco.nitrophyl.ws.service.PiezaDimensionEPService;
 import ar.com.avaco.ws.rest.service.CRUDAuditableEPBaseService;
 
 @Service("piezaDimensionEPService")
-public class PiezaDimensionEPServiceImpl extends CRUDAuditableEPBaseService<Long, PiezaDimensionDTO, PiezaDimension, PiezaDimensionService>
+public class PiezaDimensionEPServiceImpl
+		extends CRUDAuditableEPBaseService<Long, PiezaDimensionDTO, PiezaDimension, PiezaDimensionService>
 		implements PiezaDimensionEPService {
+
+	public PiezaDimensionEPServiceImpl() {
+		super(PiezaDimension.class, PiezaDimensionDTO.class);
+	}
 
 	@Override
 	@Resource(name = "piezaDimensionService")
 	protected void setService(PiezaDimensionService service) {
 		this.service = service;
-	}
-
-	@Override
-	protected PiezaDimension convertToEntity(PiezaDimensionDTO dto) {
-		PiezaDimension piezaDimension = new PiezaDimension();
-		// TODO COMPLETAR CAMPOS
-		return piezaDimension;
-	}
-
-	@Override
-	protected PiezaDimensionDTO convertToDto(PiezaDimension entity) {
-		PiezaDimensionDTO dto = new PiezaDimensionDTO();
-		// TODO COMPLETAR CAMPOS
-		return dto;
 	}
 
 }
