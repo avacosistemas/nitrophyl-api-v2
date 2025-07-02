@@ -22,6 +22,10 @@ public class PiezaRepositoryImpl extends NJBaseRepository<Long, Pieza> implement
 
 	@Override
 	public List<PiezaGrillaDTO> listGrilla(PiezaFilterDTO filtro) {
+		
+		if (filtro.getNombre() != null)
+			filtro.setNombre(filtro.getNombre().toUpperCase());
+		
 		String query = " SELECT cast(COUNT(*) OVER() as integer) as rows, p.denominacion as denominacion, " + 
 				"  cast(p.id_pieza as integer) as idPieza, p.codigo, cast(p.vigente as boolean), " + 
 				"  cast(p.revision as integer), p.fecha_revision as fechaRevision, " + 
@@ -46,11 +50,11 @@ public class PiezaRepositoryImpl extends NJBaseRepository<Long, Pieza> implement
 				" left join pieza_tipo pt on pt.id_pieza_tipo = p.id_tipo " + 
 				" where 1 = 1 ";
 		
-		if (filtro.getSoloVigentes() == null && filtro.getSoloVigentes().booleanValue())
+		if (filtro.getSoloVigentes() != null && filtro.getSoloVigentes().booleanValue())
 			query += " and p.vigente = true ";
 		
 		if (StringUtils.isNotBlank(filtro.getNombre()))
-			query += " and (p.denominacion like '%" + filtro.getNombre() + "%' or p.codigo like '%" + filtro.getNombre() + "%'";
+			query += " and (upper(p.denominacion) like '%" + filtro.getNombre() + "%' or upper(p.codigo) like '%" + filtro.getNombre() + "%') ";
 		
 		if (filtro.getIdFormula() != null)
 			query += " and f.id_formula = " + filtro.getIdFormula();
