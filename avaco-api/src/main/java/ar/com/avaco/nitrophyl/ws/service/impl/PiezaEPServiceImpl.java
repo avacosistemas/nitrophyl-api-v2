@@ -89,14 +89,30 @@ public class PiezaEPServiceImpl extends CRUDAuditableEPBaseService<Long, PiezaDT
 	@Override
 	public void nuevaRevision(Long piezaId) {
 		String username = SecurityContextHolder.getContext().getAuthentication().getName();
+		Date fechaHora = DateUtils.getFechaYHoraActual();
+
 		Pieza pieza = this.service.get(piezaId);
+		
+		Pieza clonada = pieza.clonar(username, fechaHora);
 
 		if (!pieza.getVigente()) {
 			throw new ErrorValidationException(
 					"No se puede generar una nueva revisión ya que la pieza/proceso seleccionada no es la vigente");
 		}
 
-		Pieza clonada = pieza.clonar(username);
+//		Pieza clonada = new Pieza();
+//		modelMapper.map(pieza, clonada);
+//		clonada.resetearCreacion(username, fechaHora);
+//		clonada.setRevision(clonada.getRevision() + 1);
+//		clonada.setVigente(false);
+//		clonada.getDimensiones().forEach(dimension -> dimension.resetearCreacion(username, fechaHora));
+//		clonada.getPlanos().forEach(plano -> plano.resetearCreacion(username, fechaHora));
+//		clonada.getInsumos().forEach(insumo -> insumo.resetearCreacion(username, fechaHora));
+//		clonada.getClientes().forEach(cliente -> cliente.resetearCreacion(username, fechaHora));
+//		clonada.getProceso().resetearCreacion(username, fechaHora);
+//		clonada.getProceso().getBombeos().forEach(bombeo -> bombeo.resetearCreacion(username, fechaHora));
+//		clonada.getProceso().getTerminacion().resetearCreacion(username, fechaHora);
+//		clonada.getProceso().getEsquema().forEach(esquema -> esquema.resetearCreacion(username, fechaHora));
 		this.service.save(clonada);
 	}
 

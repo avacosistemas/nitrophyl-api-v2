@@ -1,7 +1,7 @@
 package ar.com.avaco.nitrophyl.domain.entities.pieza;
 
+import java.util.Date;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -60,6 +60,19 @@ public class InsumoTratado extends AuditableEntity<Long> {
 	@Column(name = "MEDIDA_OBSERVACIONES")
 	private String medidaObservaciones;
 
+	public InsumoTratado clonar(String username, Date fechaHora, Pieza pieza) {
+		InsumoTratado clonada = new InsumoTratado();
+		clonada.resetearCreacion(username, fechaHora);
+		clonada.setAdhesivos(this.adhesivos);
+		clonada.setInsumo(this.insumo);
+		clonada.setMedidaObservaciones(this.medidaObservaciones);
+		clonada.setMedidaValor(this.medidaValor);
+		clonada.setObservaciones(this.observaciones);
+		clonada.setPieza(pieza);
+		clonada.setTratamiento(this.tratamiento);
+		return clonada;
+	}
+
 	public Pieza getPieza() {
 		return pieza;
 	}
@@ -106,18 +119,6 @@ public class InsumoTratado extends AuditableEntity<Long> {
 
 	public void setObservaciones(String observaciones) {
 		this.observaciones = observaciones;
-	}
-
-	public InsumoTratado clonar(Pieza pieza) {
-		InsumoTratado ins = new InsumoTratado();
-		ins.setAdhesivos(this.adhesivos);
-		ins.setInsumo(this.insumo);
-		ins.setPieza(pieza);
-		ins.setTratamiento(this.tratamiento);
-		ins.setObservaciones(this.observaciones);
-		ins.setMedidaObservaciones(this.medidaObservaciones);
-		ins.setMedidaValor(this.medidaValor);
-		return ins;
 	}
 
 	public String getMedidaValor() {

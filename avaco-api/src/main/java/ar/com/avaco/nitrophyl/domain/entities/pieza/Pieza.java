@@ -148,41 +148,38 @@ public class Pieza extends AuditableEntity<Long> {
 	@Column(name = "OBSERVACIONES_REVISION")
 	private String observacionesRevision;
 
-	public Pieza clonar(String username) {
+	public static Pieza ofId(Long id) {
 		Pieza pieza = new Pieza();
-
-		pieza.setDenominacion(this.denominacion);
-		pieza.setTipo(this.tipo);
-		pieza.setCodigo(this.codigo);
-		pieza.setDetalleFormula(this.detalleFormula);
-		pieza.setPlanos(this.planos);
-
-		this.dimensiones.forEach(dimension -> pieza.getDimensiones().add(dimension.clonar(pieza)));
-		this.insumos.forEach(insumo -> pieza.getInsumos().add(insumo.clonar(pieza)));
-		this.moldes.forEach(molde -> pieza.getMoldes().add(molde.clonar(pieza)));
-
-		pieza.setProceso(this.proceso.clonar(pieza));
-
-		// Incremento la revisión y seteo la fecha actual
-		pieza.setRevision(revision + 1);
-		pieza.setFechaRevision(DateUtils.getFechaYHoraActual());
-
-		// No es la vigente, debera setearse a demanda
-		pieza.setVigente(false);
-
-		// Usuario y fecha de creación de la nueva revision
-		pieza.setUsuarioCreacion(username);
-		pieza.setFechaCreacion(DateUtils.getFechaYHoraActual());
-
-		// Usuario y fecha de creación de la nueva revision igual a la creacion
-		pieza.setUsuarioActualizacion(username);
-		pieza.setFechaActualizacion(DateUtils.getFechaYHoraActual());
-
-		// Fecha de creacion de la pieza se mantiene
-		pieza.setFechaCreacionPiezaProceso(this.fechaCreacionPiezaProceso);
-
+		pieza.setId(id);
 		return pieza;
+	}
 
+	public Pieza clonar(String username, Date fechaHora) {
+		Pieza clonada = new Pieza();
+		clonada.resetearCreacion(username, fechaHora);
+		
+		this.clientes.forEach(cliente -> clonada.getClientes().add(cliente.clonar(username, fechaHora, clonada)));
+		
+		clonada.setCodigo(codigo);
+		clonada.setDenominacion(this.denominacion);
+		clonada.setTipo(tipo);
+		clonada.setDetalleFormula(detalleFormula);
+		
+		clonada.setFechaCreacionPiezaProceso(this.fechaCreacionPiezaProceso);
+		clonada.setFechaRevision(fechaHora);
+		
+		this.dimensiones.forEach(dimension -> clonada.getDimensiones().add(dimension.clonar(username, fechaHora, clonada)));
+		this.insumos.forEach(insumo -> clonada.getInsumos().add(insumo.clonar(username, fechaHora, clonada)));
+		this.moldes.forEach(molde -> clonada.getMoldes().add(molde.clonar(username, fechaHora, clonada)));
+		this.planos.forEach(plano -> clonada.getPlanos().add(plano.clonar(username, fechaHora, clonada)));
+		
+		clonada.setProceso(proceso.clonar(username, fechaHora, clonada));
+
+		clonada.setRevision(revision + 1);
+		
+		clonada.setVigente(false);
+
+		return clonada;
 	}
 
 	public Long getId() {
@@ -311,12 +308,6 @@ public class Pieza extends AuditableEntity<Long> {
 
 	public void setClientes(Set<PiezaCliente> clientes) {
 		this.clientes = clientes;
-	}
-
-	public static Pieza ofId(Long id) {
-		Pieza pieza = new Pieza();
-		pieza.setId(id);
-		return pieza;
 	}
 
 }

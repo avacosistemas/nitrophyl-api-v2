@@ -1,5 +1,7 @@
 package ar.com.avaco.nitrophyl.domain.entities.pieza;
 
+import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -36,6 +38,15 @@ public class PiezaCliente extends AuditableEntity<Long> {
 	@Column(name = "NOMBRE_PIEZA_PESONALIZADO")
 	private String nombrePiezaPersonalizado;
 
+	public PiezaCliente clonar(String username, Date fechaHora, Pieza pieza) {
+		PiezaCliente clonada = new PiezaCliente();
+		clonada.resetearCreacion(username, fechaHora);
+		clonada.setPieza(pieza);
+		clonada.setNombrePiezaPersonalizado(nombrePiezaPersonalizado);
+		clonada.setCliente(cliente);
+		return clonada;
+	}
+	
 	public Long getId() {
 		return id;
 	}

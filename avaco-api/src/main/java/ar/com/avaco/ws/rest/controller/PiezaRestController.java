@@ -49,8 +49,8 @@ public class PiezaRestController extends AbstractAuditableDTORestController<Piez
 	}
 
 	@RequestMapping(value = "/pieza/clonar/{idPieza}", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<JSONResponse> clonar(@PathVariable Long idPIeza) {
-		this.service.nuevaRevision(idPIeza);
+	public ResponseEntity<JSONResponse> clonar(@PathVariable Long idPieza) {
+		this.service.nuevaRevision(idPieza);
 		return returnOK();
 	}
 

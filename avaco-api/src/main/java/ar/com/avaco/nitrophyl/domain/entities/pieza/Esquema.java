@@ -1,6 +1,9 @@
 package ar.com.avaco.nitrophyl.domain.entities.pieza;
 
+import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -39,20 +42,11 @@ public class Esquema extends AuditableEntity<Long> {
 	private String titulo;
 
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "esquema", orphanRemoval = true)
-	private List<EsquemaPaso> pasos;
+	private Set<EsquemaPaso> pasos = new HashSet<>();
 
 	@Column(name = "IMAGEN", nullable = true)
 	@Type(type = "org.hibernate.type.BinaryType")
 	private byte[] imagen;
-
-	public Esquema clonar(Proceso proceso) {
-		Esquema esquema = new Esquema();
-		esquema.setImagen(imagen);
-		pasos.forEach(paso -> esquema.getPasos().add(paso.clonar(esquema)));
-		esquema.setProceso(proceso);
-		esquema.setTitulo(titulo);
-		return esquema;
-	}
 
 	public String getTitulo() {
 		return titulo;
@@ -70,11 +64,11 @@ public class Esquema extends AuditableEntity<Long> {
 		this.imagen = imagen;
 	}
 
-	public List<EsquemaPaso> getPasos() {
+	public Set<EsquemaPaso> getPasos() {
 		return pasos;
 	}
 
-	public void setPasos(List<EsquemaPaso> pasos) {
+	public void setPasos(Set<EsquemaPaso> pasos) {
 		this.pasos = pasos;
 	}
 
@@ -92,6 +86,16 @@ public class Esquema extends AuditableEntity<Long> {
 
 	public void setId(Long id) {
 		this.id = id;
+	}
+
+	public Esquema clonar(String username, Date fechaHora, Proceso proceso) {
+		Esquema clonada = new Esquema();
+		clonada.resetearCreacion(username, fechaHora);
+		clonada.setImagen(imagen);
+		this.pasos.forEach(paso -> clonada.getPasos().add(paso.clonar(username, fechaHora, clonada)));
+		clonada.setProceso(proceso);
+		clonada.setTitulo(titulo);
+		return clonada;
 	}
 
 }

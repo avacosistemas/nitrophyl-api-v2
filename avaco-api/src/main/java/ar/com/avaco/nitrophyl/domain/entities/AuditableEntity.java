@@ -25,6 +25,14 @@ public abstract class AuditableEntity<T extends Serializable> extends Entity<T> 
 	@Column(name = "FECHA_ACTUALIZACION", nullable = false)
 	private Date fechaActualizacion;
 
+	public void resetearCreacion(String username, Date fechaHora) {
+		this.setId(null);
+		this.fechaActualizacion = null;
+		this.fechaCreacion = fechaHora;
+		this.usuarioCreacion = username;
+		this.usuarioActualizacion = null;
+	}
+	
 	public String getUsuarioCreacion() {
 		return usuarioCreacion;
 	}

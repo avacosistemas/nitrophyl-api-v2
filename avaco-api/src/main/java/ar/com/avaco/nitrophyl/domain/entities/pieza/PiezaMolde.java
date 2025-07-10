@@ -1,5 +1,7 @@
 package ar.com.avaco.nitrophyl.domain.entities.pieza;
 
+import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -37,18 +39,16 @@ public class PiezaMolde extends AuditableEntity<Long> {
 	@Column(name = "OBSERVACIONES")
 	private String observaciones;
 
-	public PiezaMolde clonar(Pieza pieza) {
-		PiezaMolde piezaMolde = new PiezaMolde();
-		piezaMolde.setFechaActualizacion(this.getFechaActualizacion());
-		piezaMolde.setFechaCreacion(this.getFechaCreacion());
-		piezaMolde.setMolde(this.molde);
-		piezaMolde.setObservaciones(this.observaciones);
-		piezaMolde.setPieza(pieza);
-		piezaMolde.setUsuarioActualizacion(this.getUsuarioCreacion());
-		piezaMolde.setUsuarioCreacion(this.getUsuarioCreacion());
-		return piezaMolde;
+	public PiezaMolde clonar(String username, Date fechaHora, Pieza pieza) {
+		PiezaMolde clonada = new PiezaMolde();
+		clonada.resetearCreacion(username, fechaHora);
+		clonada.setMolde(this.molde);
+		clonada.setObservaciones(this.observaciones);
+		clonada.setPieza(pieza);
+		return clonada;
 	}
 
+	
 	public Long getId() {
 		return id;
 	}
@@ -80,5 +80,5 @@ public class PiezaMolde extends AuditableEntity<Long> {
 	public void setObservaciones(String observaciones) {
 		this.observaciones = observaciones;
 	}
-
+	
 }

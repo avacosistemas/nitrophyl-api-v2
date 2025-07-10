@@ -35,7 +35,7 @@ public class NJBaseRepository<ID extends Serializable, E extends ar.com.avaco.ar
 	private SessionFactory sessionFactory;
 	private Class<E> javaType;
 
-	private EntityManager entityManager;
+	protected EntityManager entityManager;
 
 	public NJBaseRepository(Class<E> domainClass, EntityManager entityManager) {
 		super(domainClass, entityManager);

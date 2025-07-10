@@ -1,5 +1,6 @@
 package ar.com.avaco.nitrophyl.domain.entities.pieza;
 
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -64,13 +65,19 @@ public class Proceso extends AuditableEntity<Long> {
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "proceso")
 	private Set<Esquema> esquema = new HashSet<>();
 
-	public Proceso clonar(Pieza pieza) {
-		Proceso proceso = new Proceso();
-		proceso.setDesmoldante(this.desmoldante);
-		this.esquema.forEach(esquema -> this.esquema.add(esquema.clonar(proceso)));
-		proceso.setPostCura(postCura);
-		proceso.setTerminacion(terminacion);
-		return proceso;
+	public Proceso clonar(String username, Date fechaHora, Pieza pieza) {
+		Proceso clonada = new Proceso();
+		clonada.resetearCreacion(username, fechaHora);
+		this.bombeos.forEach(bombeo -> clonada.getBombeos().add(bombeo.clonar(username, fechaHora, clonada)));
+		this.esquema.forEach(esquema -> clonada.getEsquema().add(esquema.clonar(username, fechaHora, clonada)));
+		clonada.setDesmoldante(desmoldante);
+		clonada.setPieza(pieza);
+		clonada.setPostCura(postCura);
+		clonada.setPrecalentamiento(precalentamiento);
+		clonada.getPrensas().addAll(prensas);
+		clonada.setTerminacion(terminacion.clonar(username, fechaHora, clonada));
+		clonada.setVulcanizacion(vulcanizacion);
+		return clonada;
 	}
 
 	public Terminacion getTerminacion() {

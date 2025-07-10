@@ -1,5 +1,7 @@
 package ar.com.avaco.nitrophyl.domain.entities.pieza;
 
+import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -34,14 +36,6 @@ public class EsquemaPaso extends AuditableEntity<Long> {
 	@Column(name = "DESCRIPCION")
 	private String descripcion;
 
-	public EsquemaPaso clonar(Esquema esquema) {
-		EsquemaPaso pasoEsquema = new EsquemaPaso();
-		pasoEsquema.setDescripcion(descripcion);
-		pasoEsquema.setPaso(paso);
-		pasoEsquema.setEsquema(esquema);
-		return pasoEsquema;
-	}
-
 	public Esquema getEsquema() {
 		return esquema;
 	}
@@ -72,6 +66,15 @@ public class EsquemaPaso extends AuditableEntity<Long> {
 
 	public void setId(Long id) {
 		this.id = id;
+	}
+
+	public EsquemaPaso clonar(String username, Date fechaHora, Esquema esquema) {
+		EsquemaPaso clonada = new EsquemaPaso();
+		clonada.resetearCreacion(username, fechaHora);
+		clonada.setDescripcion(descripcion);
+		clonada.setEsquema(esquema);
+		clonada.setPaso(paso);
+		return clonada;
 	}
 
 }

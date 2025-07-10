@@ -1,5 +1,7 @@
 package ar.com.avaco.nitrophyl.domain.entities.pieza;
 
+import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -86,6 +88,17 @@ public class Terminacion extends AuditableEntity<Long> {
 
 	public void setProceso(Proceso proceso) {
 		this.proceso = proceso;
+	}
+
+	public Terminacion clonar(String username, Date fechaHora, Proceso proceso) {
+		Terminacion clonada = new Terminacion();
+		clonada.resetearCreacion(username, fechaHora);
+		clonada.setEmbalaje(embalaje);
+		clonada.setIdentificacion(identificacion);
+		clonada.setImagenTerminada(imagenTerminada);
+		clonada.setProceso(proceso);
+		clonada.setRefilado(refilado);
+		return clonada;
 	}
 
 }

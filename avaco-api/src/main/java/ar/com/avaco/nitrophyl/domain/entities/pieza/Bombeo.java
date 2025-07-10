@@ -1,5 +1,7 @@
 package ar.com.avaco.nitrophyl.domain.entities.pieza;
 
+import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -40,15 +42,6 @@ public class Bombeo extends AuditableEntity<Long> {
 	@Column(name = "PRESION")
 	private Double presion;
 
-	public Bombeo clonar(Proceso proceso) {
-		Bombeo bombeo = new Bombeo();
-		bombeo.setCantidad(cantidad);
-		bombeo.setPresion(presion);
-		bombeo.setTipo(tipo);
-		bombeo.setProceso(proceso);
-		return bombeo;
-	}
-
 	public Integer getCantidad() {
 		return cantidad;
 	}
@@ -87,6 +80,16 @@ public class Bombeo extends AuditableEntity<Long> {
 
 	public void setProceso(Proceso proceso) {
 		this.proceso = proceso;
+	}
+
+	public Bombeo clonar(String username, Date fechaHora, Proceso proceso) {
+		Bombeo clonada = new Bombeo();
+		clonada.resetearCreacion(username, fechaHora);
+		clonada.setCantidad(cantidad);
+		clonada.setPresion(presion);
+		clonada.setProceso(proceso);
+		clonada.setTipo(tipo);
+		return clonada;
 	}
 
 }
