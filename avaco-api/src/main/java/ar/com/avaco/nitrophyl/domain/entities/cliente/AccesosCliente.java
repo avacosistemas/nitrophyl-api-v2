@@ -31,9 +31,7 @@ public class AccesosCliente extends ar.com.avaco.arc.core.domain.Entity<Long> {
 	private String descripcion;
 
 	@ManyToMany(fetch = FetchType.EAGER)
-	@JoinTable(name = "CLI_ACCESO_PERMISO", 
-	joinColumns = @JoinColumn(name = "ID_ACCESO", referencedColumnName = "ID_ACCESO"), 
-	inverseJoinColumns = @JoinColumn(name = "ID_PERMISO", referencedColumnName = "ID_PERMISO"))
+	@JoinTable(name = "CLI_ACCESO_PERMISO", joinColumns = @JoinColumn(name = "ID_ACCESO", referencedColumnName = "ID_ACCESO"), inverseJoinColumns = @JoinColumn(name = "ID_PERMISO", referencedColumnName = "ID_PERMISO"))
 	@Fetch(FetchMode.SELECT)
 	private Set<PermisoCliente> permisos;
 

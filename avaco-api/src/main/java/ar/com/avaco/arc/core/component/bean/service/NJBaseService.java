@@ -8,7 +8,6 @@ import java.util.List;
 import ar.com.avaco.arc.core.component.bean.repository.NJRepository;
 import ar.com.avaco.arc.core.domain.Entity;
 import ar.com.avaco.arc.core.domain.filter.AbstractFilter;
-import ar.com.avaco.commons.exception.BusinessException;
 import ar.com.avaco.commons.exception.ErrorValidationException;
 
 /**

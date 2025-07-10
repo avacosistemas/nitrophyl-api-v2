@@ -73,8 +73,10 @@ public class PiezaRepositoryImpl extends NJBaseRepository<Long, Pieza> implement
 			query += " order by p.codigo desc, p.revision asc ";
 		}
 		
-		query += " limit " + filtro.getRows();
-		query += " offset " + (filtro.getFirst() - 1);
+		if (filtro.getRows() != null && filtro.getFirst() != null) {
+			query += " limit " + filtro.getRows();
+			query += " offset " + (filtro.getFirst() - 1);
+		}
 		
 		
 		SQLQuery createSQLQuery = getCurrentSession().createSQLQuery(query)

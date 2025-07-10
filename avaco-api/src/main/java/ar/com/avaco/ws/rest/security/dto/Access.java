@@ -11,7 +11,7 @@ import ar.com.avaco.arc.core.domain.Entity;
  * @author avaco
  *
  */
-public class Access extends Entity<Long> implements Serializable{
+public class Access extends Entity<Long> implements Serializable {
 
 	/**
 	 * 
@@ -20,9 +20,9 @@ public class Access extends Entity<Long> implements Serializable{
 	private Long id;
 	private User user;
 	private Profile profile;
-	
+
 	public Access() {
-		
+
 	}
 
 	public Access(Long id, User user, Profile profile) {

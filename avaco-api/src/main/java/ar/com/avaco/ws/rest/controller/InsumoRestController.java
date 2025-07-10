@@ -2,6 +2,7 @@ package ar.com.avaco.ws.rest.controller;
 
 import javax.annotation.Resource;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -12,16 +13,22 @@ import org.springframework.web.bind.annotation.RestController;
 
 import ar.com.avaco.commons.exception.BusinessException;
 import ar.com.avaco.nitrophyl.ws.dto.InsumoDTO;
+import ar.com.avaco.nitrophyl.ws.dto.InsumoFilterDTO;
+import ar.com.avaco.nitrophyl.ws.dto.PageDTO;
 import ar.com.avaco.nitrophyl.ws.service.InsumoEPService;
+import ar.com.avaco.nitrophyl.ws.service.filter.InsumoFilter;
 import ar.com.avaco.ws.rest.dto.JSONResponse;
 
 @RestController
 public class InsumoRestController extends AbstractAuditableDTORestController<InsumoDTO, Long, InsumoEPService> {
 
-	@Override
 	@RequestMapping(value = "/insumo", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<JSONResponse> list() {
-		return super.list();
+	public ResponseEntity<JSONResponse> list(InsumoFilterDTO filterDTO) {
+		PageDTO<InsumoDTO> page = this.service.listFilterCount(new InsumoFilter(filterDTO));
+		JSONResponse response = new JSONResponse();
+		response.setData(page);
+		response.setStatus(JSONResponse.OK);
+		return new ResponseEntity<JSONResponse>(response, HttpStatus.OK);
 	}
 
 	@Override

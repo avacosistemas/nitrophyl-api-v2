@@ -41,4 +41,10 @@ public class Prensa extends AuditableEntity<Long> {
 		this.nombre = nombre;
 	}
 
+	public static Prensa ofId(Long id) {
+		Prensa prensa = new Prensa();
+		prensa.setId(id);
+		return prensa;
+	}
+
 }

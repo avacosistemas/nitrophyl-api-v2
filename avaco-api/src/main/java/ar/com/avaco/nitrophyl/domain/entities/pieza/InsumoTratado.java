@@ -1,6 +1,8 @@
 package ar.com.avaco.nitrophyl.domain.entities.pieza;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -47,10 +49,16 @@ public class InsumoTratado extends AuditableEntity<Long> {
 	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(name = "INSUMO_TRATADO_ADHESIVO", joinColumns = @JoinColumn(name = "ID_INSUMO_TRATADO", referencedColumnName = "ID_INSUMO_TRATADO"), inverseJoinColumns = @JoinColumn(name = "ID_ADHESIVO", referencedColumnName = "ID_ADHESIVO"))
 	@Fetch(FetchMode.SELECT)
-	private List<Adhesivo> adhesivos;
+	private Set<Adhesivo> adhesivos = new HashSet<>();
 
 	@Column(name = "OBSERVACIONES")
 	private String observaciones;
+
+	@Column(name = "MEDIDA_VALOR")
+	private String medidaValor;
+
+	@Column(name = "MEDIDA_OBSERVACIONES")
+	private String medidaObservaciones;
 
 	public Pieza getPieza() {
 		return pieza;
@@ -76,11 +84,11 @@ public class InsumoTratado extends AuditableEntity<Long> {
 		this.tratamiento = tratamiento;
 	}
 
-	public List<Adhesivo> getAdhesivos() {
+	public Set<Adhesivo> getAdhesivos() {
 		return adhesivos;
 	}
 
-	public void setAdhesivos(List<Adhesivo> adhesivos) {
+	public void setAdhesivos(Set<Adhesivo> adhesivos) {
 		this.adhesivos = adhesivos;
 	}
 
@@ -107,7 +115,25 @@ public class InsumoTratado extends AuditableEntity<Long> {
 		ins.setPieza(pieza);
 		ins.setTratamiento(this.tratamiento);
 		ins.setObservaciones(this.observaciones);
+		ins.setMedidaObservaciones(this.medidaObservaciones);
+		ins.setMedidaValor(this.medidaValor);
 		return ins;
+	}
+
+	public String getMedidaValor() {
+		return medidaValor;
+	}
+
+	public void setMedidaValor(String medidaValor) {
+		this.medidaValor = medidaValor;
+	}
+
+	public String getMedidaObservaciones() {
+		return medidaObservaciones;
+	}
+
+	public void setMedidaObservaciones(String medidaObservaciones) {
+		this.medidaObservaciones = medidaObservaciones;
 	}
 
 }

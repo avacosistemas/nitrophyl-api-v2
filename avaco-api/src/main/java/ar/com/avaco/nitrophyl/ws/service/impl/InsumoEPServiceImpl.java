@@ -2,7 +2,6 @@ package ar.com.avaco.nitrophyl.ws.service.impl;
 
 import javax.annotation.Resource;
 
-import org.checkerframework.checker.fenum.qual.SwingTitlePosition;
 import org.springframework.stereotype.Service;
 
 import ar.com.avaco.nitrophyl.domain.entities.pieza.Insumo;
@@ -21,7 +20,7 @@ public class InsumoEPServiceImpl extends CRUDAuditableEPBaseService<Long, Insumo
 	}
 
 	private TipoInsumoService tipoInsumoService;
-	
+
 	@Override
 	@Resource(name = "insumoService")
 	protected void setService(InsumoService service) {
@@ -30,7 +29,7 @@ public class InsumoEPServiceImpl extends CRUDAuditableEPBaseService<Long, Insumo
 
 	@Override
 	protected Insumo convertToEntity(InsumoDTO dto) {
-		Insumo insumo = new Insumo();
+		Insumo insumo = super.convertToEntity(dto);
 		insumo.setId(dto.getId());
 		insumo.setNombre(dto.getNombre());
 		insumo.setTipo(tipoInsumoService.get(dto.getIdTipo()));
@@ -39,10 +38,11 @@ public class InsumoEPServiceImpl extends CRUDAuditableEPBaseService<Long, Insumo
 
 	@Override
 	protected InsumoDTO convertToDto(Insumo entity) {
-		InsumoDTO dto = new InsumoDTO();
+		InsumoDTO dto = super.convertToDto(entity);
 		dto.setId(entity.getId());
 		dto.setNombre(entity.getNombre());
 		dto.setIdTipo(entity.getTipo().getId());
+		dto.setTipoNombre(entity.getTipo().getNombre());
 		return dto;
 	}
 
@@ -50,5 +50,5 @@ public class InsumoEPServiceImpl extends CRUDAuditableEPBaseService<Long, Insumo
 	public void setTipoInsumoService(TipoInsumoService tipoInsumoService) {
 		this.tipoInsumoService = tipoInsumoService;
 	}
-	
+
 }

@@ -12,7 +12,7 @@ public class PiezaClienteDTO extends DTOAuditableEntity<Long> {
 
 	private String nombreCliente;
 
-	private String nombrePiezaCliente;
+	private String nombrePiezaPersonalizado;
 
 	public Long getId() {
 		return id;
@@ -46,12 +46,12 @@ public class PiezaClienteDTO extends DTOAuditableEntity<Long> {
 		this.nombreCliente = nombreCliente;
 	}
 
-	public String getNombrePiezaCliente() {
-		return nombrePiezaCliente;
+	public String getNombrePiezaPersonalizado() {
+		return nombrePiezaPersonalizado;
 	}
 
-	public void setNombrePiezaCliente(String nombrePiezaCliente) {
-		this.nombrePiezaCliente = nombrePiezaCliente;
+	public void setNombrePiezaPersonalizado(String nombrePiezaPersonalizado) {
+		this.nombrePiezaPersonalizado = nombrePiezaPersonalizado;
 	}
 
 }

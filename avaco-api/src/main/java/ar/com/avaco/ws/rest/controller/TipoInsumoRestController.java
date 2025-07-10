@@ -1,7 +1,10 @@
 package ar.com.avaco.ws.rest.controller;
 
+import java.util.List;
+
 import javax.annotation.Resource;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,13 +19,21 @@ import ar.com.avaco.nitrophyl.ws.service.TipoInsumoEPService;
 import ar.com.avaco.ws.rest.dto.JSONResponse;
 
 @RestController
-public class TipoInsumoRestController
-		extends AbstractAuditableDTORestController<TipoInsumoDTO, Long, TipoInsumoEPService> {
+public class TipoInsumoRestController extends AbstractAuditableDTORestController<TipoInsumoDTO, Long, TipoInsumoEPService> {
 
 	@Override
 	@RequestMapping(value = "/tipoInsumo", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<JSONResponse> list() {
 		return super.list();
+	}
+
+	@RequestMapping(value = "/tipoInsumo/{parentId}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<JSONResponse> list(@PathVariable Long parentId) {
+		List<TipoInsumoDTO> list = this.service.listEq("padre.id", parentId);
+		JSONResponse response = new JSONResponse();
+		response.setData(list);
+		response.setStatus(JSONResponse.OK);
+		return new ResponseEntity<JSONResponse>(response, HttpStatus.OK);
 	}
 
 	@Override

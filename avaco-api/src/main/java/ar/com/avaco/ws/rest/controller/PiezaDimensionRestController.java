@@ -1,7 +1,10 @@
 package ar.com.avaco.ws.rest.controller;
 
+import java.util.List;
+
 import javax.annotation.Resource;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,12 +21,15 @@ import ar.com.avaco.ws.rest.dto.JSONResponse;
 @RestController
 public class PiezaDimensionRestController extends AbstractAuditableDTORestController<PiezaDimensionDTO, Long, PiezaDimensionEPService> {
 
-	@Override
-	@RequestMapping(value = "/piezaDimension", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<JSONResponse> list() {
-		return super.list();
+	@RequestMapping(value = "/piezaDimension/{idPieza}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<JSONResponse> list(@PathVariable Long idPieza) {
+		List<PiezaDimensionDTO> list = this.service.listEq("pieza.id", idPieza);
+		JSONResponse response = new JSONResponse();
+		response.setData(list);
+		response.setStatus(JSONResponse.OK);
+		return new ResponseEntity<JSONResponse>(response, HttpStatus.OK);
 	}
-
+	
 	@Override
 	@RequestMapping(value = "/piezaDimension", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<JSONResponse> create(@RequestBody PiezaDimensionDTO dto) throws BusinessException {

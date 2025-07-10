@@ -4,6 +4,7 @@ import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
 
+import ar.com.avaco.nitrophyl.domain.entities.pieza.Pieza;
 import ar.com.avaco.nitrophyl.domain.entities.pieza.PiezaDimension;
 import ar.com.avaco.nitrophyl.service.pieza.PiezaDimensionService;
 import ar.com.avaco.nitrophyl.ws.dto.PiezaDimensionDTO;
@@ -19,6 +20,20 @@ public class PiezaDimensionEPServiceImpl
 		super(PiezaDimension.class, PiezaDimensionDTO.class);
 	}
 
+	@Override
+	protected PiezaDimensionDTO convertToDto(PiezaDimension entity) {
+		PiezaDimensionDTO dto = super.convertToDto(entity);
+		dto.setIdPieza(entity.getPieza().getId());
+		return dto;
+	}
+	
+	@Override
+	protected PiezaDimension convertToEntity(PiezaDimensionDTO dto) {
+		PiezaDimension entity = super.convertToEntity(dto);
+		entity.setPieza(Pieza.ofId(dto.getIdPieza()));
+		return entity;
+	}
+	
 	@Override
 	@Resource(name = "piezaDimensionService")
 	protected void setService(PiezaDimensionService service) {

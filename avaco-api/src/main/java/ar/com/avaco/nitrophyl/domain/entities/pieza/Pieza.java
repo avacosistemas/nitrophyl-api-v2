@@ -29,25 +29,20 @@ import ar.com.avaco.nitrophyl.domain.entities.AuditableEntity;
 import ar.com.avaco.nitrophyl.ws.dto.PiezaGrillaDTO;
 import ar.com.avaco.utils.DateUtils;
 
-@SqlResultSetMapping(name="PiezaGrillaDTOMapper",
-classes = {
-    @ConstructorResult(
-            targetClass = PiezaGrillaDTO.class,
-            columns = {
-        		@ColumnResult(name = "rows", type = Integer.class),
-                @ColumnResult(name = "denominacion", type = String.class),
-                @ColumnResult(name = "idPieza", type = Integer.class),
-                @ColumnResult(name = "codigo", type = String.class),
-                @ColumnResult(name = "vigente", type = Boolean.class),
-                @ColumnResult(name = "revision", type = Integer.class),
-                @ColumnResult(name = "fechaRevision", type = Date.class),
-                @ColumnResult(name = "tipo", type = String.class),
-                @ColumnResult(name = "material", type = String.class),
-                @ColumnResult(name = "puedeGenerarRevision", type = Boolean.class),
-                @ColumnResult(name = "formula", type = String.class),
-                @ColumnResult(name = "puedeMarcarVigente", type = Boolean.class)
-            })
-})
+@SqlResultSetMapping(name = "PiezaGrillaDTOMapper", classes = {
+		@ConstructorResult(targetClass = PiezaGrillaDTO.class, columns = {
+				@ColumnResult(name = "rows", type = Integer.class),
+				@ColumnResult(name = "denominacion", type = String.class),
+				@ColumnResult(name = "idPieza", type = Integer.class),
+				@ColumnResult(name = "codigo", type = String.class),
+				@ColumnResult(name = "vigente", type = Boolean.class),
+				@ColumnResult(name = "revision", type = Integer.class),
+				@ColumnResult(name = "fechaRevision", type = Date.class),
+				@ColumnResult(name = "tipo", type = String.class),
+				@ColumnResult(name = "material", type = String.class),
+				@ColumnResult(name = "puedeGenerarRevision", type = Boolean.class),
+				@ColumnResult(name = "formula", type = String.class),
+				@ColumnResult(name = "puedeMarcarVigente", type = Boolean.class) }) })
 
 @Entity
 @Table(name = "PIEZA")
@@ -117,8 +112,7 @@ public class Pieza extends AuditableEntity<Long> {
 	/**
 	 * Proceso de creacion de la pieza.
 	 */
-	@OneToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "ID_PROCESO", referencedColumnName = "ID_PROCESO", unique = true)
+	@OneToOne(mappedBy = "pieza", cascade = CascadeType.ALL, orphanRemoval = true)
 	private Proceso proceso;
 
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "pieza")
@@ -317,6 +311,12 @@ public class Pieza extends AuditableEntity<Long> {
 
 	public void setClientes(Set<PiezaCliente> clientes) {
 		this.clientes = clientes;
+	}
+
+	public static Pieza ofId(Long id) {
+		Pieza pieza = new Pieza();
+		pieza.setId(id);
+		return pieza;
 	}
 
 }

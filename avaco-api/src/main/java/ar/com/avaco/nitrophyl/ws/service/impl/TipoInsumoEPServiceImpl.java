@@ -24,26 +24,4 @@ public class TipoInsumoEPServiceImpl extends
 		this.service = service;
 	}
 
-	@Override
-	protected TipoInsumo convertToEntity(TipoInsumoDTO dto) {
-		TipoInsumo tipoInsumo = new TipoInsumo();
-		tipoInsumo.setId(dto.getId());
-		tipoInsumo.setNombre(dto.getNombre());
-		if (dto.getParentId() != null) {
-			TipoInsumo padre = this.service.get(dto.getParentId());
-			tipoInsumo.setPadre(padre);
-		}
-		return tipoInsumo;
-	}
-
-	@Override
-	protected TipoInsumoDTO convertToDto(TipoInsumo entity) {
-		TipoInsumoDTO dto = new TipoInsumoDTO();
-		dto.setId(entity.getId());
-		dto.setNombre(entity.getNombre());
-		if (entity.getPadre() != null)
-			dto.setParentId(entity.getPadre().getId());
-		return dto;
-	}
-
 }

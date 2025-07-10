@@ -2,10 +2,10 @@ package ar.com.avaco.nitrophyl.domain.entities.pieza;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.SequenceGenerator;
+import javax.persistence.JoinColumn;
+import javax.persistence.MapsId;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.Type;
@@ -14,15 +14,18 @@ import ar.com.avaco.nitrophyl.domain.entities.AuditableEntity;
 
 @Entity
 @Table(name = "TERMINACION")
-@SequenceGenerator(name = "TERMINACION_SEQ", sequenceName = "TERMINACION_SEQ", allocationSize = 1)
 public class Terminacion extends AuditableEntity<Long> {
 
 	private static final long serialVersionUID = -5745677178144225795L;
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "TERMINACION_SEQ")
 	@Column(name = "ID_TERMINACION", unique = true, nullable = false)
 	private Long id;
+
+	@OneToOne
+	@MapsId
+	@JoinColumn(name = "ID_TERMINACION")
+	private Proceso proceso;
 
 	@Column(name = "REFILADO")
 	private String refilado;
@@ -75,6 +78,14 @@ public class Terminacion extends AuditableEntity<Long> {
 
 	public void setId(Long id) {
 		this.id = id;
+	}
+
+	public Proceso getProceso() {
+		return proceso;
+	}
+
+	public void setProceso(Proceso proceso) {
+		this.proceso = proceso;
 	}
 
 }

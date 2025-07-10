@@ -8,14 +8,13 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
 
 import ar.com.avaco.commons.exception.BusinessException;
 import ar.com.avaco.nitrophyl.ws.dto.EsquemaPasoDTO;
 import ar.com.avaco.nitrophyl.ws.service.EsquemaPasoEPService;
 import ar.com.avaco.ws.rest.dto.JSONResponse;
 
-@RestController
+//@RestController
 public class EsquemaPasoRestController extends AbstractAuditableDTORestController<EsquemaPasoDTO, Long, EsquemaPasoEPService> {
 
 	@Override

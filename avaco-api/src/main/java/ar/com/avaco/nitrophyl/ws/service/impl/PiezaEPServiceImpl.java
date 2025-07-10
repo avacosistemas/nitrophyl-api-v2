@@ -9,7 +9,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import ar.com.avaco.commons.exception.BusinessException;
 import ar.com.avaco.commons.exception.ErrorValidationException;
 import ar.com.avaco.nitrophyl.domain.entities.cliente.Cliente;
 import ar.com.avaco.nitrophyl.domain.entities.formula.Formula;
@@ -22,28 +21,37 @@ import ar.com.avaco.nitrophyl.domain.entities.pieza.PiezaMolde;
 import ar.com.avaco.nitrophyl.domain.entities.pieza.PiezaPlano;
 import ar.com.avaco.nitrophyl.domain.entities.pieza.PiezaTipo;
 import ar.com.avaco.nitrophyl.domain.entities.pieza.Proceso;
+import ar.com.avaco.nitrophyl.domain.entities.pieza.Terminacion;
 import ar.com.avaco.nitrophyl.domain.entities.pieza.UnidadDureza;
 import ar.com.avaco.nitrophyl.service.cliente.ClienteService;
 import ar.com.avaco.nitrophyl.service.formula.FormulaService;
 import ar.com.avaco.nitrophyl.service.molde.MoldeService;
 import ar.com.avaco.nitrophyl.service.pieza.PiezaService;
 import ar.com.avaco.nitrophyl.service.pieza.PiezaTipoService;
+import ar.com.avaco.nitrophyl.ws.dto.BombeoDTO;
 import ar.com.avaco.nitrophyl.ws.dto.PageDTO;
 import ar.com.avaco.nitrophyl.ws.dto.PiezaCreacionDTO;
 import ar.com.avaco.nitrophyl.ws.dto.PiezaDTO;
+import ar.com.avaco.nitrophyl.ws.dto.PiezaEdicionDTO;
 import ar.com.avaco.nitrophyl.ws.dto.PiezaFilterDTO;
+import ar.com.avaco.nitrophyl.ws.dto.PiezaPUTDTO;
 import ar.com.avaco.nitrophyl.ws.dto.PiezaGrillaDTO;
+import ar.com.avaco.nitrophyl.ws.dto.PrensaDTO;
 import ar.com.avaco.nitrophyl.ws.service.PiezaEPService;
 import ar.com.avaco.utils.DateUtils;
-import ar.com.avaco.ws.rest.service.CRUDEPBaseService;
+import ar.com.avaco.ws.rest.service.CRUDAuditableEPBaseService;
 
 @Transactional
 @Service("piezaEPService")
-public class PiezaEPServiceImpl extends CRUDEPBaseService<Long, PiezaDTO, Pieza, PiezaService>
+public class PiezaEPServiceImpl extends CRUDAuditableEPBaseService<Long, PiezaDTO, Pieza, PiezaService>
 		implements PiezaEPService {
 
+	public PiezaEPServiceImpl() {
+		super(Pieza.class, PiezaDTO.class);
+	}
+
 	private ClienteService clienteService;
-	
+
 	private FormulaService formulaService;
 
 	private MoldeService moldeService;
@@ -53,14 +61,8 @@ public class PiezaEPServiceImpl extends CRUDEPBaseService<Long, PiezaDTO, Pieza,
 	@Override
 	public PageDTO<PiezaGrillaDTO> listGrilla(PiezaFilterDTO filter) {
 		List<PiezaGrillaDTO> listGrilla = this.service.listGrilla(filter);
-		Integer rows = !listGrilla.isEmpty() ? listGrilla.get(0).getRows() : 0;  
+		Integer rows = !listGrilla.isEmpty() ? listGrilla.get(0).getRows() : 0;
 		return new PageDTO<PiezaGrillaDTO>(listGrilla, rows);
-	}
-	
-	@Override
-	public PiezaDTO update(PiezaDTO dto) throws BusinessException {
-		// TODO Auto-generated method stub
-		return super.update(dto);
 	}
 
 	@Override
@@ -112,12 +114,12 @@ public class PiezaEPServiceImpl extends CRUDEPBaseService<Long, PiezaDTO, Pieza,
 		pieza.setFechaRevision(fechaYHoraActual);
 
 		pieza.setFechaCreacionPiezaProceso(fechaYHoraActual);
-		
+
 		pieza.setUsuarioCreacion(username);
 		pieza.setFechaCreacion(fechaYHoraActual);
 
 		Formula formula = formulaService.get(dto.getIdFormula());
-		
+
 		PiezaFormula detalle = new PiezaFormula();
 		detalle.setFormula(formula);
 
@@ -127,7 +129,7 @@ public class PiezaEPServiceImpl extends CRUDEPBaseService<Long, PiezaDTO, Pieza,
 
 		detalle.setEspesorMinimo(dto.getEspesorMinimo());
 		detalle.setEspesorMaximo(dto.getEspesorMaximo());
-		
+
 		detalle.setPesoCrudo(dto.getPesoCrudo());
 		detalle.setObservacionesPesoCrudo(dto.getObservacionesPesoCrudo());
 
@@ -156,18 +158,23 @@ public class PiezaEPServiceImpl extends CRUDEPBaseService<Long, PiezaDTO, Pieza,
 		pieza.getPlanos().add(plano);
 
 		Cliente cliente = this.clienteService.get(dto.getIdCliente());
-		
+
 		PiezaCliente piezaCliente = new PiezaCliente();
 		piezaCliente.setCliente(cliente);
 		piezaCliente.setFechaCreacion(fechaYHoraActual);
 		piezaCliente.setNombrePiezaPersonalizado(dto.getNombrePiezaCliente());
 		piezaCliente.setPieza(pieza);
 		piezaCliente.setUsuarioCreacion(username);
-		
+
 		pieza.getClientes().add(piezaCliente);
-		
+
+		Terminacion terminacion = new Terminacion();
 		Proceso proceso = new Proceso();
+
+		terminacion.setProceso(proceso);
+		proceso.setTerminacion(terminacion);
 		pieza.setProceso(proceso);
+		proceso.setPieza(pieza);
 
 		pieza.setRevision(dto.getRevisionIncial());
 
@@ -214,5 +221,66 @@ public class PiezaEPServiceImpl extends CRUDEPBaseService<Long, PiezaDTO, Pieza,
 	public void setClienteService(ClienteService clienteService) {
 		this.clienteService = clienteService;
 	}
-	
+
+	@Override
+	public PiezaEdicionDTO getByIdEdicion(Long idPieza) {
+		Pieza pieza = this.service.get(idPieza);
+
+		PiezaEdicionDTO dto = new PiezaEdicionDTO();
+		dto.setId(pieza.getId());
+		dto.setDenominacion(pieza.getDenominacion());
+		dto.setTipo(pieza.getTipo().getNombre());
+		dto.setCodigo(pieza.getCodigo());
+		dto.setNombreFormula(pieza.getDetalleFormula().getFormula().getNombre());
+		dto.setDurezaMinima(pieza.getDetalleFormula().getDurezaMinima());
+		dto.setDurezaMaxima(pieza.getDetalleFormula().getDurezaMaxima());
+		dto.setUnidadDureza(pieza.getDetalleFormula().getUnidadDureza());
+		dto.setEspesorMinimo(pieza.getDetalleFormula().getEspesorMinimo());
+		dto.setEspesorMaximo(pieza.getDetalleFormula().getEspesorMaximo());
+		dto.setPesoCrudo(pieza.getDetalleFormula().getPesoCrudo());
+		dto.setObservacionesPesoCrudo(pieza.getDetalleFormula().getObservacionesPesoCrudo());
+		dto.setRevision(pieza.getRevision());
+		dto.setFechaRevision(pieza.getFechaRevision());
+		dto.setVigente(pieza.getVigente());
+		dto.setFechaCreacionPiezaProceso(pieza.getFechaCreacionPiezaProceso());
+		dto.setObservacionesRevision(pieza.getObservacionesRevision());
+
+		dto.setPrecalentamientoUnidad(pieza.getProceso().getPrecalentamiento().getUnidad());
+		dto.setPrecalentamientoValor(pieza.getProceso().getPrecalentamiento().getValor());
+
+		pieza.getProceso().getPrensas().forEach(prensa -> {
+			dto.getPrensas().add(super.modelMapper.map(prensa, PrensaDTO.class));
+		});
+
+		dto.setVulcanizacionTemperaturaMin(pieza.getProceso().getVulcanizacion().getTemperaturaMin());
+		dto.setVulcanizacionTemperaturaMax(pieza.getProceso().getVulcanizacion().getTemperaturaMax());
+		dto.setVulcanizacionTiempo(pieza.getProceso().getVulcanizacion().getTiempo());
+
+		pieza.getProceso().getBombeos().forEach(bombeo -> {
+			dto.getBombeos().add(modelMapper.map(bombeo, BombeoDTO.class));
+		});
+
+		dto.setDesmoldante(pieza.getProceso().getDesmoldante());
+		dto.setPostCura(pieza.getProceso().getPostCura());
+
+		return dto;
+
+	}
+
+	@Override
+	public void update(Long idPieza, PiezaPUTDTO piezaFormula) {
+		Pieza pieza = this.service.get(idPieza);
+		pieza.getDetalleFormula().setDurezaMaxima(piezaFormula.getDurezaMaxima());
+		pieza.getDetalleFormula().setDurezaMinima(piezaFormula.getDurezaMinima());
+		pieza.getDetalleFormula().setEspesorMaximo(piezaFormula.getEspesorMaximo());
+		pieza.getDetalleFormula().setEspesorMinimo(piezaFormula.getEspesorMinimo());
+		pieza.getDetalleFormula().setObservacionesPesoCrudo(piezaFormula.getObservacionesPesoCrudo());
+		pieza.getDetalleFormula().setPesoCrudo(piezaFormula.getPesoCrudo());
+		pieza.getDetalleFormula().setUnidadDureza(piezaFormula.getUnidadDureza());
+		pieza.setObservacionesRevision(piezaFormula.getObservacionesRevision());
+		pieza.setUsuarioActualizacion(SecurityContextHolder.getContext().getAuthentication().getName());
+		pieza.setFechaActualizacion(DateUtils.getFechaYHoraActual());
+		this.service.update(pieza);
+	}
+
 }

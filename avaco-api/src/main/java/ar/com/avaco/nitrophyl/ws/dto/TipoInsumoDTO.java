@@ -6,7 +6,7 @@ public class TipoInsumoDTO extends DTOAuditableEntity<Long> {
 
 	private Long id;
 	private String nombre;
-	private Long parentId;
+	private TipoInsumoDTO padre;
 
 	public Long getId() {
 		return id;
@@ -24,12 +24,12 @@ public class TipoInsumoDTO extends DTOAuditableEntity<Long> {
 		this.nombre = nombre;
 	}
 
-	public Long getParentId() {
-		return parentId;
+	public TipoInsumoDTO getPadre() {
+		return padre;
 	}
 
-	public void setParentId(Long parentId) {
-		this.parentId = parentId;
+	public void setPadre(TipoInsumoDTO padre) {
+		this.padre = padre;
 	}
 
 }

@@ -1,7 +1,10 @@
 package ar.com.avaco.ws.rest.controller;
 
+import java.util.List;
+
 import javax.annotation.Resource;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,6 +27,21 @@ public class InsumoTratadoRestController extends AbstractAuditableDTORestControl
 		return super.list();
 	}
 
+	@RequestMapping(value = "/insumoTratado/pieza/{idPieza}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<JSONResponse> list(@PathVariable Long idPieza) {
+		List<InsumoTratadoDTO> list = this.service.listEq("pieza.id", idPieza);
+		JSONResponse response = new JSONResponse();
+		response.setData(list);
+		response.setStatus(JSONResponse.OK);
+		return new ResponseEntity<JSONResponse>(response, HttpStatus.OK);
+	}
+	
+	@Override
+	@RequestMapping(value = "/insumoTratado/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<JSONResponse> get(Long id) throws BusinessException {
+		return super.get(id);
+	}
+	
 	@Override
 	@RequestMapping(value = "/insumoTratado", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<JSONResponse> create(@RequestBody InsumoTratadoDTO dto) throws BusinessException {

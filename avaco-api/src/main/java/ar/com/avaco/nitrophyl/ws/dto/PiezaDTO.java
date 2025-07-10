@@ -3,9 +3,9 @@
  */
 package ar.com.avaco.nitrophyl.ws.dto;
 
-import ar.com.avaco.ws.rest.dto.DTOEntity;
+import ar.com.avaco.ws.rest.dto.DTOAuditableEntity;
 
-public class PiezaDTO extends DTOEntity<Long> {
+public class PiezaDTO extends DTOAuditableEntity<Long> {
 
 	private Long id;
 

@@ -38,7 +38,7 @@ public class Esquema extends AuditableEntity<Long> {
 	@Column(name = "TITULO")
 	private String titulo;
 
-	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "esquema")
+	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "esquema", orphanRemoval = true)
 	private List<EsquemaPaso> pasos;
 
 	@Column(name = "IMAGEN", nullable = true)

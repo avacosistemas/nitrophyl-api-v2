@@ -31,9 +31,9 @@ public abstract class CRUDAuditableEPBaseService<ID extends Serializable, DTO ex
 		dtoClass = theDtoClass;
 		entityClass = theEntityClass;
 	}
-	
-	private final ModelMapper modelMapper = new ModelMapper();
-	
+
+	protected final ModelMapper modelMapper = new ModelMapper();
+
 	@Override
 	public DTO save(DTO dto) throws BusinessException {
 		String username = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -106,8 +106,12 @@ public abstract class CRUDAuditableEPBaseService<ID extends Serializable, DTO ex
 
 	@Override
 	public List<DTO> listPattern(String field, String pattern) {
-		// TODO Auto-generated method stub
-		return null;
+		return convertToDtos(this.service.listPattern(field, pattern));
+	}
+
+	@Override
+	public List<DTO> listEq(String field, Object value) {
+		return convertToDtos(this.service.listEqField(field, value));
 	}
 
 	protected T convertToEntity(DTO dto) {

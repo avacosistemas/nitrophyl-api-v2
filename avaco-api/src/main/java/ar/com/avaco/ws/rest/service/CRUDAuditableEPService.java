@@ -27,5 +27,7 @@ public interface CRUDAuditableEPService<ID extends Serializable, DTO extends DTO
 	List<DTO> listPattern(String field, String pattern);
 
 	PageDTO<DTO> listFilterCount(AbstractFilter abstractFilter);
+	
+	List<DTO> listEq(String field, Object value);
 
 }

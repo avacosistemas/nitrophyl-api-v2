@@ -68,15 +68,16 @@ public class NJBaseRepository<ID extends Serializable, E extends ar.com.avaco.ar
 		return uniqueResult.intValue();
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
+	@SuppressWarnings("unchecked")
 	public List<E> listPattern(String field, String pattern) {
 		Criteria criteria = getCurrentSession().createCriteria(getHandledClass());
-		criteria.add(Restrictions.like(field, pattern, MatchMode.ANYWHERE).ignoreCase());
+		criteria.add(Restrictions.like(field, pattern.trim(), MatchMode.ANYWHERE).ignoreCase());
 		return criteria.list();
 	}
 
 	@Override
+	@SuppressWarnings("unchecked")
 	public List<E> listEqField(String field, Object value) {
 		Criteria criteria = getCurrentSession().createCriteria(getHandledClass());
 		criteria.add(Restrictions.eq(field, value));

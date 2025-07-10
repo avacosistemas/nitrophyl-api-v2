@@ -1,7 +1,6 @@
 package ar.com.avaco.nitrophyl.domain.entities.pieza;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -9,15 +8,13 @@ import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.MapsId;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
-import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.Fetch;
@@ -28,18 +25,21 @@ import ar.com.avaco.nitrophyl.domain.entities.fabrica.Prensa;
 
 @Entity
 @Table(name = "PROCESO")
-@SequenceGenerator(name = "PROCESO_SEQ", sequenceName = "PROCESO_SEQ", allocationSize = 1)
 public class Proceso extends AuditableEntity<Long> {
 
 	private static final long serialVersionUID = -9161533934017681173L;
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "PROCESO_SEQ")
 	@Column(name = "ID_PROCESO", unique = true, nullable = false)
 	private Long id;
 
+	@OneToOne
+	@MapsId
+	@JoinColumn(name = "ID_PROCESO")
+	private Pieza pieza;
+
 	@Embedded
-	private Precalentamiento precalentamiento;
+	private Precalentamiento precalentamiento = new Precalentamiento();
 
 	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(name = "PROCESO_PRENSA", joinColumns = @JoinColumn(name = "ID_PROCESO", referencedColumnName = "ID_PROCESO"), inverseJoinColumns = @JoinColumn(name = "ID_PRENSA", referencedColumnName = "ID_PRENSA"))
@@ -47,10 +47,10 @@ public class Proceso extends AuditableEntity<Long> {
 	private Set<Prensa> prensas = new HashSet<>();
 
 	@Embedded
-	private Vulcanizacion vulcanizacion;
+	private Vulcanizacion vulcanizacion = new Vulcanizacion();
 
-	@OneToMany
-	private Set<Bombeo> bombeos;
+	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "proceso")
+	private Set<Bombeo> bombeos = new HashSet<>();
 
 	@Column(name = "DESMOLDANTE")
 	private String desmoldante;
@@ -58,12 +58,11 @@ public class Proceso extends AuditableEntity<Long> {
 	@Column(name = "POSTCURA")
 	private String postCura;
 
-	@OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "ID_TERMINACION", referencedColumnName = "ID_TERMINACION", unique = true)
+	@OneToOne(mappedBy = "proceso", cascade = CascadeType.ALL, orphanRemoval = true)
 	private Terminacion terminacion;
 
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "proceso")
-	private List<Esquema> esquema;
+	private Set<Esquema> esquema = new HashSet<>();
 
 	public Proceso clonar(Pieza pieza) {
 		Proceso proceso = new Proceso();
@@ -130,11 +129,11 @@ public class Proceso extends AuditableEntity<Long> {
 		this.postCura = postCura;
 	}
 
-	public List<Esquema> getEsquema() {
+	public Set<Esquema> getEsquema() {
 		return esquema;
 	}
 
-	public void setEsquema(List<Esquema> esquema) {
+	public void setEsquema(Set<Esquema> esquema) {
 		this.esquema = esquema;
 	}
 
@@ -144,6 +143,20 @@ public class Proceso extends AuditableEntity<Long> {
 
 	public void setId(Long id) {
 		this.id = id;
+	}
+
+	public Pieza getPieza() {
+		return pieza;
+	}
+
+	public void setPieza(Pieza pieza) {
+		this.pieza = pieza;
+	}
+
+	public static Proceso ofId(Long id) {
+		Proceso p = new Proceso();
+		p.setId(id);
+		return p;
 	}
 
 }

@@ -1,5 +1,6 @@
 package ar.com.avaco.ws.rest.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -12,8 +13,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import ar.com.avaco.nitrophyl.ws.dto.ComboDTO;
 import ar.com.avaco.nitrophyl.ws.dto.MoldeBocaListadoDTO;
 import ar.com.avaco.nitrophyl.ws.dto.MoldeClienteDTO;
 import ar.com.avaco.nitrophyl.ws.dto.MoldeDTO;
@@ -230,6 +233,18 @@ public class MoldeRestController extends AbstractDTORestController<MoldeDTO, Lon
 		MoldeObservacionDTO saved = this.service.addMoldeObservacion(dto);
 		JSONResponse response = new JSONResponse();
 		response.setData(saved);
+		response.setStatus(JSONResponse.OK);
+		return new ResponseEntity<JSONResponse>(response, HttpStatus.OK);
+	}
+	
+	@RequestMapping(value = "/molde/combo", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<JSONResponse> getCombo(@RequestParam String nombre) throws Exception {
+		List<MoldeDTO> list = this.service.listPattern("codigo", nombre);
+		List<ComboDTO> combo = new ArrayList<ComboDTO>();
+		if (list != null && !list.isEmpty())
+			list.stream().forEach(molde -> combo.add(new ComboDTO(molde.getCodigo(), molde.getId().toString())));
+		JSONResponse response = new JSONResponse();
+		response.setData(combo);
 		response.setStatus(JSONResponse.OK);
 		return new ResponseEntity<JSONResponse>(response, HttpStatus.OK);
 	}
