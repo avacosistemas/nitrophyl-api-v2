@@ -27,7 +27,6 @@ import org.hibernate.annotations.FetchMode;
 
 import ar.com.avaco.nitrophyl.domain.entities.AuditableEntity;
 import ar.com.avaco.nitrophyl.ws.dto.PiezaGrillaDTO;
-import ar.com.avaco.utils.DateUtils;
 
 @SqlResultSetMapping(name = "PiezaGrillaDTOMapper", classes = {
 		@ConstructorResult(targetClass = PiezaGrillaDTO.class, columns = {
