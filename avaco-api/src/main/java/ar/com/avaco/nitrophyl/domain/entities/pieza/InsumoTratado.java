@@ -38,13 +38,14 @@ public class InsumoTratado extends AuditableEntity<Long> {
 	@JoinColumn(name = "ID_PIEZA")
 	private Pieza pieza;
 
+	@ManyToMany(fetch = FetchType.EAGER)
+	@JoinTable(name = "INSUMO_TRATADO_TRATAMIENTO", joinColumns = @JoinColumn(name = "ID_INSUMO_TRATADO", referencedColumnName = "ID_INSUMO_TRATADO"), inverseJoinColumns = @JoinColumn(name = "ID_TRATAMIENTO", referencedColumnName = "ID_TRATAMIENTO"))
+	@Fetch(FetchMode.SELECT)
+	private Set<Tratamiento> tratamientos = new HashSet<>();
+
 	@ManyToOne(fetch = FetchType.EAGER, optional = false)
 	@JoinColumn(name = "ID_INSUMO")
 	private Insumo insumo;
-
-	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "ID_TRATAMIENTO")
-	private Tratamiento tratamiento;
 
 	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(name = "INSUMO_TRATADO_ADHESIVO", joinColumns = @JoinColumn(name = "ID_INSUMO_TRATADO", referencedColumnName = "ID_INSUMO_TRATADO"), inverseJoinColumns = @JoinColumn(name = "ID_ADHESIVO", referencedColumnName = "ID_ADHESIVO"))
@@ -63,13 +64,13 @@ public class InsumoTratado extends AuditableEntity<Long> {
 	public InsumoTratado clonar(String username, Date fechaHora, Pieza pieza) {
 		InsumoTratado clonada = new InsumoTratado();
 		clonada.resetearCreacion(username, fechaHora);
-		clonada.setAdhesivos(this.adhesivos);
+		clonada.getAdhesivos().addAll(this.adhesivos);
 		clonada.setInsumo(this.insumo);
 		clonada.setMedidaObservaciones(this.medidaObservaciones);
 		clonada.setMedidaValor(this.medidaValor);
 		clonada.setObservaciones(this.observaciones);
 		clonada.setPieza(pieza);
-		clonada.setTratamiento(this.tratamiento);
+		clonada.getTratamientos().addAll(this.tratamientos);
 		return clonada;
 	}
 
@@ -89,12 +90,12 @@ public class InsumoTratado extends AuditableEntity<Long> {
 		this.insumo = insumo;
 	}
 
-	public Tratamiento getTratamiento() {
-		return tratamiento;
+	public Set<Tratamiento> getTratamientos() {
+		return tratamientos;
 	}
 
-	public void setTratamiento(Tratamiento tratamiento) {
-		this.tratamiento = tratamiento;
+	public void setTratamientos(Set<Tratamiento> tratamientos) {
+		this.tratamientos = tratamientos;
 	}
 
 	public Set<Adhesivo> getAdhesivos() {

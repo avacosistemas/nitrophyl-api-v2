@@ -50,7 +50,7 @@ public class Proceso extends AuditableEntity<Long> {
 	@Embedded
 	private Vulcanizacion vulcanizacion = new Vulcanizacion();
 
-	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "proceso")
+	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "proceso", orphanRemoval = true)
 	private Set<Bombeo> bombeos = new HashSet<>();
 
 	@Column(name = "DESMOLDANTE")
@@ -62,7 +62,7 @@ public class Proceso extends AuditableEntity<Long> {
 	@OneToOne(mappedBy = "proceso", cascade = CascadeType.ALL, orphanRemoval = true)
 	private Terminacion terminacion;
 
-	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "proceso")
+	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "proceso", orphanRemoval = true)
 	private Set<Esquema> esquema = new HashSet<>();
 
 	public Proceso clonar(String username, Date fechaHora, Pieza pieza) {
@@ -163,6 +163,7 @@ public class Proceso extends AuditableEntity<Long> {
 	public static Proceso ofId(Long id) {
 		Proceso p = new Proceso();
 		p.setId(id);
+		p.setPieza(Pieza.ofId(id));
 		return p;
 	}
 

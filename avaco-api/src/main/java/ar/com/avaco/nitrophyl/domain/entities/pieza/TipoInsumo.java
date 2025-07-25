@@ -1,5 +1,10 @@
 package ar.com.avaco.nitrophyl.domain.entities.pieza;
 
+import java.beans.Transient;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -53,6 +58,28 @@ public class TipoInsumo extends AuditableEntity<Long> {
 
 	public void setNombre(String nombre) {
 		this.nombre = nombre;
+	}
+
+	public static TipoInsumo ofId(Long id) {
+		TipoInsumo ti = new TipoInsumo();
+		ti.setId(id);
+		return ti;
+	}
+
+	@Transient
+	public String getNombreCompleto() {
+		List<String> nombres = new ArrayList<>();
+		TipoInsumo actual = this;
+
+		while (actual != null) {
+			nombres.add(actual.getNombre());
+			actual = actual.getPadre();
+		}
+
+		// Invertir la lista para tener la ruta desde la raíz hasta la hoja
+		Collections.reverse(nombres);
+
+		return String.join(" > ", nombres);
 	}
 
 }

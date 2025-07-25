@@ -8,6 +8,7 @@ import ar.com.avaco.nitrophyl.domain.entities.pieza.Adhesivo;
 import ar.com.avaco.nitrophyl.domain.entities.pieza.Insumo;
 import ar.com.avaco.nitrophyl.domain.entities.pieza.InsumoTratado;
 import ar.com.avaco.nitrophyl.domain.entities.pieza.Pieza;
+import ar.com.avaco.nitrophyl.domain.entities.pieza.Tratamiento;
 import ar.com.avaco.nitrophyl.service.pieza.InsumoService;
 import ar.com.avaco.nitrophyl.service.pieza.InsumoTratadoService;
 import ar.com.avaco.nitrophyl.service.pieza.PiezaService;
@@ -15,6 +16,7 @@ import ar.com.avaco.nitrophyl.service.pieza.TratamientoService;
 import ar.com.avaco.nitrophyl.ws.dto.AdhesivoDTO;
 import ar.com.avaco.nitrophyl.ws.dto.InsumoTratadoDTO;
 import ar.com.avaco.nitrophyl.ws.dto.TipoInsumoDTO;
+import ar.com.avaco.nitrophyl.ws.dto.TratamientoDTO;
 import ar.com.avaco.nitrophyl.ws.service.InsumoTratadoEPService;
 import ar.com.avaco.ws.rest.service.CRUDAuditableEPBaseService;
 
@@ -40,13 +42,12 @@ public class InsumoTratadoEPServiceImpl
 		it.setId(entity.getId());
 		it.setIdInsumo(entity.getInsumo().getId());
 		it.setIdPieza(entity.getPieza().getId());
-		it.setIdTratamiento(entity.getTratamiento().getId());
+		entity.getTratamientos().forEach(tr -> it.getTratamientos().add(super.modelMapper.map(tr, TratamientoDTO.class)));
 		it.setInsumo(entity.getInsumo().getNombre());
 		it.setMedidaObservaciones(entity.getMedidaObservaciones());
 		it.setMedidaValor(entity.getMedidaValor());
 		it.setObservaciones(entity.getObservaciones());
 		it.setTipo(super.modelMapper.map(entity.getInsumo().getTipo(), TipoInsumoDTO.class));
-		it.setTratamiento(entity.getTratamiento().getNombre());
 		return it;
 	}
 	
@@ -60,9 +61,9 @@ public class InsumoTratadoEPServiceImpl
 		entity.setMedidaObservaciones(dto.getMedidaObservaciones());
 		entity.setMedidaValor(dto.getMedidaValor());
 		entity.setObservaciones(dto.getObservaciones());
+		dto.getTratamientos().forEach(tr -> entity.getTratamientos().add(super.modelMapper.map(tr,Tratamiento.class)));
 		Pieza pieza = piezaService.get(dto.getIdPieza()); 
 		entity.setPieza(pieza);
-		entity.setTratamiento(tratamientoService.get(dto.getIdTratamiento()));
 		return entity;
 	}
 	

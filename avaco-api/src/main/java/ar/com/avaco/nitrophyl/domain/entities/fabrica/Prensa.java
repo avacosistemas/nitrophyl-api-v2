@@ -1,5 +1,7 @@
 package ar.com.avaco.nitrophyl.domain.entities.fabrica;
 
+import java.util.Objects;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -47,4 +49,17 @@ public class Prensa extends AuditableEntity<Long> {
 		return prensa;
 	}
 
+	@Override
+	public boolean equals(Object o) {
+	    if (this == o) return true;
+	    if (o == null || getClass() != o.getClass()) return false;
+	    Prensa prensa = (Prensa) o;
+	    return Objects.equals(id, prensa.id);
+	}
+	
+	@Override
+	public int hashCode() {
+	    return Objects.hash(id);
+	}
+	
 }

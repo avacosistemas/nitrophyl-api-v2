@@ -42,7 +42,7 @@ public class InsumoEPServiceImpl extends CRUDAuditableEPBaseService<Long, Insumo
 		dto.setId(entity.getId());
 		dto.setNombre(entity.getNombre());
 		dto.setIdTipo(entity.getTipo().getId());
-		dto.setTipoNombre(entity.getTipo().getNombre());
+		dto.setTipoNombre(entity.getTipo().getNombreCompleto());
 		return dto;
 	}
 

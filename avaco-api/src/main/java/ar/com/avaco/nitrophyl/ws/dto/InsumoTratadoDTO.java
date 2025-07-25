@@ -21,13 +21,11 @@ public class InsumoTratadoDTO extends DTOAuditableEntity<Long> {
 
 	private String medidaObservaciones;
 
-	private String tratamiento;
-
-	private Long idTratamiento;
-
 	private String observaciones;
 
-	private List<AdhesivoDTO> adhesivos = new ArrayList<AdhesivoDTO>();
+	private List<AdhesivoDTO> adhesivos = new ArrayList<>();
+
+	private List<TratamientoDTO> tratamientos = new ArrayList<>();
 
 	public String getInsumo() {
 		return insumo;
@@ -61,20 +59,12 @@ public class InsumoTratadoDTO extends DTOAuditableEntity<Long> {
 		this.medidaObservaciones = medidaObservaciones;
 	}
 
-	public String getTratamiento() {
-		return tratamiento;
+	public List<TratamientoDTO> getTratamientos() {
+		return tratamientos;
 	}
 
-	public void setTratamiento(String tratamiento) {
-		this.tratamiento = tratamiento;
-	}
-
-	public Long getIdTratamiento() {
-		return idTratamiento;
-	}
-
-	public void setIdTratamiento(Long idTratamiento) {
-		this.idTratamiento = idTratamiento;
+	public void setTratamientos(List<TratamientoDTO> tratamientos) {
+		this.tratamientos = tratamientos;
 	}
 
 	public List<AdhesivoDTO> getAdhesivos() {

@@ -80,7 +80,11 @@ public class NJBaseRepository<ID extends Serializable, E extends ar.com.avaco.ar
 	@SuppressWarnings("unchecked")
 	public List<E> listEqField(String field, Object value) {
 		Criteria criteria = getCurrentSession().createCriteria(getHandledClass());
-		criteria.add(Restrictions.eq(field, value));
+		if (value == null) {
+			criteria.add(Restrictions.isNull(field));
+		} else {
+			criteria.add(Restrictions.eq(field, value));
+		}
 		return criteria.list();
 	}
 

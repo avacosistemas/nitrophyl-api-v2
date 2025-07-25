@@ -2,6 +2,7 @@ package ar.com.avaco.nitrophyl.ws.service.impl;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 import javax.annotation.Resource;
 
@@ -11,18 +12,22 @@ import org.springframework.transaction.annotation.Transactional;
 
 import ar.com.avaco.commons.exception.ErrorValidationException;
 import ar.com.avaco.nitrophyl.domain.entities.cliente.Cliente;
+import ar.com.avaco.nitrophyl.domain.entities.fabrica.Prensa;
 import ar.com.avaco.nitrophyl.domain.entities.formula.Formula;
 import ar.com.avaco.nitrophyl.domain.entities.moldes.Molde;
 import ar.com.avaco.nitrophyl.domain.entities.moldes.PlanoClasificacion;
+import ar.com.avaco.nitrophyl.domain.entities.pieza.Bombeo;
 import ar.com.avaco.nitrophyl.domain.entities.pieza.Pieza;
 import ar.com.avaco.nitrophyl.domain.entities.pieza.PiezaCliente;
 import ar.com.avaco.nitrophyl.domain.entities.pieza.PiezaFormula;
 import ar.com.avaco.nitrophyl.domain.entities.pieza.PiezaMolde;
 import ar.com.avaco.nitrophyl.domain.entities.pieza.PiezaPlano;
 import ar.com.avaco.nitrophyl.domain.entities.pieza.PiezaTipo;
+import ar.com.avaco.nitrophyl.domain.entities.pieza.Precalentamiento;
 import ar.com.avaco.nitrophyl.domain.entities.pieza.Proceso;
 import ar.com.avaco.nitrophyl.domain.entities.pieza.Terminacion;
 import ar.com.avaco.nitrophyl.domain.entities.pieza.UnidadDureza;
+import ar.com.avaco.nitrophyl.domain.entities.pieza.Vulcanizacion;
 import ar.com.avaco.nitrophyl.service.cliente.ClienteService;
 import ar.com.avaco.nitrophyl.service.formula.FormulaService;
 import ar.com.avaco.nitrophyl.service.molde.MoldeService;
@@ -73,16 +78,18 @@ public class PiezaEPServiceImpl extends CRUDAuditableEPBaseService<Long, PiezaDT
 		// Pieza vigente actual
 		Pieza piezaVigente = this.service.getVigenteByCodigoInterno(pieza.getCodigo());
 
-		if (pieza.getRevision() != piezaVigente.getRevision() + 1) {
+		if (piezaVigente != null && pieza.getRevision() != piezaVigente.getRevision() + 1) {
 			// Ocurrio un error, no puede setearse como vigente una revisión que no es la
 			// posterior a la actual
 			throw new ErrorValidationException(
 					"No se puede marcar la pieza/proceso como vigente ya que no es la ultima");
 		}
-		piezaVigente.setVigente(false);
-		pieza.setVigente(true);
+		if (piezaVigente != null) {
+			piezaVigente.setVigente(false);
+			this.service.update(piezaVigente);
+		}
 
-		this.service.update(piezaVigente);
+		pieza.setVigente(true);
 		this.service.update(pieza);
 	}
 
@@ -92,7 +99,7 @@ public class PiezaEPServiceImpl extends CRUDAuditableEPBaseService<Long, PiezaDT
 		Date fechaHora = DateUtils.getFechaYHoraActual();
 
 		Pieza pieza = this.service.get(piezaId);
-		
+
 		Pieza clonada = pieza.clonar(username, fechaHora);
 
 		this.service.save(clonada);
@@ -243,20 +250,26 @@ public class PiezaEPServiceImpl extends CRUDAuditableEPBaseService<Long, PiezaDT
 		dto.setFechaCreacionPiezaProceso(pieza.getFechaCreacionPiezaProceso());
 		dto.setObservacionesRevision(pieza.getObservacionesRevision());
 
-		dto.setPrecalentamientoUnidad(pieza.getProceso().getPrecalentamiento().getUnidad());
-		dto.setPrecalentamientoValor(pieza.getProceso().getPrecalentamiento().getValor());
+		Precalentamiento precalentamiento = pieza.getProceso().getPrecalentamiento();
+		if (precalentamiento != null) {
+			dto.setPrecalentamientoUnidad(precalentamiento.getUnidad());
+			dto.setPrecalentamientoValor(pieza.getProceso().getPrecalentamiento().getValor());
+		}
 
-		pieza.getProceso().getPrensas().forEach(prensa -> {
-			dto.getPrensas().add(super.modelMapper.map(prensa, PrensaDTO.class));
-		});
+		Set<Prensa> prensas = pieza.getProceso().getPrensas();
+		if (prensas != null && !prensas.isEmpty())
+			prensas.forEach(prensa -> dto.getPrensas().add(super.modelMapper.map(prensa, PrensaDTO.class)));
 
-		dto.setVulcanizacionTemperaturaMin(pieza.getProceso().getVulcanizacion().getTemperaturaMin());
-		dto.setVulcanizacionTemperaturaMax(pieza.getProceso().getVulcanizacion().getTemperaturaMax());
-		dto.setVulcanizacionTiempo(pieza.getProceso().getVulcanizacion().getTiempo());
+		Vulcanizacion vulcanizacion = pieza.getProceso().getVulcanizacion();
+		if (vulcanizacion != null) {
+			dto.setVulcanizacionTemperaturaMin(vulcanizacion.getTemperaturaMin());
+			dto.setVulcanizacionTemperaturaMax(pieza.getProceso().getVulcanizacion().getTemperaturaMax());
+			dto.setVulcanizacionTiempo(pieza.getProceso().getVulcanizacion().getTiempo());
+		}
 
-		pieza.getProceso().getBombeos().forEach(bombeo -> {
-			dto.getBombeos().add(modelMapper.map(bombeo, BombeoDTO.class));
-		});
+		Set<Bombeo> bombeos = pieza.getProceso().getBombeos();
+		if (bombeos != null && !bombeos.isEmpty())
+			bombeos.forEach(bombeo -> dto.getBombeos().add(modelMapper.map(bombeo, BombeoDTO.class)));
 
 		dto.setDesmoldante(pieza.getProceso().getDesmoldante());
 		dto.setPostCura(pieza.getProceso().getPostCura());

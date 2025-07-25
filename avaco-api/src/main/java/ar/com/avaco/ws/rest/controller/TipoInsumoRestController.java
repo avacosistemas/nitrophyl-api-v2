@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import ar.com.avaco.commons.exception.BusinessException;
+import ar.com.avaco.nitrophyl.ws.dto.ComboDTO;
 import ar.com.avaco.nitrophyl.ws.dto.TipoInsumoDTO;
 import ar.com.avaco.nitrophyl.ws.service.TipoInsumoEPService;
 import ar.com.avaco.ws.rest.dto.JSONResponse;
@@ -21,7 +22,6 @@ import ar.com.avaco.ws.rest.dto.JSONResponse;
 @RestController
 public class TipoInsumoRestController extends AbstractAuditableDTORestController<TipoInsumoDTO, Long, TipoInsumoEPService> {
 
-	@Override
 	@RequestMapping(value = "/tipoInsumo", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<JSONResponse> list() {
 		return super.list();
@@ -32,6 +32,15 @@ public class TipoInsumoRestController extends AbstractAuditableDTORestController
 		List<TipoInsumoDTO> list = this.service.listEq("padre.id", parentId);
 		JSONResponse response = new JSONResponse();
 		response.setData(list);
+		response.setStatus(JSONResponse.OK);
+		return new ResponseEntity<JSONResponse>(response, HttpStatus.OK);
+	}
+
+	@RequestMapping(value = "/tipoInsumo/soloHijos", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<JSONResponse> listHijos() {
+		List<ComboDTO> combo = this.service.listHijos();
+		JSONResponse response = new JSONResponse();
+		response.setData(combo);
 		response.setStatus(JSONResponse.OK);
 		return new ResponseEntity<JSONResponse>(response, HttpStatus.OK);
 	}

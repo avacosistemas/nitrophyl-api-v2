@@ -4,7 +4,6 @@ import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
 
-import ar.com.avaco.nitrophyl.domain.entities.pieza.Proceso;
 import ar.com.avaco.nitrophyl.domain.entities.pieza.Terminacion;
 import ar.com.avaco.nitrophyl.service.pieza.TerminacionService;
 import ar.com.avaco.nitrophyl.ws.dto.TerminacionDTO;
@@ -23,9 +22,7 @@ public class TerminacionEPServiceImpl
 	@Override
 	protected Terminacion convertToEntity(TerminacionDTO dto) {
 		Terminacion entity = this.service.get(dto.getId());
-		entity.setProceso(Proceso.ofId(dto.getId()));
 		entity.setEmbalaje(dto.getEmbalaje());
-		entity.setId(dto.getId());
 		entity.setIdentificacion(dto.getIdentificacion());
 		if (dto.getImagenTerminada() != null) {
 			entity.setImagenTerminada(dto.getImagenTerminada());

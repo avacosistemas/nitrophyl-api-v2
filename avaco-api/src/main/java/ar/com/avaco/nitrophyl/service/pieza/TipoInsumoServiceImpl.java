@@ -1,5 +1,7 @@
 package ar.com.avaco.nitrophyl.service.pieza;
 
+import java.util.List;
+
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
@@ -17,6 +19,11 @@ public class TipoInsumoServiceImpl extends NJBaseService<Long, TipoInsumo, TipoI
 	@Resource(name = "tipoInsumoRepository")
 	void setClienteRepository(TipoInsumoRepository tipoInsumoRepository) {
 		this.repository = tipoInsumoRepository;
+	}
+
+	@Override
+	public List<TipoInsumo> listHijos() {
+		return this.repository.listHijos();
 	}
 
 }
