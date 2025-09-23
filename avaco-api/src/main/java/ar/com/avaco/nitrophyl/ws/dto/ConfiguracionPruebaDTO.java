@@ -29,6 +29,16 @@ public class ConfiguracionPruebaDTO extends DTOEntity<Long> {
 
 	private Boolean vigente;
 
+	private Boolean isPuedeIncorporarRevisionVigente;
+
+	public Boolean getIsPuedeIncorporarRevisionVigente() {
+		return isPuedeIncorporarRevisionVigente;
+	}
+
+	public void setIsPuedeIncorporarRevisionVigente(Boolean isPuedeIncorporarRevisionVigente) {
+		this.isPuedeIncorporarRevisionVigente = isPuedeIncorporarRevisionVigente;
+	}
+
 	public Long getVersion() {
 		return version;
 	}

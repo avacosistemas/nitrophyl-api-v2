@@ -28,10 +28,6 @@ public class PiezaEdicionDTO extends DTOEntity<Long> {
 
 	private UnidadDureza unidadDureza;
 
-	private Double espesorMinimo;
-
-	private Double espesorMaximo;
-
 	private Double pesoCrudo;
 
 	private String observacionesPesoCrudo;
@@ -59,6 +55,8 @@ public class PiezaEdicionDTO extends DTOEntity<Long> {
 	private Double vulcanizacionTemperaturaMax;
 
 	private Set<BombeoDTO> bombeos = new HashSet<>();
+
+	private Set<EspesorDTO> espesores = new HashSet<>();
 
 	private String desmoldante;
 
@@ -126,22 +124,6 @@ public class PiezaEdicionDTO extends DTOEntity<Long> {
 
 	public void setUnidadDureza(UnidadDureza unidadDureza) {
 		this.unidadDureza = unidadDureza;
-	}
-
-	public Double getEspesorMinimo() {
-		return espesorMinimo;
-	}
-
-	public void setEspesorMinimo(Double espesorMinimo) {
-		this.espesorMinimo = espesorMinimo;
-	}
-
-	public Double getEspesorMaximo() {
-		return espesorMaximo;
-	}
-
-	public void setEspesorMaximo(Double espesorMaximo) {
-		this.espesorMaximo = espesorMaximo;
 	}
 
 	public Double getPesoCrudo() {
@@ -270,6 +252,14 @@ public class PiezaEdicionDTO extends DTOEntity<Long> {
 
 	public void setPostCura(String postCura) {
 		this.postCura = postCura;
+	}
+
+	public Set<EspesorDTO> getEspesores() {
+		return espesores;
+	}
+
+	public void setEspesores(Set<EspesorDTO> espesores) {
+		this.espesores = espesores;
 	}
 
 }

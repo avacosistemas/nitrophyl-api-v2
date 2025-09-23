@@ -3,6 +3,9 @@
  */
 package ar.com.avaco.nitrophyl.ws.dto;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import ar.com.avaco.nitrophyl.domain.entities.pieza.UnidadDureza;
 import ar.com.avaco.ws.rest.dto.DTOEntity;
 
@@ -16,15 +19,21 @@ public class PiezaPUTDTO extends DTOEntity<Long> {
 
 	private UnidadDureza unidadDureza;
 
-	private Double espesorMinimo;
-
-	private Double espesorMaximo;
-
 	private Double pesoCrudo;
 
 	private String observacionesPesoCrudo;
 
 	private String observacionesRevision;
+
+	private Set<EspesorDTO> espesores = new HashSet<>();
+
+	public Set<EspesorDTO> getEspesores() {
+		return espesores;
+	}
+
+	public void setEspesores(Set<EspesorDTO> espesores) {
+		this.espesores = espesores;
+	}
 
 	public Long getId() {
 		return id;
@@ -56,22 +65,6 @@ public class PiezaPUTDTO extends DTOEntity<Long> {
 
 	public void setUnidadDureza(UnidadDureza unidadDureza) {
 		this.unidadDureza = unidadDureza;
-	}
-
-	public Double getEspesorMinimo() {
-		return espesorMinimo;
-	}
-
-	public void setEspesorMinimo(Double espesorMinimo) {
-		this.espesorMinimo = espesorMinimo;
-	}
-
-	public Double getEspesorMaximo() {
-		return espesorMaximo;
-	}
-
-	public void setEspesorMaximo(Double espesorMaximo) {
-		this.espesorMaximo = espesorMaximo;
 	}
 
 	public Double getPesoCrudo() {

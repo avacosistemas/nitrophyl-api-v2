@@ -1,5 +1,7 @@
 package ar.com.avaco.nitrophyl.ws.dto;
 
+import java.util.Date;
+
 import ar.com.avaco.ws.rest.dto.DTOAuditableEntity;
 
 public class PiezaClienteDTO extends DTOAuditableEntity<Long> {
@@ -13,6 +15,36 @@ public class PiezaClienteDTO extends DTOAuditableEntity<Long> {
 	private String nombreCliente;
 
 	private String nombrePiezaPersonalizado;
+
+	private Double cotizacion;
+
+	private Date fechaCotizacion;
+
+	private String observacionesCotizacion;
+
+	public Double getCotizacion() {
+		return cotizacion;
+	}
+
+	public void setCotizacion(Double cotizacion) {
+		this.cotizacion = cotizacion;
+	}
+
+	public Date getFechaCotizacion() {
+		return fechaCotizacion;
+	}
+
+	public void setFechaCotizacion(Date fechaCotizacion) {
+		this.fechaCotizacion = fechaCotizacion;
+	}
+
+	public String getObservacionesCotizacion() {
+		return observacionesCotizacion;
+	}
+
+	public void setObservacionesCotizacion(String observacionesCotizacion) {
+		this.observacionesCotizacion = observacionesCotizacion;
+	}
 
 	public Long getId() {
 		return id;

@@ -31,12 +31,6 @@ public class PiezaFormula {
 	@Enumerated(EnumType.STRING)
 	private UnidadDureza unidadDureza;
 
-	@Column(name = "ESPESOR_MIN")
-	private Double espesorMinimo;
-
-	@Column(name = "ESPESOR_MAX")
-	private Double espesorMaximo;
-
 	@Column(name = "PESO_CRUDO")
 	private Double pesoCrudo;
 
@@ -73,22 +67,6 @@ public class PiezaFormula {
 
 	public void setUnidadDureza(UnidadDureza unidadDureza) {
 		this.unidadDureza = unidadDureza;
-	}
-
-	public Double getEspesorMinimo() {
-		return espesorMinimo;
-	}
-
-	public void setEspesorMinimo(Double espesorMinimo) {
-		this.espesorMinimo = espesorMinimo;
-	}
-
-	public Double getEspesorMaximo() {
-		return espesorMaximo;
-	}
-
-	public void setEspesorMaximo(Double espesorMaximo) {
-		this.espesorMaximo = espesorMaximo;
 	}
 
 	public Double getPesoCrudo() {

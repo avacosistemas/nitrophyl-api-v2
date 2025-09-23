@@ -42,9 +42,10 @@ public abstract class CRUDAuditableEPBaseService<ID extends Serializable, DTO ex
 		entity.setUsuarioCreacion(username);
 		entity.setFechaCreacion(DateUtils.getFechaYHoraActual());
 		entity = service.save(entity);
-		DTO convertToDto = convertToDto(entity);
-		convertToDto.setUsuarioCreacion(entity.getUsuarioCreacion());
-		convertToDto.setFechaCreacion(entity.getFechaCreacion());
+		T saved = service.get(entity.getId());
+		DTO convertToDto = convertToDto(saved);
+		convertToDto.setUsuarioCreacion(saved.getUsuarioCreacion());
+		convertToDto.setFechaCreacion(saved.getFechaCreacion());
 		return convertToDto;
 	}
 

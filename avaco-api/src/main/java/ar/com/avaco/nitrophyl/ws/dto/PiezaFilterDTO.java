@@ -10,6 +10,16 @@ public class PiezaFilterDTO extends SortPageDTO {
 
 	private Boolean soloVigentes;
 
+	private String idTipoPieza;
+
+	public String getIdTipoPieza() {
+		return idTipoPieza;
+	}
+
+	public void setIdTipoPieza(String idTipoPieza) {
+		this.idTipoPieza = idTipoPieza;
+	}
+
 	public String getNombre() {
 		return nombre;
 	}

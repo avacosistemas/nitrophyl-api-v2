@@ -18,4 +18,9 @@ public class PiezaClienteServiceImpl extends NJBaseService<Long, PiezaCliente, P
 		this.repository = piezaClienteRepository;
 	}
 
+	@Override
+	public PiezaCliente getByPiezaCliente(Long idCliente, Long idPieza) {
+		return this.repository.findByClienteIdAndPiezaId(idCliente, idPieza);
+	}
+
 }

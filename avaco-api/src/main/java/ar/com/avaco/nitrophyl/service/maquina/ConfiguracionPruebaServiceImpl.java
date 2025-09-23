@@ -11,8 +11,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import ar.com.avaco.arc.core.component.bean.service.NJBaseService;
 import ar.com.avaco.nitrophyl.domain.entities.formula.ConfiguracionPrueba;
+import ar.com.avaco.nitrophyl.domain.entities.formula.Formula;
+import ar.com.avaco.nitrophyl.domain.entities.formula.RevisionParametros;
 import ar.com.avaco.nitrophyl.repository.lote.LoteRepository;
 import ar.com.avaco.nitrophyl.repository.material.ConfiguracionPruebaRepository;
+import ar.com.avaco.nitrophyl.repository.material.RevisionParametrosRepository;
 import ar.com.avaco.utils.DateUtils;
 
 @Transactional
@@ -21,7 +24,9 @@ public class ConfiguracionPruebaServiceImpl extends
 		NJBaseService<Long, ConfiguracionPrueba, ConfiguracionPruebaRepository> implements ConfiguracionPruebaService {
 
 	private LoteRepository loteRepository;
-	
+
+	private RevisionParametrosRepository revParamRepository;
+
 	@Override
 	public List<ConfiguracionPrueba> listByFormulaId(Long idFormula) {
 		return this.repository.findAllByFormulaIdOrderByMaquinaNombre(idFormula);
@@ -29,9 +34,13 @@ public class ConfiguracionPruebaServiceImpl extends
 
 	@Override
 	public ConfiguracionPrueba save(ConfiguracionPrueba entity) {
+
+		// Busco si hay una configuracion previa.
 		Optional<ConfiguracionPrueba> confprevia = this.repository.findTopByFormulaIdAndMaquinaIdOrderByVersionDesc(
 				entity.getFormula().getId(), entity.getMaquina().getId());
 		Long version = 0L;
+
+		// Si hay una configuracion previa, le pongo una version mas.
 		if (confprevia.isPresent()) {
 			ConfiguracionPrueba configuracionPrueba = confprevia.get();
 			configuracionPrueba.setFechaHasta(DateUtils.getFechaYHoraActual());
@@ -83,7 +92,31 @@ public class ConfiguracionPruebaServiceImpl extends
 
 	@Override
 	public List<ConfiguracionPrueba> listByLote(Long idLote) {
-		return new ArrayList<ConfiguracionPrueba>(this.loteRepository.findOne(idLote).getRevisionParametros().getConfiguraciones());
+		return new ArrayList<ConfiguracionPrueba>(
+				this.loteRepository.findOne(idLote).getRevisionParametros().getConfiguraciones());
+	}
+
+	@Override
+	public void setearVigente(Long idConfiguracionPrueba) {
+
+		// Busco la configuracion
+		ConfiguracionPrueba cp = this.repository.getOne(idConfiguracionPrueba);
+
+		// Busco la formula de la configuracion
+		Formula formula = cp.getFormula();
+
+		// Busco la revision vigente de la formula
+		RevisionParametros revision = formula.getRevision();
+
+		// Seteo la configuracion como vigente
+		cp.setVigente(true);
+
+		// Agrego la configuracion a la revision vigente
+		revision.getConfiguraciones().add(cp);
+
+		// Actualizo la revision
+		this.revParamRepository.saveAndFlush(revision);
+
 	}
 
 	@Resource(name = "configuracionPruebaRepository")
@@ -95,5 +128,10 @@ public class ConfiguracionPruebaServiceImpl extends
 	public void setLoteRepository(LoteRepository loteRepository) {
 		this.loteRepository = loteRepository;
 	}
-	
+
+	@Resource(name = "revisionParametrosRepository")
+	public void setRevParamService(RevisionParametrosRepository revParamRepository) {
+		this.revParamRepository = revParamRepository;
+	}
+
 }

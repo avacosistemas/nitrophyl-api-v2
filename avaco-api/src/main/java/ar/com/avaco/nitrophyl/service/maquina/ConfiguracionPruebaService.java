@@ -11,4 +11,6 @@ public interface ConfiguracionPruebaService extends NJService<Long, Configuracio
 
 	List<ConfiguracionPrueba> listByLote(Long idLote);
 
+	void setearVigente(Long idConfiguracionPrueba);
+
 }

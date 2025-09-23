@@ -109,6 +109,12 @@ public class Pieza extends AuditableEntity<Long> {
 	private Set<PiezaMolde> moldes = new HashSet<>();
 
 	/**
+	 * Listado de espesores asociados de la pieza.
+	 */
+	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "pieza", orphanRemoval = true)
+	private Set<PiezaEspesor> espesores = new HashSet<>();
+
+	/**
 	 * Proceso de creacion de la pieza.
 	 */
 	@OneToOne(mappedBy = "pieza", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -156,29 +162,39 @@ public class Pieza extends AuditableEntity<Long> {
 	public Pieza clonar(String username, Date fechaHora) {
 		Pieza clonada = new Pieza();
 		clonada.resetearCreacion(username, fechaHora);
-		
+
 		this.clientes.forEach(cliente -> clonada.getClientes().add(cliente.clonar(username, fechaHora, clonada)));
-		
+
 		clonada.setCodigo(codigo);
 		clonada.setDenominacion(this.denominacion);
 		clonada.setTipo(tipo);
 		clonada.setDetalleFormula(detalleFormula);
-		
+
 		clonada.setFechaCreacionPiezaProceso(this.fechaCreacionPiezaProceso);
 		clonada.setFechaRevision(fechaHora);
-		
-		this.dimensiones.forEach(dimension -> clonada.getDimensiones().add(dimension.clonar(username, fechaHora, clonada)));
+
+		this.espesores.forEach(espesor -> clonada.getEspesores().add(espesor.clonar(username, fechaHora, clonada)));
+		this.dimensiones
+				.forEach(dimension -> clonada.getDimensiones().add(dimension.clonar(username, fechaHora, clonada)));
 		this.insumos.forEach(insumo -> clonada.getInsumos().add(insumo.clonar(username, fechaHora, clonada)));
 		this.moldes.forEach(molde -> clonada.getMoldes().add(molde.clonar(username, fechaHora, clonada)));
 		this.planos.forEach(plano -> clonada.getPlanos().add(plano.clonar(username, fechaHora, clonada)));
-		
+
 		clonada.setProceso(proceso.clonar(username, fechaHora, clonada));
 
 		clonada.setRevision(revision + 1);
-		
+
 		clonada.setVigente(false);
 
 		return clonada;
+	}
+
+	public Set<PiezaEspesor> getEspesores() {
+		return espesores;
+	}
+
+	public void setEspesores(Set<PiezaEspesor> espesores) {
+		this.espesores = espesores;
 	}
 
 	public Long getId() {

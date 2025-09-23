@@ -3,6 +3,9 @@
  */
 package ar.com.avaco.nitrophyl.ws.dto;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import ar.com.avaco.ws.rest.dto.DTOEntity;
 
 public class PiezaCreacionDTO extends DTOEntity<Long> {
@@ -29,10 +32,6 @@ public class PiezaCreacionDTO extends DTOEntity<Long> {
 
 	private String unidadDureza; //
 
-	private Double espesorMinimo;//
-
-	private Double espesorMaximo;//
-
 	private Double pesoCrudo;//
 
 	private String observacionesPesoCrudo;//
@@ -50,6 +49,16 @@ public class PiezaCreacionDTO extends DTOEntity<Long> {
 	private String planoClasificacion;
 
 	private String planoObservaciones;
+
+	private List<EspesorDTO> espesores = new ArrayList<>();
+
+	public List<EspesorDTO> getEspesores() {
+		return espesores;
+	}
+
+	public void setEspesores(List<EspesorDTO> espesores) {
+		this.espesores = espesores;
+	}
 
 	public Long getId() {
 		return id;
@@ -137,22 +146,6 @@ public class PiezaCreacionDTO extends DTOEntity<Long> {
 
 	public void setUnidadDureza(String unidadDureza) {
 		this.unidadDureza = unidadDureza;
-	}
-
-	public Double getEspesorMinimo() {
-		return espesorMinimo;
-	}
-
-	public void setEspesorMinimo(Double espesorMinimo) {
-		this.espesorMinimo = espesorMinimo;
-	}
-
-	public Double getEspesorMaximo() {
-		return espesorMaximo;
-	}
-
-	public void setEspesorMaximo(Double espesorMaximo) {
-		this.espesorMaximo = espesorMaximo;
 	}
 
 	public Double getPesoCrudo() {

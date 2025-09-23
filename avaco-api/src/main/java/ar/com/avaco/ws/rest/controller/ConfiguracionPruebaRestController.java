@@ -27,6 +27,15 @@ public class ConfiguracionPruebaRestController
 		super.service = configuracionPruebaEPService;
 	}
 
+	@RequestMapping(value = "/configuracionPrueba/setearVigente/{idConfiguracionPrueba}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<JSONResponse> setearVigente(@PathVariable("idConfiguracionPrueba") Long idConfiguracionPrueba) {
+		super.service.setarVigente(idConfiguracionPrueba);
+		JSONResponse response = new JSONResponse();
+		response.setStatus(JSONResponse.OK);
+		return new ResponseEntity<JSONResponse>(response, HttpStatus.OK);
+	}
+	
+	
 	@RequestMapping(value = "/configuracionPrueba/formula/{idFormula}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<JSONResponse> list(@PathVariable("idFormula") Long idFormula) {
 		List<ConfiguracionPruebaDTO> listFilter = super.service.list(idFormula);
@@ -44,16 +53,21 @@ public class ConfiguracionPruebaRestController
 		response.setStatus(JSONResponse.OK);
 		return new ResponseEntity<JSONResponse>(response, HttpStatus.OK);
 	}
-	
+
 	@RequestMapping(value = "/configuracionPrueba/{idConfiguracionPrueba}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<JSONResponse> listPruebasCondiciones(@PathVariable("idConfiguracionPrueba") Long idConfiguracionPrueba) {
+	public ResponseEntity<JSONResponse> listPruebasCondiciones(
+			@PathVariable("idConfiguracionPrueba") Long idConfiguracionPrueba) {
 		ConfiguracionPruebaDTO configuracionPruebaDTO = super.service.get(idConfiguracionPrueba);
 		JSONResponse response = new JSONResponse();
 		response.setData(configuracionPruebaDTO);
 		response.setStatus(JSONResponse.OK);
 		return new ResponseEntity<JSONResponse>(response, HttpStatus.OK);
 	}
-	
+
+	/*
+	 * Crea una nueva configuracion de pruebas asociando una maquina y sus pruebas a
+	 * una formula junto con las condiciones.
+	 */
 	@RequestMapping(value = "/configuracionPrueba", method = RequestMethod.POST)
 	public ResponseEntity<JSONResponse> create(@RequestBody ConfiguracionPruebaDTO confPruebaDTO)
 			throws BusinessException {
@@ -63,7 +77,7 @@ public class ConfiguracionPruebaRestController
 		response.setStatus(JSONResponse.OK);
 		return new ResponseEntity<JSONResponse>(response, HttpStatus.OK);
 	}
-	
+
 	@RequestMapping(value = "/configuracionPrueba", method = RequestMethod.PUT)
 	public ResponseEntity<JSONResponse> update(@RequestBody ConfiguracionPruebaDTO confPruebaDTO)
 			throws BusinessException {

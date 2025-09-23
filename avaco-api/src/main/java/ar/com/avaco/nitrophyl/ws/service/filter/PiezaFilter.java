@@ -2,6 +2,8 @@ package ar.com.avaco.nitrophyl.ws.service.filter;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -20,6 +22,8 @@ public class PiezaFilter extends AbstractFilter {
 
 	private Boolean soloVigentes;
 
+	private String idsTipoPieza;
+
 	public PiezaFilter() {
 	}
 
@@ -29,6 +33,7 @@ public class PiezaFilter extends AbstractFilter {
 		this.idFormula = filter.getIdFormula();
 		this.idMaterial = filter.getIdMaterial();
 		this.soloVigentes = filter.getSoloVigentes();
+		this.idsTipoPieza = filter.getIdTipoPieza();
 	}
 
 	@Override
@@ -46,6 +51,12 @@ public class PiezaFilter extends AbstractFilter {
 
 		if (soloVigentes != null && soloVigentes.booleanValue())
 			filters.add(new FilterData("vigente", true, FilterDataType.EQUALS));
+
+		if (idsTipoPieza != null) {
+			List<Integer> lista = Stream.of(idsTipoPieza.split(",")).map(Integer::parseInt)
+					.collect(Collectors.toList());
+			filters.add(new FilterData("tipo.id", lista, FilterDataType.IN));
+		}
 
 		return filters;
 	}

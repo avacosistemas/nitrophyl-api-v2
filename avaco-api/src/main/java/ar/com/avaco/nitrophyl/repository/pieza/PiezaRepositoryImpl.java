@@ -62,6 +62,9 @@ public class PiezaRepositoryImpl extends NJBaseRepository<Long, Pieza> implement
 		if (filtro.getIdMaterial() != null)
 			query += " and m.id_material = " + filtro.getIdMaterial();
 		
+		if (StringUtils.isNotBlank(filtro.getIdTipoPieza()))
+			query += " and p.id_tipo in (" + filtro.getIdTipoPieza() + ") ";
+		
 		if (StringUtils.isNotBlank(filtro.getIdx())) {
 			query += " order by " + filtro.getIdx();
 			if (filtro.getAsc() != null && filtro.getAsc().booleanValue()) {

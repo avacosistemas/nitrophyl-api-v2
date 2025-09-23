@@ -187,6 +187,12 @@ public class NJBaseRepository<ID extends Serializable, E extends ar.com.avaco.ar
 		case IS_NOT_NULL:
 			criterion = Restrictions.isNotNull(property);
 			break;
+		case IN:
+			criterion = Restrictions.in(property, (Object[]) data.getObject());
+			break;
+		case NOT_IN:
+			criterion = Restrictions.not(Restrictions.in(property, (Object[]) data.getObject()));
+			break;
 		default:
 			break;
 		}
