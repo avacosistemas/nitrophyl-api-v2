@@ -8,6 +8,15 @@ public class MoldeBocaListadoDTO {
 	private Integer nroBoca;
 	private String estado;
 	private String descripcion;
+	private String observacionesEstado;
+	
+	public String getObservacionesEstado() {
+		return observacionesEstado;
+	}
+
+	public void setObservacionesEstado(String observacionesEstado) {
+		this.observacionesEstado = observacionesEstado;
+	}
 
 	public String getDescripcion() {
 		return descripcion;

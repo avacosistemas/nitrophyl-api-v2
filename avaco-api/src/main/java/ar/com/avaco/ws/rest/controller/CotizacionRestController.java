@@ -26,12 +26,8 @@ public class CotizacionRestController
 
 	@RequestMapping(value = "/cotizacion", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<JSONResponse> list(CotizacionFilterDTO filterDTO) {
-		CotizacionFilter filter = new CotizacionFilter(filterDTO);
-		List<CotizacionDTO> listFilter = this.service.listFilter(filter);
-		int listCount = this.service.listCount(filter);
-		PageDTO<CotizacionDTO> page = new PageDTO<>();
-		page.setPage(listFilter);
-		page.setTotalReg(listCount);
+		PageDTO<CotizacionDTO> page = this.service.list(filterDTO);
+		
 		JSONResponse response = new JSONResponse();
 		response.setData(page);
 		response.setStatus(JSONResponse.OK);

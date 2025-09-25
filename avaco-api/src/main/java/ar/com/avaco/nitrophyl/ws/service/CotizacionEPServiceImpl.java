@@ -1,7 +1,5 @@
 package ar.com.avaco.nitrophyl.ws.service;
 
-import java.util.Calendar;
-
 import javax.annotation.Resource;
 import javax.transaction.Transactional;
 
@@ -9,6 +7,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import ar.com.avaco.commons.exception.BusinessException;
+import ar.com.avaco.commons.exception.ErrorValidationException;
 import ar.com.avaco.nitrophyl.domain.entities.cliente.Cliente;
 import ar.com.avaco.nitrophyl.domain.entities.pieza.Cotizacion;
 import ar.com.avaco.nitrophyl.domain.entities.pieza.Pieza;
@@ -16,7 +15,8 @@ import ar.com.avaco.nitrophyl.domain.entities.pieza.PiezaCliente;
 import ar.com.avaco.nitrophyl.service.pieza.CotizacionService;
 import ar.com.avaco.nitrophyl.service.pieza.PiezaClienteService;
 import ar.com.avaco.nitrophyl.ws.dto.CotizacionDTO;
-import ar.com.avaco.nitrophyl.ws.service.CotizacionEPService;
+import ar.com.avaco.nitrophyl.ws.dto.CotizacionFilterDTO;
+import ar.com.avaco.nitrophyl.ws.dto.PageDTO;
 import ar.com.avaco.utils.DateUtils;
 import ar.com.avaco.ws.rest.service.CRUDAuditableEPBaseService;
 
@@ -76,11 +76,16 @@ public class CotizacionEPServiceImpl extends
 		return cotizacion;
 	}
 
+//	@Override
+//	public CotizacionDTO save(CotizacionDTO dto) throws BusinessException {
+//		Cotizacion convertToEntity = this.convertToEntity(dto);
+//		this.service.save(convertToEntity);
+//		return dto;
+//	}
+
 	@Override
-	public CotizacionDTO save(CotizacionDTO dto) throws BusinessException {
-		Cotizacion convertToEntity = this.convertToEntity(dto);
-		this.service.save(convertToEntity);
-		return dto;
+	public PageDTO<CotizacionDTO> list(CotizacionFilterDTO filterDTO) {
+		return this.service.listCotizaciones(filterDTO);
 	}
 
 	@Override
@@ -88,6 +93,20 @@ public class CotizacionEPServiceImpl extends
 		throw new RuntimeException("No se puede actualizar las cotizaciones");
 	}
 
+	@Override
+	protected void validationSave(CotizacionDTO dto) {
+		CotizacionFilterDTO filter = new CotizacionFilterDTO();
+		filter.setFirst(1);
+		filter.setIdCliente(dto.getIdCliente());
+		filter.setIdPieza(dto.getIdPieza());
+		filter.setSoloVigentes(true);
+		filter.setRows(1);
+		CotizacionDTO cotizacion = this.service.listCotizaciones(filter).getPage().get(0);
+		if (dto.getFecha().before(cotizacion.getFecha())) {
+			throw new ErrorValidationException("La fecha de la nueva cotización debe ser posterior a " + DateUtils.toString(cotizacion.getFecha(), "dd/MM/yyyy"));
+		}
+	}
+	
 	@Override
 	@Resource(name = "cotizacionService")
 	protected void setService(CotizacionService service) {

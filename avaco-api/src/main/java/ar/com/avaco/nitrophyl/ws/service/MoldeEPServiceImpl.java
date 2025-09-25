@@ -21,8 +21,8 @@ import ar.com.avaco.nitrophyl.domain.entities.moldes.MoldeDimension;
 import ar.com.avaco.nitrophyl.domain.entities.moldes.MoldeFoto;
 import ar.com.avaco.nitrophyl.domain.entities.moldes.MoldeObservacion;
 import ar.com.avaco.nitrophyl.domain.entities.moldes.MoldePlano;
-import ar.com.avaco.nitrophyl.domain.entities.moldes.PlanoClasificacion;
 import ar.com.avaco.nitrophyl.domain.entities.moldes.MoldeRegistro;
+import ar.com.avaco.nitrophyl.domain.entities.moldes.PlanoClasificacion;
 import ar.com.avaco.nitrophyl.domain.entities.moldes.TipoRegistroMolde;
 import ar.com.avaco.nitrophyl.service.cliente.ClienteService;
 import ar.com.avaco.nitrophyl.service.molde.MoldeBocaService;
@@ -79,6 +79,24 @@ public class MoldeEPServiceImpl extends CRUDEPBaseService<Long, MoldeDTO, Molde,
 	@Resource(name = "piezaTipoService")
 	private PiezaTipoService piezaTipoService;
 
+	@Override
+	public MoldeDTO update(MoldeDTO dto) throws BusinessException {
+		String estadoAnterior = this.get(dto.getId()).getEstado();
+		String observacionesEstado = dto.getObservacionesEstado();
+		MoldeDTO update = super.update(dto);
+		if (!update.getEstado().equals(estadoAnterior)) {
+			MoldeObservacion observacion = new MoldeObservacion();
+			observacion.setFechaActualizacion(DateUtils.getFechaYHoraActual());
+			observacion.setFechaCreacion(DateUtils.getFechaYHoraActual());
+			observacion.setIdMolde(dto.getId());
+			observacion.setObservacion(estadoAnterior + " -> "  + update.getEstado() + ": "  + observacionesEstado);
+			observacion.setUsuarioActualizacion(SecurityContextHolder.getContext().getAuthentication().getName());
+			observacion.setUsuarioCreacion(SecurityContextHolder.getContext().getAuthentication().getName());
+			moldeObservacionService.save(observacion);
+		}
+		return update;
+	}
+	
 	@Override
 	protected Molde convertToEntity(MoldeDTO dto) {
 		Molde molde = new Molde();
@@ -168,18 +186,35 @@ public class MoldeEPServiceImpl extends CRUDEPBaseService<Long, MoldeDTO, Molde,
 
 	@Override
 	public List<MoldeBocaListadoDTO> updateMoldesBoca(Long idMolde, List<MoldeBocaListadoDTO> moldeBocaListadoDTO) {
+		
+		List<MoldeBocaListadoDTO> moldesActuales = this.getMoldesBoca(idMolde);
+		
 		if (moldeBocaListadoDTO != null) {
 			List<MoldeBoca> listado = new ArrayList<MoldeBoca>();
 
 			Molde molde = service.get(idMolde);
 
 			for (MoldeBocaListadoDTO dto : moldeBocaListadoDTO) {
-				MoldeBoca moldeBoca = new MoldeBoca();
-				moldeBoca.setEstado(EstadoBoca.valueOf(dto.getEstado()));
-				moldeBoca.setNroBoca(dto.getNroBoca());
-				moldeBoca.setIdMolde(idMolde);
-				moldeBoca.setDescripcion(dto.getDescripcion());
-				listado.add(moldeBoca);
+				MoldeBoca nuevoMoldeBoca = new MoldeBoca();
+				nuevoMoldeBoca.setEstado(EstadoBoca.valueOf(dto.getEstado()));
+				nuevoMoldeBoca.setNroBoca(dto.getNroBoca());
+				nuevoMoldeBoca.setIdMolde(idMolde);
+				nuevoMoldeBoca.setDescripcion(dto.getDescripcion());
+				listado.add(nuevoMoldeBoca);
+				
+				
+				MoldeBocaListadoDTO modeActual = moldesActuales.stream().filter(x -> x.getNroBoca().equals(nuevoMoldeBoca.getNroBoca())).findFirst().get();
+				if (!nuevoMoldeBoca.getEstado().toString().equals(modeActual.getEstado())) {
+					MoldeObservacion observacion = new MoldeObservacion();
+					observacion.setFechaActualizacion(DateUtils.getFechaYHoraActual());
+					observacion.setFechaCreacion(DateUtils.getFechaYHoraActual());
+					observacion.setIdMolde(idMolde);
+					observacion.setObservacion("Boca " + nuevoMoldeBoca.getNroBoca() + " " + modeActual.getEstado() + " -> "  + nuevoMoldeBoca.getEstado().toString() + ": "  + dto.getObservacionesEstado());
+					observacion.setUsuarioActualizacion(SecurityContextHolder.getContext().getAuthentication().getName());
+					observacion.setUsuarioCreacion(SecurityContextHolder.getContext().getAuthentication().getName());
+					moldeObservacionService.save(observacion);
+				}
+				
 			}
 
 			moldeBocaService.removeByMolde(idMolde);
@@ -386,4 +421,17 @@ public class MoldeEPServiceImpl extends CRUDEPBaseService<Long, MoldeDTO, Molde,
 		this.piezaTipoService = piezaTipoService;
 	}
 
+	@Override
+	public MoldeDTO save(MoldeDTO dto) throws BusinessException {
+		MoldeDTO save = super.save(dto);
+		MoldeRegistro registro = new MoldeRegistro();
+		registro.setFecha(DateUtils.getFechaYHoraActual());
+		registro.setIdMolde(save.getId());
+		registro.setTipoRegistro(TipoRegistroMolde.INGRESO);
+		moldeRegistroService.save(registro );
+		return save;
+	}
+	
+	
+	
 }

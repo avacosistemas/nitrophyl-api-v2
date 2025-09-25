@@ -138,7 +138,7 @@ public class InformeBuilder {
 			generarFirma(document);
 			document.close();
 			adto.setArchivo(baos.toByteArray());
-			adto.setNombre("Informe Calidad - " + cliente.getNombre().replace(".", " - " + lote.getNroLote()) + ".pdf");
+			adto.setNombre("Informe Calidad - " + cliente.getNombre().replace(".", "") + " - " + lote.getNroLote() + ".pdf");
 
 			return adto;
 		} catch (DocumentException e) {

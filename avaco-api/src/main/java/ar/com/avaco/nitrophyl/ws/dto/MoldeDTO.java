@@ -19,7 +19,16 @@ public class MoldeDTO extends DTOEntity<Long> {
 	private String observaciones;
 	private String clienteDuenio;
 	private Long idClienteDuenio;
+	private String observacionesEstado;
 	private List<PiezaTipoDTO> piezaTipos = new ArrayList<PiezaTipoDTO>();
+
+	public String getObservacionesEstado() {
+		return observacionesEstado;
+	}
+
+	public void setObservacionesEstado(String observacionesEstado) {
+		this.observacionesEstado = observacionesEstado;
+	}
 
 	public List<PiezaTipoDTO> getPiezaTipos() {
 		return piezaTipos;

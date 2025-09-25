@@ -238,11 +238,15 @@ public class MoldeRestController extends AbstractDTORestController<MoldeDTO, Lon
 	}
 	
 	@RequestMapping(value = "/molde/combo", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<JSONResponse> getCombo(@RequestParam String nombre) throws Exception {
-		List<MoldeDTO> list = this.service.listPattern("codigo", nombre);
+	public ResponseEntity<JSONResponse> getCombo(MoldeFilterDTO filter) throws Exception {
+		filter.setAsc(true);
+		filter.setIdx("nombre");
+		filter.setFirst(1);
+		filter.setRows(50);
+		PageDTO<MoldeListadoDTO> page = this.service.list(filter);
 		List<ComboDTO> combo = new ArrayList<ComboDTO>();
-		if (list != null && !list.isEmpty())
-			list.stream().forEach(molde -> combo.add(new ComboDTO(molde.getCodigo(), molde.getId().toString())));
+		if (page.getPage() != null && !page.getPage().isEmpty())
+			page.getPage().stream().forEach(molde -> combo.add(new ComboDTO(molde.getCodigo(), molde.getId().toString())));
 		JSONResponse response = new JSONResponse();
 		response.setData(combo);
 		response.setStatus(JSONResponse.OK);

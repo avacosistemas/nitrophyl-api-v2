@@ -2,26 +2,30 @@ package ar.com.avaco.nitrophyl.ws.dto;
 
 import java.util.Date;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 public class ReporteEnsayoLotePorMaquinaFilterDTO extends SortPageDTO {
 
 	public Long idMaquina;
 
+	@DateTimeFormat(pattern = "dd/MM/yyyy")
 	public Date fechaDesde;
 
+	@DateTimeFormat(pattern = "dd/MM/yyyy")
 	public Date fechaHasta;
 
 	public Long idFormula;
 
 	public String nroLote;
 
-	public String estadoLote;
+	public String estadoEnsayo;
 
-	public String getEstadoLote() {
-		return estadoLote;
+	public String getEstadoEnsayo() {
+		return estadoEnsayo;
 	}
 
-	public void setEstadoLote(String estadoLote) {
-		this.estadoLote = estadoLote;
+	public void setEstadoEnsayo(String estadoEnsayo) {
+		this.estadoEnsayo = estadoEnsayo;
 	}
 
 	public Date getFechaDesde() {

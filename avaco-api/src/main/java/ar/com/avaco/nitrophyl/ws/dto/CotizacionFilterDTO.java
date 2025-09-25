@@ -6,6 +6,16 @@ public class CotizacionFilterDTO extends SortPageDTO {
 
 	private Long idPieza;
 
+	private Boolean soloVigentes;
+
+	public Boolean getSoloVigentes() {
+		return soloVigentes;
+	}
+
+	public void setSoloVigentes(Boolean soloVigentes) {
+		this.soloVigentes = soloVigentes;
+	}
+
 	public Long getIdCliente() {
 		return idCliente;
 	}
