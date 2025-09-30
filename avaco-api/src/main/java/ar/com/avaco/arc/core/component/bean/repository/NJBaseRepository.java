@@ -35,7 +35,7 @@ public class NJBaseRepository<ID extends Serializable, E extends ar.com.avaco.ar
 	private SessionFactory sessionFactory;
 	private Class<E> javaType;
 
-	private EntityManager entityManager;
+	protected EntityManager entityManager;
 
 	public NJBaseRepository(Class<E> domainClass, EntityManager entityManager) {
 		super(domainClass, entityManager);
@@ -68,18 +68,23 @@ public class NJBaseRepository<ID extends Serializable, E extends ar.com.avaco.ar
 		return uniqueResult.intValue();
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
+	@SuppressWarnings("unchecked")
 	public List<E> listPattern(String field, String pattern) {
 		Criteria criteria = getCurrentSession().createCriteria(getHandledClass());
-		criteria.add(Restrictions.like(field, pattern, MatchMode.ANYWHERE).ignoreCase());
+		criteria.add(Restrictions.like(field, pattern.trim(), MatchMode.ANYWHERE).ignoreCase());
 		return criteria.list();
 	}
 
 	@Override
+	@SuppressWarnings("unchecked")
 	public List<E> listEqField(String field, Object value) {
 		Criteria criteria = getCurrentSession().createCriteria(getHandledClass());
-		criteria.add(Restrictions.eq(field, value));
+		if (value == null) {
+			criteria.add(Restrictions.isNull(field));
+		} else {
+			criteria.add(Restrictions.eq(field, value));
+		}
 		return criteria.list();
 	}
 
@@ -181,6 +186,12 @@ public class NJBaseRepository<ID extends Serializable, E extends ar.com.avaco.ar
 			break;
 		case IS_NOT_NULL:
 			criterion = Restrictions.isNotNull(property);
+			break;
+		case IN:
+			criterion = Restrictions.in(property, (Object[]) data.getObject());
+			break;
+		case NOT_IN:
+			criterion = Restrictions.not(Restrictions.in(property, (Object[]) data.getObject()));
 			break;
 		default:
 			break;

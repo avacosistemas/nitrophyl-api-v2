@@ -2,12 +2,16 @@ package ar.com.avaco.nitrophyl.ws.dto;
 
 import java.util.Date;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 public class ReporteEnsayoLotePorMaquinaFilterDTO extends SortPageDTO {
 
 	public Long idMaquina;
 
+	@DateTimeFormat(pattern = "dd/MM/yyyy")
 	public Date fechaDesde;
 
+	@DateTimeFormat(pattern = "dd/MM/yyyy")
 	public Date fechaHasta;
 
 	public Long idFormula;

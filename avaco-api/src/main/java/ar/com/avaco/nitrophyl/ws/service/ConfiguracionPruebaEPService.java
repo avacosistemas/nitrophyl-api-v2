@@ -11,4 +11,6 @@ public interface ConfiguracionPruebaEPService extends CRUDEPService<Long, Config
 
 	List<ConfiguracionPruebaDTO> listVigentesByLote(Long idLote);
 
+	void setarVigente(Long idConfiguracionPrueba);
+
 }

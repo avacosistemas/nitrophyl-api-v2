@@ -1,8 +1,6 @@
 package ar.com.avaco.nitrophyl.repository.material;
 
 import java.util.List;
-import java.util.stream.Collectors;
-
 import javax.persistence.EntityManager;
 
 import org.springframework.stereotype.Repository;

@@ -54,7 +54,7 @@ public class InformeBuilder {
 	private final static Font fontText = FontFactory.getFont(FontFactory.HELVETICA, 10, BaseColor.BLACK);
 
 	public ArchivoDTO generarReporte(Lote lote, ReporteLoteConfiguracionClienteService serviceConfiguracion,
-			Cliente cliente) throws DocumentException, IOException, URISyntaxException, ErrorValidationException {
+			Cliente cliente, String observacionesInforme) throws DocumentException, IOException, URISyntaxException, ErrorValidationException {
 
 		// Obtengo la empresa para el logo
 		String empresa = cliente.getEmpresa().name();
@@ -129,23 +129,16 @@ public class InformeBuilder {
 					+ "en base a un estudio entre una curva patrón normalizada y la medición directa de "
 					+ "los ensayos físicos descriptos por Norma bajo condiciones reguladas (I-LAB-018).";
 
-			PdfPCell cellBorder = new PdfPCell();
-			cellBorder.setCellEvent(new RoundRectangle());
-			cellBorder.setBorder(Rectangle.NO_BORDER);
-			cellBorder.setPadding(10f);
-			cellBorder.setPaddingTop(0);
-			cellBorder.addElement(new Phrase(string, fontText));
+			agregarObservacionesInforme(document, string);
 
-			PdfPTable tableBorder = new PdfPTable(1);
-			tableBorder.setWidthPercentage(100);
-			tableBorder.addCell(cellBorder);
-
-			document.add(tableBorder);
-
+			if (StringUtils.isNoneBlank(observacionesInforme)) {
+				agregarObservacionesInforme(document, observacionesInforme);
+			}
+			
 			generarFirma(document);
 			document.close();
 			adto.setArchivo(baos.toByteArray());
-			adto.setNombre("Informe Calidad - " + cliente.getNombre().replace(".", " - " + lote.getNroLote()) + ".pdf");
+			adto.setNombre("Informe Calidad - " + cliente.getNombre().replace(".", "") + " - " + lote.getNroLote() + ".pdf");
 
 			return adto;
 		} catch (DocumentException e) {
@@ -158,6 +151,21 @@ public class InformeBuilder {
 			throw e;
 		}
 
+	}
+
+	private void agregarObservacionesInforme(Document document, String string) throws DocumentException {
+		PdfPCell cellBorder = new PdfPCell();
+		cellBorder.setCellEvent(new RoundRectangle());
+		cellBorder.setBorder(Rectangle.NO_BORDER);
+		cellBorder.setPadding(10f);
+		cellBorder.setPaddingTop(0);
+		cellBorder.addElement(new Phrase(string, fontText));
+
+		PdfPTable tableBorder = new PdfPTable(1);
+		tableBorder.setWidthPercentage(100);
+		tableBorder.addCell(cellBorder);
+
+		document.add(tableBorder);
 	}
 
 	private Ensayo generarEnsayoVacio(ConfiguracionPrueba parametro) {

@@ -55,7 +55,7 @@ public class MoldePlano extends ar.com.avaco.arc.core.domain.Entity<Long> {
 	private byte[] archivo;
 
 	@Enumerated(EnumType.STRING)
-	private MoldePlanoClasificacion clasificacion;
+	private PlanoClasificacion clasificacion;
 
 	public MoldePlano() {
 		super();
@@ -125,11 +125,11 @@ public class MoldePlano extends ar.com.avaco.arc.core.domain.Entity<Long> {
 		this.descripcion = descripcion;
 	}
 
-	public MoldePlanoClasificacion getClasificacion() {
+	public PlanoClasificacion getClasificacion() {
 		return clasificacion;
 	}
 
-	public void setClasificacion(MoldePlanoClasificacion clasificacion) {
+	public void setClasificacion(PlanoClasificacion clasificacion) {
 		this.clasificacion = clasificacion;
 	}
 

@@ -2,44 +2,63 @@ package ar.com.avaco.nitrophyl.ws.service.filter;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import org.apache.commons.lang3.StringUtils;
 
 import ar.com.avaco.arc.core.domain.filter.AbstractFilter;
 import ar.com.avaco.arc.core.domain.filter.FilterData;
 import ar.com.avaco.arc.core.domain.filter.FilterDataType;
-import ar.com.avaco.nitrophyl.domain.entities.pieza.TipoPieza;
+import ar.com.avaco.nitrophyl.ws.dto.PiezaFilterDTO;
 
 public class PiezaFilter extends AbstractFilter {
 
-	private TipoPieza tipo;
+	private String nombre;
 
-	private Boolean esProducto;
+	private Long idFormula;
+
+	private Long idMaterial;
+
+	private Boolean soloVigentes;
+
+	private String idsTipoPieza;
+
+	public PiezaFilter() {
+	}
+
+	public PiezaFilter(PiezaFilterDTO filter) {
+		super(filter.getRows(), filter.getFirst(), filter.getAsc(), filter.getIdx());
+		this.nombre = filter.getNombre();
+		this.idFormula = filter.getIdFormula();
+		this.idMaterial = filter.getIdMaterial();
+		this.soloVigentes = filter.getSoloVigentes();
+		this.idsTipoPieza = filter.getIdTipoPieza();
+	}
 
 	@Override
 	public List<FilterData> getFilterDatas() {
-		List<FilterData> list = new ArrayList<FilterData>();
-		if (tipo != null) {
-			list.add(new FilterData("tipo", tipo, FilterDataType.EQUALS));
+		List<FilterData> filters = new ArrayList<FilterData>();
+
+		if (StringUtils.isNotBlank(nombre))
+			filters.add(new FilterData("denominacion", nombre, FilterDataType.LIKE));
+
+		if (idFormula != null)
+			filters.add(new FilterData("detalleFormula.formula.id", idFormula, FilterDataType.EQUALS));
+
+		if (idMaterial != null)
+			filters.add(new FilterData("detalleFormula.formula.material.id", idMaterial, FilterDataType.EQUALS));
+
+		if (soloVigentes != null && soloVigentes.booleanValue())
+			filters.add(new FilterData("vigente", true, FilterDataType.EQUALS));
+
+		if (idsTipoPieza != null) {
+			List<Integer> lista = Stream.of(idsTipoPieza.split(",")).map(Integer::parseInt)
+					.collect(Collectors.toList());
+			filters.add(new FilterData("tipo.id", lista, FilterDataType.IN));
 		}
-		if (esProducto != null) {
-			list.add(new FilterData("esProducto", esProducto, FilterDataType.EQUALS));
-		}
-		return list;
-	}
 
-	public TipoPieza getTipo() {
-		return tipo;
-	}
-
-	public void setTipo(TipoPieza tipo) {
-		this.tipo = tipo;
-	}
-
-	public Boolean getEsProducto() {
-		return esProducto;
-	}
-
-	public void setEsProducto(Boolean esProducto) {
-		this.esProducto = esProducto;
+		return filters;
 	}
 
 }

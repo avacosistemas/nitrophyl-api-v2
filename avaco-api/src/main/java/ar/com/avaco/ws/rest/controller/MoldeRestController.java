@@ -1,5 +1,6 @@
 package ar.com.avaco.ws.rest.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -12,8 +13,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import ar.com.avaco.nitrophyl.ws.dto.ComboDTO;
 import ar.com.avaco.nitrophyl.ws.dto.MoldeBocaListadoDTO;
 import ar.com.avaco.nitrophyl.ws.dto.MoldeClienteDTO;
 import ar.com.avaco.nitrophyl.ws.dto.MoldeDTO;
@@ -226,7 +229,7 @@ public class MoldeRestController extends AbstractDTORestController<MoldeDTO, Lon
 	}
 	
 	@RequestMapping(value = "/molde/observacion/", method = RequestMethod.POST)
-	public ResponseEntity<JSONResponse> addMoldeObservacion(@RequestBody MoldeObservacionDTO dto) throws Exception {
+	public ResponseEntity<JSONResponse> addMoldeFoto(@RequestBody MoldeObservacionDTO dto) throws Exception {
 		MoldeObservacionDTO saved = this.service.addMoldeObservacion(dto);
 		JSONResponse response = new JSONResponse();
 		response.setData(saved);
@@ -234,12 +237,21 @@ public class MoldeRestController extends AbstractDTORestController<MoldeDTO, Lon
 		return new ResponseEntity<JSONResponse>(response, HttpStatus.OK);
 	}
 	
-	@RequestMapping(value = "/molde/observacion/{idObservacion}", method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<JSONResponse> deleteObservacion(@PathVariable("idObservacion") Long idObservacion) throws Exception {
-		this.service.remove(idObservacion);
+	@RequestMapping(value = "/molde/combo", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<JSONResponse> getCombo(MoldeFilterDTO filter) throws Exception {
+		filter.setAsc(true);
+		filter.setIdx("nombre");
+		filter.setFirst(1);
+		filter.setRows(50);
+		PageDTO<MoldeListadoDTO> page = this.service.list(filter);
+		List<ComboDTO> combo = new ArrayList<ComboDTO>();
+		if (page.getPage() != null && !page.getPage().isEmpty())
+			page.getPage().stream().forEach(molde -> combo.add(new ComboDTO(molde.getCodigo(), molde.getId().toString())));
 		JSONResponse response = new JSONResponse();
+		response.setData(combo);
 		response.setStatus(JSONResponse.OK);
 		return new ResponseEntity<JSONResponse>(response, HttpStatus.OK);
 	}
+	
 	
 }

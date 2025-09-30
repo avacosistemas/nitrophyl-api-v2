@@ -80,8 +80,7 @@ public abstract class CRUDEPBaseService<ID extends Serializable, DTO extends DTO
 
 	@Override
 	public List<DTO> listPattern(String field, String pattern) {
-		// TODO Auto-generated method stub
-		return null;
+		return convertToDtos(service.listPattern(field, pattern));
 	}
 
 	abstract protected T convertToEntity(DTO dto);

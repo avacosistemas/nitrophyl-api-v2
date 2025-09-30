@@ -16,14 +16,15 @@ public interface LoteEPService extends CRUDEPService<Long, LoteDTO> {
 
 	void borrar(Long idLote) throws BusinessException;
 
-	ArchivoDTO generarReporteLoteCliente(Long idLote, Long idCliente) throws BusinessException;
+	ArchivoDTO generarReporteLoteCliente(Long idLote, Long idCliente, String string) throws BusinessException;
 
 	void revisiones();
 
 	PageDTO<ReporteEnsayoLotePorMaquinaDTO> generarReporteEnsayoLotePorMaquina(
 			ReporteEnsayoLotePorMaquinaFilterDTO filtro);
 
-	void enviarReporte(Long idLote, Long idCliente, byte[] adjuntoextra, String nombreAdjunto, String observaciones)
+	void enviarReporte(Long idLote, Long idCliente, byte[] adjuntoextra, String nombreAdjunto, String observaciones,
+			String string)
 			throws BusinessException;
 
 }

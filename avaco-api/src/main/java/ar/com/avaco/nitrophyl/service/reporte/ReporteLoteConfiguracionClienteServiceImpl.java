@@ -14,8 +14,6 @@ import ar.com.avaco.nitrophyl.domain.entities.cliente.Cliente;
 import ar.com.avaco.nitrophyl.domain.entities.formula.Formula;
 import ar.com.avaco.nitrophyl.domain.entities.reporte.ReporteLoteConfiguracionCliente;
 import ar.com.avaco.nitrophyl.repository.reporte.ReporteLoteConfiguracionClienteRepository;
-import ar.com.avaco.nitrophyl.service.cliente.ClienteService;
-import ar.com.avaco.nitrophyl.service.lote.LoteService;
 
 @Transactional
 @Service("reporteLoteConfiguracionClienteService")
@@ -29,7 +27,7 @@ public class ReporteLoteConfiguracionClienteServiceImpl
 				entity.getCliente(), entity.getMaquina());
 		if (find != null) {
 			throw new ErrorValidationException(
-					"Ya existe un registro con esa combinacion de fórmula, cliente y máquina", null);
+					"Ya existe un registro con esa combinacion de fórmula, cliente y máquina con id " + find.getId(), null);
 		}
 		return super.save(entity);
 	}
@@ -38,7 +36,7 @@ public class ReporteLoteConfiguracionClienteServiceImpl
 	public ReporteLoteConfiguracionCliente update(ReporteLoteConfiguracionCliente entity) {
 		ReporteLoteConfiguracionCliente find = this.repository.findByFormulaClienteMaquina(entity.getFormula(),
 				entity.getCliente(), entity.getMaquina());
-		if (find != null && entity.getId() != find.getId()) {
+		if (find != null && !entity.getId().equals(find.getId())) {
 			throw new ErrorValidationException(
 					"Ya existe un registro con esa combinacion de fórmula, cliente y máquina", null);
 		}

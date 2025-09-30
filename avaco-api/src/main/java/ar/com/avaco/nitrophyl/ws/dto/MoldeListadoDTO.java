@@ -16,13 +16,16 @@ public class MoldeListadoDTO extends DTOEntity<Long> {
 	private Integer ancho;
 	private Integer diametro;
 	private Integer profundidad;
+	private String piezas;
+	private String ultimoRegistro;
+	private Integer totalRows;
 
 	public MoldeListadoDTO() {
-		// TODO Auto-generated constructor stub
 	}
 
 	public MoldeListadoDTO(Integer id, String codigo, String estado, String nombre, String ubicacion, Integer alto,
-			Integer ancho, Integer diametro, Integer profundidad) {
+			Integer ancho, Integer diametro, Integer profundidad, String piezas, String ultimoRegistro,
+			Integer totalRows) {
 		this.id = new Long(id);
 		this.codigo = codigo;
 		this.estado = estado;
@@ -32,6 +35,25 @@ public class MoldeListadoDTO extends DTOEntity<Long> {
 		this.ancho = ancho;
 		this.diametro = diametro;
 		this.profundidad = profundidad;
+		this.piezas = piezas;
+		this.ultimoRegistro = ultimoRegistro;
+		this.totalRows = totalRows;
+	}
+
+	public Integer getTotalRows() {
+		return totalRows;
+	}
+
+	public void setTotalRows(Integer totalRows) {
+		this.totalRows = totalRows;
+	}
+
+	public String getPiezas() {
+		return piezas;
+	}
+
+	public void setPiezas(String piezas) {
+		this.piezas = piezas;
 	}
 
 	public String getUbicacion() {
@@ -104,6 +126,14 @@ public class MoldeListadoDTO extends DTOEntity<Long> {
 
 	public void setProfundidad(Integer profundidad) {
 		this.profundidad = profundidad;
+	}
+
+	public String getUltimoRegistro() {
+		return ultimoRegistro;
+	}
+
+	public void setUltimoRegistro(String ultimoRegistro) {
+		this.ultimoRegistro = ultimoRegistro;
 	}
 
 }

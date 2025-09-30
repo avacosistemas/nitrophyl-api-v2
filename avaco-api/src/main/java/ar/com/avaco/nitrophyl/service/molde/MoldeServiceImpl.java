@@ -24,9 +24,4 @@ public class MoldeServiceImpl extends NJBaseService<Long, Molde, MoldeRepository
 		return this.repository.list(filter);
 	}
 
-	@Override
-	public int listCount(MoldeFilterDTO filter) {
-		return this.repository.listCount(filter);
-	}
-
 }

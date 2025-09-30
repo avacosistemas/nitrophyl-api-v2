@@ -7,6 +7,15 @@ public class ReporteLoteClienteDTO {
 	private byte[] archivo;
 	private String observaciones;
 	private String nombreArchivo;
+	private String observacionesInforme;
+
+	public String getObservacionesInforme() {
+		return observacionesInforme;
+	}
+
+	public void setObservacionesInforme(String observacionesInforme) {
+		this.observacionesInforme = observacionesInforme;
+	}
 
 	public Long getIdCliente() {
 		return idCliente;

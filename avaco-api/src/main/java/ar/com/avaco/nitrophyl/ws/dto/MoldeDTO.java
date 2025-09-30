@@ -3,6 +3,9 @@
  */
 package ar.com.avaco.nitrophyl.ws.dto;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import ar.com.avaco.ws.rest.dto.DTOEntity;
 
 public class MoldeDTO extends DTOEntity<Long> {
@@ -16,6 +19,24 @@ public class MoldeDTO extends DTOEntity<Long> {
 	private String observaciones;
 	private String clienteDuenio;
 	private Long idClienteDuenio;
+	private String observacionesEstado;
+	private List<PiezaTipoDTO> piezaTipos = new ArrayList<PiezaTipoDTO>();
+
+	public String getObservacionesEstado() {
+		return observacionesEstado;
+	}
+
+	public void setObservacionesEstado(String observacionesEstado) {
+		this.observacionesEstado = observacionesEstado;
+	}
+
+	public List<PiezaTipoDTO> getPiezaTipos() {
+		return piezaTipos;
+	}
+
+	public void setPiezaTipos(List<PiezaTipoDTO> piezaTipos) {
+		this.piezaTipos = piezaTipos;
+	}
 
 	public Long getId() {
 		return id;

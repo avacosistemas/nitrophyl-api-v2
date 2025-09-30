@@ -16,9 +16,9 @@ public class ErrorValidationException extends RuntimeException {
 	 * 
 	 */
 	private static final long serialVersionUID = -383811933611356052L;
-	
+
 	private Map<String, String> errors;
-	
+
 	public ErrorValidationException() {
 		super();
 	}
@@ -34,10 +34,14 @@ public class ErrorValidationException extends RuntimeException {
 		super("Se encontraron los siguientes errores");
 		this.errors = errors;
 	}
-	
+
 	public ErrorValidationException(String message, Map<String, String> errors) {
 		super(message);
 		this.errors = errors;
+	}
+
+	public ErrorValidationException(String message) {
+		super(message);
 	}
 
 	public Map<String, String> getErrors() {
@@ -47,5 +51,5 @@ public class ErrorValidationException extends RuntimeException {
 	public void setErrors(Map<String, String> errors) {
 		this.errors = errors;
 	}
-	
+
 }

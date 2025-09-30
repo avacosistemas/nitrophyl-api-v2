@@ -263,4 +263,10 @@ public class Cliente extends ar.com.avaco.arc.core.domain.Entity<Long> {
 		this.empresa = empresa;
 	}
 
+	public static Cliente ofId(Long idCliente) {
+		Cliente cliente = new Cliente();
+		cliente.setId(idCliente);
+		return cliente;
+	}
+
 }

@@ -93,4 +93,5 @@ public class Acceso extends ar.com.avaco.arc.core.domain.Entity<Long> {
 		sb.append(getPerfil().getNombre());
 		return sb.toString();
 	}
+	
 }

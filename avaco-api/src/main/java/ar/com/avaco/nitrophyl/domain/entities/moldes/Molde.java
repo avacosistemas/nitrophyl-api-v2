@@ -27,24 +27,25 @@ import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
 import ar.com.avaco.nitrophyl.domain.entities.cliente.Cliente;
+import ar.com.avaco.nitrophyl.domain.entities.pieza.PiezaTipo;
 import ar.com.avaco.nitrophyl.ws.dto.MoldeListadoDTO;
 
-@SqlResultSetMapping(name="MoldeListadoDTOMapper",
-classes = {
-    @ConstructorResult(
-            targetClass = MoldeListadoDTO.class,
-            columns = {
-                @ColumnResult(name = "id", type = Integer.class),
-                @ColumnResult(name = "codigo", type = String.class),
-                @ColumnResult(name = "estado", type = String.class),
-                @ColumnResult(name = "nombre", type = String.class),
-                @ColumnResult(name = "ubicacion", type = String.class),
-                @ColumnResult(name = "alto", type = Integer.class),
-                @ColumnResult(name = "ancho", type = Integer.class),
-                @ColumnResult(name = "diametro", type = Integer.class),
-                @ColumnResult(name = "profundidad", type = Integer.class),
-            })
-})
+@SqlResultSetMapping(name = "MoldeListadoDTOMapper", classes = {
+		@ConstructorResult(targetClass = MoldeListadoDTO.class, columns = {
+				@ColumnResult(name = "id", type = Integer.class), 
+				@ColumnResult(name = "codigo", type = String.class),
+				@ColumnResult(name = "estado", type = String.class),
+				@ColumnResult(name = "nombre", type = String.class),
+				@ColumnResult(name = "ubicacion", type = String.class),
+				@ColumnResult(name = "alto", type = Integer.class), 
+				@ColumnResult(name = "ancho", type = Integer.class),
+				@ColumnResult(name = "diametro", type = Integer.class),
+				@ColumnResult(name = "profundidad", type = Integer.class),
+				@ColumnResult(name = "piezas", type = String.class),
+				@ColumnResult(name = "ultimoRegistro", type = String.class),
+				@ColumnResult(name = "totalRows", type = Integer.class)
+			}) 
+		})
 
 @Entity
 @Table(name = "MOLDES")
@@ -89,6 +90,19 @@ public class Molde extends ar.com.avaco.arc.core.domain.Entity<Long> {
 	@JoinTable(name = "MOLDE_CLIENTE", joinColumns = @JoinColumn(name = "ID_MOLDE", referencedColumnName = "ID_MOLDE"), inverseJoinColumns = @JoinColumn(name = "ID_CLIENTE", referencedColumnName = "ID_CLIENTE"))
 	@Fetch(FetchMode.SELECT)
 	private Set<Cliente> clientes = new HashSet<>();
+
+	@ManyToMany(fetch = FetchType.EAGER)
+	@JoinTable(name = "MOLDE_TIPO_PIEZA", joinColumns = @JoinColumn(name = "ID_MOLDE", referencedColumnName = "ID_MOLDE"), inverseJoinColumns = @JoinColumn(name = "ID_PIEZA_TIPO", referencedColumnName = "ID_PIEZA_TIPO"))
+	@Fetch(FetchMode.SELECT)
+	private Set<PiezaTipo> tiposPieza = new HashSet<>();
+
+	public Set<PiezaTipo> getTiposPieza() {
+		return tiposPieza;
+	}
+
+	public void setTiposPieza(Set<PiezaTipo> tiposPieza) {
+		this.tiposPieza = tiposPieza;
+	}
 
 	public Molde() {
 		super();

@@ -13,6 +13,24 @@ public class MoldeFilterDTO extends SortPageDTO {
 	private Long profumax;
 	private Long diametromin;
 	private Long diametromax;
+	private String idTipoPieza;
+	private Long idCliente;
+
+	public Long getIdCliente() {
+		return idCliente;
+	}
+
+	public void setIdCliente(Long idCliente) {
+		this.idCliente = idCliente;
+	}
+
+	public String getIdTipoPieza() {
+		return idTipoPieza;
+	}
+
+	public void setIdTipoPieza(String idTipoPieza) {
+		this.idTipoPieza = idTipoPieza;
+	}
 
 	public String getCodigo() {
 		return codigo;
