@@ -1,5 +1,7 @@
 package ar.com.avaco.nitrophyl.ws.service;
 
+import java.util.List;
+
 import javax.annotation.Resource;
 import javax.transaction.Transactional;
 
@@ -12,6 +14,7 @@ import ar.com.avaco.nitrophyl.domain.entities.cliente.Cliente;
 import ar.com.avaco.nitrophyl.domain.entities.pieza.Cotizacion;
 import ar.com.avaco.nitrophyl.domain.entities.pieza.Pieza;
 import ar.com.avaco.nitrophyl.domain.entities.pieza.PiezaCliente;
+import ar.com.avaco.nitrophyl.domain.entities.pieza.PiezaFormula;
 import ar.com.avaco.nitrophyl.service.pieza.CotizacionService;
 import ar.com.avaco.nitrophyl.service.pieza.PiezaClienteService;
 import ar.com.avaco.nitrophyl.ws.dto.CotizacionDTO;
@@ -46,7 +49,9 @@ public class CotizacionEPServiceImpl extends
 		CotizacionDTO dto = super.convertToDto(entity);
 		dto.setCliente(entity.getPiezaCliente().getCliente().getNombre());
 		dto.setIdCliente(entity.getPiezaCliente().getCliente().getId());
-		dto.setFormula(entity.getPiezaCliente().getPieza().getDetalleFormula().getFormula().getNombre());
+		PiezaFormula detalleFormula = entity.getPiezaCliente().getPieza().getDetalleFormula();
+		if (detalleFormula != null)
+			dto.setFormula(detalleFormula.getFormula().getNombre());
 		dto.setValor(entity.getValor());
 		dto.setFecha(entity.getFecha());
 		dto.setObservaciones(entity.getObservaciones());
@@ -58,7 +63,7 @@ public class CotizacionEPServiceImpl extends
 	@Override
 	protected Cotizacion convertToEntity(CotizacionDTO dto) {
 		Cotizacion cotizacion = new Cotizacion();
-		cotizacion.setFecha(DateUtils.getFechaYHoraActual());
+		cotizacion.setFecha(dto.getFecha());
 		cotizacion.setObservaciones(dto.getObservaciones());
 
 		PiezaCliente piezaCliente = pcService.getByPiezaCliente(dto.getIdCliente(), dto.getIdPieza());
@@ -101,12 +106,16 @@ public class CotizacionEPServiceImpl extends
 		filter.setIdPieza(dto.getIdPieza());
 		filter.setSoloVigentes(true);
 		filter.setRows(1);
-		CotizacionDTO cotizacion = this.service.listCotizaciones(filter).getPage().get(0);
-		if (dto.getFecha().before(cotizacion.getFecha())) {
-			throw new ErrorValidationException("La fecha de la nueva cotización debe ser posterior a " + DateUtils.toString(cotizacion.getFecha(), "dd/MM/yyyy"));
+		List<CotizacionDTO> page = this.service.listCotizaciones(filter).getPage();
+		if (page != null && !page.isEmpty()) {
+			CotizacionDTO cotizacion = page.get(0);
+			if (dto.getFecha().before(cotizacion.getFecha())) {
+				throw new ErrorValidationException("La fecha de la nueva cotización debe ser posterior a "
+						+ DateUtils.toString(cotizacion.getFecha(), "dd/MM/yyyy"));
+			}
 		}
 	}
-	
+
 	@Override
 	@Resource(name = "cotizacionService")
 	protected void setService(CotizacionService service) {

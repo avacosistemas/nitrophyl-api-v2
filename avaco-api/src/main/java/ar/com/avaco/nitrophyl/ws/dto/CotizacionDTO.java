@@ -2,6 +2,8 @@ package ar.com.avaco.nitrophyl.ws.dto;
 
 import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import ar.com.avaco.ws.rest.dto.DTOAuditableEntity;
 
 public class CotizacionDTO extends DTOAuditableEntity<Long> {
@@ -16,14 +18,18 @@ public class CotizacionDTO extends DTOAuditableEntity<Long> {
 	private String formula;
 
 	private Double valor;
+	
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
 	private Date fecha;
 	private String observaciones;
+
+	private Long revisionPieza;
 
 	public CotizacionDTO() {
 	}
 
 	public CotizacionDTO(Long id, String cliente, Long idCliente, String pieza, Long idPieza, String formula,
-			Double valor, Date fecha, String observaciones) {
+			Double valor, Date fecha, String observaciones, Long revisionPieza) {
 		this.id = id;
 		this.cliente = cliente;
 		this.idCliente = idCliente;
@@ -33,6 +39,7 @@ public class CotizacionDTO extends DTOAuditableEntity<Long> {
 		this.valor = valor;
 		this.fecha = fecha;
 		this.observaciones = observaciones;
+		this.revisionPieza = revisionPieza;
 	}
 
 	public Double getValor() {
@@ -105,6 +112,14 @@ public class CotizacionDTO extends DTOAuditableEntity<Long> {
 
 	public void setFormula(String formula) {
 		this.formula = formula;
+	}
+
+	public Long getRevisionPieza() {
+		return revisionPieza;
+	}
+
+	public void setRevisionPieza(Long revisionPieza) {
+		this.revisionPieza = revisionPieza;
 	}
 
 }

@@ -1,16 +1,9 @@
 package ar.com.avaco.nitrophyl.repository.pieza;
 
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
-import javax.persistence.criteria.Subquery;
 
 import org.springframework.stereotype.Repository;
 
@@ -48,7 +41,8 @@ public class CotizacionRepositoryImpl extends NJBaseRepository<Long, Cotizacion>
 				.append(" c.piezaCliente.pieza.id, ")
 				.append(" c.piezaCliente.pieza.detalleFormula.formula.nombre, ").append(" c.valor, ")
 				.append(" c.fecha, ")
-				.append(" c.observaciones ) ")
+				.append(" c.observaciones , ")
+				.append(" c.piezaCliente.pieza.revision) ")
 				.append(" FROM Cotizacion c ")
 				.append(" WHERE 1=1 ");
 
@@ -56,7 +50,7 @@ public class CotizacionRepositoryImpl extends NJBaseRepository<Long, Cotizacion>
 			sb.append(" AND c.piezaCliente.cliente.id = :idCliente ");
 		}
 		if (idPieza != null) {
-			sb.append(" AND c.piezaCliente.pieza.id = :idPieza ");
+			sb.append(" AND c.piezaCliente.pieza.codigo = :codigo ");
 		}
 
 		if (Boolean.TRUE.equals(soloVigentes)) {
@@ -82,7 +76,7 @@ public class CotizacionRepositoryImpl extends NJBaseRepository<Long, Cotizacion>
 			query.setParameter("idCliente", idCliente);
 		}
 		if (idPieza != null) {
-			query.setParameter("idPieza", idPieza);
+			query.setParameter("codigo", filter.getCodigo());
 		}
 
 		if (first != null && first > 0) {

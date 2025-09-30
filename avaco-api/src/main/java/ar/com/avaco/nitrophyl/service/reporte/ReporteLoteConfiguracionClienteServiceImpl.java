@@ -27,7 +27,7 @@ public class ReporteLoteConfiguracionClienteServiceImpl
 				entity.getCliente(), entity.getMaquina());
 		if (find != null) {
 			throw new ErrorValidationException(
-					"Ya existe un registro con esa combinacion de fórmula, cliente y máquina", null);
+					"Ya existe un registro con esa combinacion de fórmula, cliente y máquina con id " + find.getId(), null);
 		}
 		return super.save(entity);
 	}
@@ -36,7 +36,7 @@ public class ReporteLoteConfiguracionClienteServiceImpl
 	public ReporteLoteConfiguracionCliente update(ReporteLoteConfiguracionCliente entity) {
 		ReporteLoteConfiguracionCliente find = this.repository.findByFormulaClienteMaquina(entity.getFormula(),
 				entity.getCliente(), entity.getMaquina());
-		if (find != null && entity.getId() != find.getId()) {
+		if (find != null && !entity.getId().equals(find.getId())) {
 			throw new ErrorValidationException(
 					"Ya existe un registro con esa combinacion de fórmula, cliente y máquina", null);
 		}
