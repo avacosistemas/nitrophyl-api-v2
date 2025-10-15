@@ -51,7 +51,7 @@ public class Cliente extends ar.com.avaco.arc.core.domain.Entity<Long> {
 	 * @PrimaryKeyJoinColumn private Contacto contacto;
 	 */
 
-	@OneToMany(targetEntity = Contacto.class, mappedBy = "cliente", cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToMany(targetEntity = Contacto.class, mappedBy = "cliente")
 	private Set<Contacto> contactos = new HashSet<>();
 
 	/**

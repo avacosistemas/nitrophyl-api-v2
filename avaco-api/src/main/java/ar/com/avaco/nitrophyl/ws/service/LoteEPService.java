@@ -27,4 +27,6 @@ public interface LoteEPService extends CRUDEPService<Long, LoteDTO> {
 			String string)
 			throws BusinessException;
 
+	Boolean hasEnsayos(Long idLote);
+
 }

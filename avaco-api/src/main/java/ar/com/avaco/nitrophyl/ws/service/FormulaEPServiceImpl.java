@@ -61,6 +61,7 @@ public class FormulaEPServiceImpl extends CRUDEPBaseService<Long, FormulaDTO, Fo
 			rpdto.setFecha(DateUtils.toStringFecha(revision.getFecha()));
 			rpdto.setFechaHasta(DateUtils.toStringFecha(revision.getFechaHasta()));
 			rpdto.setRevision(revision.getRevision());
+			rpdto.setId(revision.getId());
 			dto.setRpdto(rpdto);
 		}
 		return dto;

@@ -335,6 +335,11 @@ public class LoteEPServiceImpl extends CRUDEPBaseService<Long, LoteDTO, Lote, Lo
 		return "<strong><span style='color: blue;'>Nitrophyl S.A.</span></strong> <br>" + "Dr. Rebizzo 5378<br>"
 				+ "(1678) Caseros, Buenos Aires<br>" + "+54 11 4759-0592 / 4759-0954 / 4750-3052";
 	}
+	
+	@Override
+	public Boolean hasEnsayos(Long idLote) {
+		return this.service.hasEnsayos(idLote);
+	}
 
 	@Override
 	@Resource(name = "loteService")
